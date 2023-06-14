@@ -1,6 +1,6 @@
 import Cell from './Cell';
 import PieceFactory from './PieceFactory';
-import type {Color, Coordinate, PieceLetter} from './types';
+import type {Color, Coordinate, Piece, PieceLetter} from './types';
 
 interface piecePosition {
     b: Coordinate[],
@@ -12,7 +12,8 @@ interface piecePosition {
 }
 
 class Desk {
-    private cells: Cell[][] = [];
+    public readonly cells: Cell[][] = [];
+    private pieces: Piece[] = [];
     private readonly piecePositionMap: piecePosition = {
         b : [[0, 2], [0, 5], [7, 2], [7, 5]],
         k : [[0, 4], [7, 4]],
@@ -53,9 +54,10 @@ class Desk {
         for (p in this.piecePositionMap) {
             const coordinates: Coordinate[] = this.piecePositionMap[p];
             // eslint-disable-next-line no-loop-func
-            coordinates.forEach(([x, y]: Coordinate, index) => {
+            coordinates.forEach(([y, x]: Coordinate, index) => {
                 const color: Color = index < coordinates.length / 2 ? 0 : 1;
-                factory.create(p, color, this.cells[x][y])
+                const piece = factory.create(p, color, this.cells[y][x]);
+                this.pieces.push(piece);
             })
         }
     }
