@@ -1,21 +1,21 @@
 import React from "react";
 import { useState, useMemo } from "react";
-import Desk from "./classes/Desk";
+import Board from "./classes/Board";
 import Cell from "./classes/Cell";
 import type { Color } from "./classes/types";
 import "./App.css";
 
 function App() {
-  const desk: Desk = Desk.init();
+  const board: Board = Board.init();
 
   const [color, setColor] = useState<Color>(0);
   const cells: Cell[][] = useMemo(() => {
     if (color === 0) {
-      return [...desk.cells].reverse();
+      return [...board.cells].reverse();
     } else {
-      return [...desk.cells];
+      return [...board.cells];
     }
-  }, [desk.cells, color]);
+  }, [board.cells, color]);
 
   function getRowNum(index: number): number {
     if (color === 0) {

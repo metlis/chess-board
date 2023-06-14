@@ -11,7 +11,7 @@ interface piecePosition {
   q: Coordinate[];
 }
 
-class Desk {
+class Board {
   public readonly cells: Cell[][] = [];
   private pieces: Piece[] = [];
   private readonly piecePositionMap: piecePosition = {
@@ -60,18 +60,18 @@ class Desk {
       [7, 3],
     ],
   };
-  private static instance: Desk;
+  private static instance: Board;
 
   private constructor() {
     this.createCells();
     this.populateCells();
   }
 
-  static init(): Desk {
-    if (!Desk.instance) {
-      Desk.instance = new Desk();
+  static init(): Board {
+    if (!Board.instance) {
+      Board.instance = new Board();
     }
-    return Desk.instance;
+    return Board.instance;
   }
 
   private createCells(): void {
@@ -100,4 +100,4 @@ class Desk {
   }
 }
 
-export default Desk;
+export default Board;
