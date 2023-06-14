@@ -1,10 +1,9 @@
-import Piece from './Piece';
+import Piece from "./Piece";
 
 class King extends Piece {
-
-    move(): void {
-        console.log();
-    };
+  move(): void {
+    console.log();
+  }
 }
 
-export default King
+export default King;

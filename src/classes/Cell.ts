@@ -1,11 +1,11 @@
-import {Color} from './types';
+import { Color } from "./types";
 
 class Cell {
-    public white: boolean;
+  public white: boolean;
 
-    constructor(color:Color) {
-        this.white = Boolean(color)
-    }
+  constructor(color: Color) {
+    this.white = Boolean(color);
+  }
 }
 
-export default Cell
+export default Cell;

@@ -1,10 +1,9 @@
-import Piece from './Piece';
+import Piece from "./Piece";
 
 class Bishop extends Piece {
-
-    move(): void {
-        console.log();
-    };
+  move(): void {
+    console.log();
+  }
 }
 
-export default Bishop
+export default Bishop;
