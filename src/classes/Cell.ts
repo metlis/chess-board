@@ -1,10 +1,12 @@
-import { Color } from "./types";
+import { Color, Piece } from "./types";
 
 class Cell {
-  public white: boolean;
+  public readonly color: Color;
+  public piece: Piece | null;
 
   constructor(color: Color) {
-    this.white = Boolean(color);
+    this.color = color;
+    this.piece = null;
   }
 }
 

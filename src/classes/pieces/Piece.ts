@@ -2,12 +2,11 @@ import type { Color } from "../types";
 import Cell from "../Cell";
 
 abstract class Piece {
-  public white: boolean;
-  public cell: Cell;
+  public readonly color: Color;
 
   constructor(color: Color, cell: Cell) {
-    this.white = Boolean(color);
-    this.cell = cell;
+    this.color = color;
+    cell.piece = this;
   }
 
   abstract move(): void;

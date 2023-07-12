@@ -8,9 +8,9 @@ import "./App.css";
 function App() {
   const board: Board = Board.init();
 
-  const [color, setColor] = useState<Color>(0);
+  const [color, setColor] = useState<Color>("B");
   const cells: Cell[][] = useMemo(() => {
-    if (color === 0) {
+    if (color === "B") {
       return [...board.cells].reverse();
     } else {
       return [...board.cells];
@@ -18,7 +18,7 @@ function App() {
   }, [board.cells, color]);
 
   function getRowNum(index: number): number {
-    if (color === 0) {
+    if (color === "B") {
       return 9 - (index + 1);
     } else {
       return index + 1;
@@ -34,9 +34,9 @@ function App() {
             {cells[index].map((cell: Cell, idx: number) => (
               <div
                 className="row__cell"
-                key={`${cell.white ? "W" : "B"}-${getRowNum(index)}-${idx + 1}`}
+                key={`${cell.color}-${getRowNum(index)}-${idx + 1}`}
               >
-                {`${cell.white ? "W" : "B"}-${getRowNum(index)}-${idx + 1}`}
+                {`${cell.color}-${getRowNum(index)}-${idx + 1}`}
               </div>
             ))}
           </div>

@@ -1,6 +1,6 @@
 import Cell from "./Cell";
 import PieceFactory from "./PieceFactory";
-import type { Color, Coordinate, Piece, PieceLetter } from "./types";
+import type { Color, Coordinate, PieceAbbreviation } from "./types";
 
 interface piecePosition {
   b: Coordinate[];
@@ -13,7 +13,6 @@ interface piecePosition {
 
 class Board {
   public readonly cells: Cell[][] = [];
-  private pieces: Piece[] = [];
   private readonly piecePositionMap: piecePosition = {
     b: [
       [0, 2],
@@ -75,26 +74,25 @@ class Board {
   }
 
   private createCells(): void {
-    let color: Color = 0;
+    let color: Color = "B";
     for (let i = 0; i < 8; i++) {
       this.cells[i] = [];
       for (let y = 0; y < 8; y++) {
         this.cells[i][y] = new Cell(color);
-        color = color ? 0 : 1;
+        color = color === "B" ? "W" : "B";
       }
     }
   }
 
   private populateCells(): void {
-    const factory = new PieceFactory();
-    let p: PieceLetter;
+    const factory: PieceFactory = new PieceFactory();
+    let p: PieceAbbreviation;
     for (p in this.piecePositionMap) {
       const coordinates: Coordinate[] = this.piecePositionMap[p];
       // eslint-disable-next-line no-loop-func
       coordinates.forEach(([y, x]: Coordinate, index) => {
-        const color: Color = index < coordinates.length / 2 ? 0 : 1;
-        const piece = factory.create(p, color, this.cells[y][x]);
-        this.pieces.push(piece);
+        const color: Color = index < coordinates.length / 2 ? "B" : "W";
+        factory.create(p, color, this.cells[y][x]);
       });
     }
   }
