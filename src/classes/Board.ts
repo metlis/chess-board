@@ -1,6 +1,6 @@
 import Cell from "./Cell";
 import PieceFactory from "./PieceFactory";
-import type { Color, Coordinate, PieceAbbreviation } from "./types";
+import type { Color, Coordinate, PieceAbbreviation } from "../types";
 
 interface piecePosition {
   b: Coordinate[];

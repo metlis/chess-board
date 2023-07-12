@@ -1,4 +1,4 @@
-import type { Color } from "../types";
+import type { Color } from "../../types";
 import Cell from "../Cell";
 
 abstract class Piece {

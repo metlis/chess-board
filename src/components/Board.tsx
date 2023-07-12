@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import BoardClass from "../classes/Board";
 import Cell from "../classes/Cell";
-import type { Color } from "../classes/types";
+import type { Color } from "../types";
 
 export default function Board() {
   const board: BoardClass = BoardClass.init();

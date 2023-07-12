@@ -5,7 +5,7 @@ import Rook from "./pieces/Rook";
 import Queen from "./pieces/Queen";
 import King from "./pieces/King";
 import Cell from "./Cell";
-import type { PieceAbbreviation, Piece, Color } from "./types";
+import type { PieceAbbreviation, Piece, Color } from "../types";
 
 class PieceFactory {
   create(name: PieceAbbreviation, color: Color, cell: Cell): Piece {
