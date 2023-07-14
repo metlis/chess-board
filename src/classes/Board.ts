@@ -2,18 +2,11 @@ import Cell from "./Cell";
 import PieceFactory from "./PieceFactory";
 import type { Color, Coordinate, PieceName } from "../types";
 
-interface piecePosition {
-  b: Coordinate[];
-  k: Coordinate[];
-  kn: Coordinate[];
-  p: Coordinate[];
-  r: Coordinate[];
-  q: Coordinate[];
-}
-
 class Board {
   public readonly cells: Cell[][] = [];
-  private readonly piecePositionMap: piecePosition = {
+  private readonly piecePositionMap: {
+    [key in PieceName]: Coordinate[];
+  } = {
     b: [
       [0, 2],
       [0, 5],
