@@ -5,10 +5,10 @@ import Rook from "./pieces/Rook";
 import Queen from "./pieces/Queen";
 import King from "./pieces/King";
 import Cell from "./Cell";
-import type { PieceAbbreviation, Piece, Color } from "../types";
+import type { PieceName, Piece, Color } from "../types";
 
 class PieceFactory {
-  create(name: PieceAbbreviation, color: Color, cell: Cell): Piece {
+  create(name: PieceName, color: Color, cell: Cell): Piece {
     let instance: Piece;
     switch (name) {
       case "b":

@@ -5,12 +5,11 @@ import Rook from "../classes/pieces/Rook";
 import Queen from "../classes/pieces/Queen";
 import King from "../classes/pieces/King";
 
-type Color = "B" | "W";
-type Coordinate = [
+export type Color = "b" | "w";
+export type Coordinate = [
   0 | 1 | 2 | 3 | 4 | 5 | 6 | 7,
   0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
 ];
-type Piece = Bishop | King | Knight | Pawn | Rook | Queen;
-type PieceAbbreviation = "b" | "k" | "kn" | "p" | "r" | "q";
-
-export type { Color, Coordinate, Piece, PieceAbbreviation };
+export type Piece = Bishop | King | Knight | Pawn | Rook | Queen;
+export type PieceName = "b" | "k" | "kn" | "p" | "r" | "q";
+export type PieceImage = `${PieceName}_${Color}.svg`;

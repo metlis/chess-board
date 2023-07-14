@@ -1,6 +1,6 @@
 import Cell from "./Cell";
 import PieceFactory from "./PieceFactory";
-import type { Color, Coordinate, PieceAbbreviation } from "../types";
+import type { Color, Coordinate, PieceName } from "../types";
 
 interface piecePosition {
   b: Coordinate[];
@@ -74,24 +74,24 @@ class Board {
   }
 
   private createCells(): void {
-    let color: Color = "B";
+    let color: Color = "b";
     for (let i = 0; i < 8; i++) {
       this.cells[i] = [];
       for (let y = 0; y < 8; y++) {
         this.cells[i][y] = new Cell(color);
-        color = color === "B" ? "W" : "B";
+        color = color === "b" ? "w" : "b";
       }
     }
   }
 
   private populateCells(): void {
     const factory: PieceFactory = new PieceFactory();
-    let p: PieceAbbreviation;
+    let p: PieceName;
     for (p in this.piecePositionMap) {
       const coordinates: Coordinate[] = this.piecePositionMap[p];
       // eslint-disable-next-line no-loop-func
       coordinates.forEach(([y, x]: Coordinate, index) => {
-        const color: Color = index < coordinates.length / 2 ? "B" : "W";
+        const color: Color = index < coordinates.length / 2 ? "b" : "w";
         factory.create(p, color, this.cells[y][x]);
       });
     }

@@ -6,9 +6,9 @@ import type { Color } from "../types";
 export default function Board() {
   const board: BoardClass = BoardClass.init();
 
-  const [colorOnTop, setColorOnTop] = useState<Color>("B");
+  const [colorOnTop, setColorOnTop] = useState<Color>("b");
   const cells: Cell[][] = useMemo(() => {
-    if (colorOnTop === "B") {
+    if (colorOnTop === "b") {
       return [...board.cells].reverse();
     } else {
       return [...board.cells];
@@ -16,7 +16,7 @@ export default function Board() {
   }, [board.cells, colorOnTop]);
 
   function getRowNum(index: number): number {
-    if (colorOnTop === "B") {
+    if (colorOnTop === "b") {
       return 9 - (index + 1);
     } else {
       return index + 1;
@@ -34,7 +34,9 @@ export default function Board() {
                 className="row__cell"
                 key={`${cell.color}-${getRowNum(index)}-${idx + 1}`}
               >
-                {`${cell.color}-${getRowNum(index)}-${idx + 1}`}
+                {`${cell.color}-${getRowNum(index)}-${idx + 1} ${
+                  cell.piece?.name || ""
+                }`}
               </div>
             ))}
           </div>
