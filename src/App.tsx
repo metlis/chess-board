@@ -1,5 +1,5 @@
 import Board from "./components/Board";
-import "./App.css";
+import "./styles/App.sass";
 
 function App() {
   return (
