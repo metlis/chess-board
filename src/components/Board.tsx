@@ -1,13 +1,15 @@
 import { useState, useMemo } from "react";
 import BoardClass from "../classes/Board";
-import Cell from "../classes/Cell";
+import CellClass from "../classes/Cell";
+import Row from "./Row";
+import Cell from "./Cell";
 import type { Color } from "../types";
 
 export default function Board() {
   const board: BoardClass = BoardClass.init();
 
   const [colorOnTop, setColorOnTop] = useState<Color>("b");
-  const cells: Cell[][] = useMemo(() => {
+  const cells: CellClass[][] = useMemo(() => {
     if (colorOnTop === "b") {
       return [...board.cells].reverse();
     } else {
@@ -25,22 +27,12 @@ export default function Board() {
 
   return (
     <>
-      {cells.map((row: Cell[], index: number) => (
-        <div className="row" key={getRowNum(index)}>
-          <div className="row__number">{getRowNum(index)}</div>
-          <div className="row__cells">
-            {cells[index].map((cell: Cell, idx: number) => (
-              <div
-                className="row__cell"
-                key={`${cell.color}-${getRowNum(index)}-${idx + 1}`}
-              >
-                {`${cell.color}-${getRowNum(index)}-${idx + 1} ${
-                  cell.piece?.name || ""
-                }`}
-              </div>
-            ))}
-          </div>
-        </div>
+      {cells.map((row: CellClass[], index: number) => (
+        <Row key={getRowNum(index)} number={getRowNum(index)}>
+          {cells[index].map((cell: CellClass, idx: number) => (
+            <Cell number={idx + 1} rowNumber={getRowNum(index)} cell={cell} />
+          ))}
+        </Row>
       ))}
     </>
   );
