@@ -1,4 +1,4 @@
-import CellClass from "../classes/Cell";
+import CellClass from "classes/Cell";
 
 type CellProps = {
   number: number;

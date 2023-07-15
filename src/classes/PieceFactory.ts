@@ -1,11 +1,11 @@
-import Pawn from "./pieces/Pawn";
-import Bishop from "./pieces/Bishop";
-import Knight from "./pieces/Knight";
-import Rook from "./pieces/Rook";
-import Queen from "./pieces/Queen";
-import King from "./pieces/King";
-import Cell from "./Cell";
-import type { PieceName, Piece, Color } from "../types";
+import Pawn from "classes/pieces/Pawn";
+import Bishop from "classes/pieces/Bishop";
+import Knight from "classes/pieces/Knight";
+import Rook from "classes/pieces/Rook";
+import Queen from "classes/pieces/Queen";
+import King from "classes/pieces/King";
+import Cell from "classes/Cell";
+import type { PieceName, Piece, Color } from "types";
 
 class PieceFactory {
   create(name: PieceName, color: Color, cell: Cell): Piece {

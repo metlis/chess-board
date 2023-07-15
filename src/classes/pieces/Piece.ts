@@ -1,5 +1,5 @@
-import type { Color, PieceImage, PieceName } from "../../types";
-import Cell from "../Cell";
+import type { Color, PieceImage, PieceName } from "types";
+import Cell from "classes/Cell";
 
 abstract class Piece {
   public readonly color: Color;

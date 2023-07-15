@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
-import BoardClass from "../classes/Board";
-import CellClass from "../classes/Cell";
-import Row from "./Row";
-import Cell from "./Cell";
-import type { Color } from "../types";
+import BoardClass from "classes/Board";
+import CellClass from "classes/Cell";
+import Row from "components/Row";
+import Cell from "components/Cell";
+import type { Color } from "types";
 
 export default function Board() {
   const board: BoardClass = BoardClass.init();

@@ -1,9 +1,9 @@
-import Pawn from "../classes/pieces/Pawn";
-import Bishop from "../classes/pieces/Bishop";
-import Knight from "../classes/pieces/Knight";
-import Rook from "../classes/pieces/Rook";
-import Queen from "../classes/pieces/Queen";
-import King from "../classes/pieces/King";
+import Pawn from "classes/pieces/Pawn";
+import Bishop from "classes/pieces/Bishop";
+import Knight from "classes/pieces/Knight";
+import Rook from "classes/pieces/Rook";
+import Queen from "classes/pieces/Queen";
+import King from "classes/pieces/King";
 
 export type Color = "b" | "w";
 export type Coordinate = [

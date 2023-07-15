@@ -1,4 +1,4 @@
-import { Color, Piece } from "../types";
+import { Color, Piece } from "types";
 
 class Cell {
   public readonly color: Color;

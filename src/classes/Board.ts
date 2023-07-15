@@ -1,6 +1,6 @@
-import Cell from "./Cell";
-import PieceFactory from "./PieceFactory";
-import type { Color, Coordinate, PieceName } from "../types";
+import Cell from "classes/Cell";
+import PieceFactory from "classes/PieceFactory";
+import type { Color, Coordinate, PieceName } from "types";
 
 class Board {
   public readonly cells: Cell[][] = [];
