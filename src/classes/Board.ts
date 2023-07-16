@@ -67,13 +67,13 @@ class Board {
   }
 
   private createCells(): void {
-    let color: Color = "b";
+    let color: Color = "w";
     for (let i = 0; i < 8; i++) {
       this.cells[i] = [];
       for (let y = 0; y < 8; y++) {
         this.cells[i][y] = new Cell(color);
         if (y !== 7) {
-          color = color === "b" ? "w" : "b";
+          color = color === "w" ? "b" : "w";
         }
       }
     }
