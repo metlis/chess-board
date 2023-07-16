@@ -14,13 +14,9 @@ export default function Board() {
     if (colorOnTop === "b") {
       return [...board.cells];
     } else {
-      const rotated = [...board.cells].reverse();
-      for (let i = 0; i < rotated.length; i++) {
-        rotated[i] = [...rotated[i]].reverse();
-      }
-      return rotated;
+      return [...board.getRotatedCells()];
     }
-  }, [board.cells, colorOnTop]);
+  }, [board, colorOnTop]);
 
   function getRowNum(index: number): number {
     if (colorOnTop === "b") {

@@ -101,6 +101,14 @@ class Board {
       });
     }
   }
+
+  public getRotatedCells(): Cell[][] {
+    const rotated = [...this.cells].reverse();
+    for (let i = 0; i < rotated.length; i++) {
+      rotated[i] = [...rotated[i]].reverse();
+    }
+    return rotated;
+  }
 }
 
 export default Board;
