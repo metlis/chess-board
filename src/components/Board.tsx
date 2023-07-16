@@ -14,7 +14,11 @@ export default function Board() {
     if (colorOnTop === "b") {
       return [...board.cells];
     } else {
-      return [...board.cells].reverse();
+      const rotated = [...board.cells].reverse();
+      for (let i = 0; i < rotated.length; i++) {
+        rotated[i] = [...rotated[i]].reverse();
+      }
+      return rotated;
     }
   }, [board.cells, colorOnTop]);
 
@@ -27,19 +31,24 @@ export default function Board() {
   }
 
   return (
-    <div className="board">
-      {cells.map((row: CellClass[], index: number) => (
-        <Row key={getRowNum(index)} number={getRowNum(index)}>
-          {cells[index].map((cell: CellClass, idx: number) => (
-            <Cell
-              key={`${getRowNum(index)}-${idx + 1}`}
-              number={idx + 1}
-              rowNumber={getRowNum(index)}
-              cell={cell}
-            />
-          ))}
-        </Row>
-      ))}
-    </div>
+    <>
+      <div className="board">
+        {cells.map((row: CellClass[], index: number) => (
+          <Row key={getRowNum(index)} number={getRowNum(index)}>
+            {cells[index].map((cell: CellClass, idx: number) => (
+              <Cell
+                key={`${getRowNum(index)}-${idx + 1}`}
+                number={idx + 1}
+                rowNumber={getRowNum(index)}
+                cell={cell}
+              />
+            ))}
+          </Row>
+        ))}
+      </div>
+      <div onClick={() => setColorOnTop(colorOnTop === "b" ? "w" : "b")}>
+        Rotate
+      </div>
+    </>
   );
 }
