@@ -72,7 +72,9 @@ class Board {
       this.cells[i] = [];
       for (let y = 0; y < 8; y++) {
         this.cells[i][y] = new Cell(color);
-        color = color === "b" ? "w" : "b";
+        if (y !== 7) {
+          color = color === "b" ? "w" : "b";
+        }
       }
     }
   }

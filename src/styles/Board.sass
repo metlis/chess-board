@@ -1,0 +1,30 @@
+$side: 500px
+
+.board
+  height: $side
+  width: $side
+  border: 1px solid black
+  margin: 20px 20px 20px 40px
+
+.row
+  width: 100%
+  height: 12.5%
+  position: relative
+  &__number
+    position: absolute
+    left: -20px
+    top: 50%
+    transform: translateY(-50%)
+  &__cells
+    width: 100%
+    height: 100%
+    display: flex
+    align-items: center
+  &__cell
+    height: 100%
+    width: 12.5%
+    display: flex
+    justify-content: center
+    align-items: center
+    &--b
+      background-color: #beb8b8
