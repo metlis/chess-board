@@ -22,6 +22,8 @@ export default function Board() {
     }
   }, [board.cells, colorOnTop]);
 
+  const columnLetters: string[] = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
   function getRowNum(index: number): number {
     if (colorOnTop === "b") {
       return 9 - (index + 1);
@@ -45,10 +47,21 @@ export default function Board() {
             ))}
           </Row>
         ))}
+        <div className="row__cells row__cells--letters">
+          {(colorOnTop === "b"
+            ? columnLetters
+            : [...columnLetters].reverse()
+          ).map((i) => (
+            <div className="row__cell">{i}</div>
+          ))}
+        </div>
       </div>
-      <div onClick={() => setColorOnTop(colorOnTop === "b" ? "w" : "b")}>
+      <button
+        className="button button--rotate"
+        onClick={() => setColorOnTop(colorOnTop === "b" ? "w" : "b")}
+      >
         Rotate
-      </div>
+      </button>
     </>
   );
 }
