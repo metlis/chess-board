@@ -52,6 +52,16 @@ class Board {
       [7, 3],
     ],
   };
+  public readonly columnLetters: string[] = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+  ];
   private static instance: Board;
 
   private constructor() {

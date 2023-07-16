@@ -45,10 +45,21 @@ export default function Board() {
             ))}
           </Row>
         ))}
+        <div className="row__cells row__cells--letters">
+          {(colorOnTop === "b"
+            ? board.columnLetters
+            : [...board.columnLetters].reverse()
+          ).map((i) => (
+            <div className="row__cell">{i}</div>
+          ))}
+        </div>
       </div>
-      <div onClick={() => setColorOnTop(colorOnTop === "b" ? "w" : "b")}>
+      <button
+        className="button button--rotate"
+        onClick={() => setColorOnTop(colorOnTop === "b" ? "w" : "b")}
+      >
         Rotate
-      </div>
+      </button>
     </>
   );
 }
