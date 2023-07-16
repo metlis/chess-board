@@ -5,6 +5,7 @@ $side: 500px
   width: $side
   border: 1px solid black
   margin: 20px 20px 20px 40px
+  user-select: none
 
 .row
   width: 100%
@@ -23,13 +24,20 @@ $side: 500px
     &--letters
       height: 20px
       margin-top: 10px
+      text-align: center
   &__cell
     height: 100%
     width: 12.5%
-    display: flex
-    justify-content: center
-    align-items: center
     &--b
       background-color: #beb8b8
+
 .button--rotate
-  margin: 20px
+  margin: 50px 20px
+
+.piece
+  cursor: pointer
+  width: 100%
+  height: 100%
+  display: flex
+  justify-content: center
+  align-items: center

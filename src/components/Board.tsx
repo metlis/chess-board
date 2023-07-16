@@ -41,13 +41,17 @@ export default function Board() {
             ))}
           </Row>
         ))}
-        <div className="row__cells row__cells--letters">
-          {(colorOnTop === "b"
-            ? board.columnLetters
-            : [...board.columnLetters].reverse()
-          ).map((i) => (
-            <div className="row__cell">{i}</div>
-          ))}
+        <div className="row">
+          <div className="row__cells row__cells--letters">
+            {(colorOnTop === "b"
+              ? board.columnLetters
+              : [...board.columnLetters].reverse()
+            ).map((i) => (
+              <div className="row__cell" key={i}>
+                {i}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <button
