@@ -1,4 +1,5 @@
 import CellModel from "models/Cell";
+import Piece from "components/Piece";
 
 type CellProps = {
   number: number;
@@ -6,20 +7,10 @@ type CellProps = {
   cell: CellModel;
 };
 
-export default function Cell({ cell, number, rowNumber }: CellProps) {
+export default function Cell({ cell }: CellProps) {
   return (
     <div className={`row__cell row__cell--${cell.color}`}>
-      {cell.piece ? (
-        <div className="piece">
-          <img
-            src={require(`images/pieces/${cell.piece.image}`)}
-            alt={cell.piece.name}
-            draggable={false}
-          />
-        </div>
-      ) : (
-        ""
-      )}
+      {cell.piece ? <Piece cell={cell} /> : ""}
     </div>
   );
 }
