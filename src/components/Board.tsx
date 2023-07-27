@@ -1,16 +1,16 @@
 import { useState, useMemo } from "react";
-import BoardClass from "classes/Board";
-import CellClass from "classes/Cell";
+import BoardModel from "models/Board";
+import CellModel from "models/Cell";
 import Row from "components/Row";
 import Cell from "components/Cell";
 import type { Color } from "types";
 import "styles/Board.sass";
 
 export default function Board() {
-  const board: BoardClass = BoardClass.init();
+  const board: BoardModel = BoardModel.init();
 
   const [colorOnTop, setColorOnTop] = useState<Color>("b");
-  const cells: CellClass[][] = useMemo(() => {
+  const cells: CellModel[][] = useMemo(() => {
     if (colorOnTop === "b") {
       return [...board.cells];
     } else {
@@ -29,9 +29,9 @@ export default function Board() {
   return (
     <>
       <div className="board">
-        {cells.map((row: CellClass[], index: number) => (
+        {cells.map((row: CellModel[], index: number) => (
           <Row key={getRowNum(index)} number={getRowNum(index)}>
-            {cells[index].map((cell: CellClass, idx: number) => (
+            {cells[index].map((cell: CellModel, idx: number) => (
               <Cell
                 key={`${getRowNum(index)}-${idx + 1}`}
                 number={idx + 1}

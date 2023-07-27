@@ -1,5 +1,5 @@
-import Cell from "classes/Cell";
-import PieceFactory from "classes/PieceFactory";
+import Cell from "models/Cell";
+import PieceFactory from "models/PieceFactory";
 import type { Color, Coordinate, PieceName } from "types";
 
 class Board {

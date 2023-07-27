@@ -1,6 +1,6 @@
-import Piece from "classes/pieces/Piece";
+import Piece from "models/pieces/Piece";
 import { Color } from "types";
-import Cell from "classes/Cell";
+import Cell from "models/Cell";
 
 class Bishop extends Piece {
   constructor(color: Color, cell: Cell) {

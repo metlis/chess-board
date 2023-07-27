@@ -1,9 +1,9 @@
-import CellClass from "classes/Cell";
+import CellModel from "models/Cell";
 
 type CellProps = {
   number: number;
   rowNumber: number;
-  cell: CellClass;
+  cell: CellModel;
 };
 
 export default function Cell({ cell, number, rowNumber }: CellProps) {
