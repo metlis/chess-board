@@ -11,5 +11,5 @@ export type Coordinate = [
   0 | 1 | 2 | 3 | 4 | 5 | 6 | 7
 ];
 export type Piece = Bishop | King | Knight | Pawn | Rook | Queen;
-export type PieceName = "b" | "k" | "kn" | "p" | "r" | "q";
+export type PieceName = "b" | "k" | "n" | "p" | "r" | "q";
 export type PieceImage = `${PieceName}_${Color}.svg`;

@@ -17,7 +17,7 @@ class PieceFactory {
       case "k":
         instance = new King(color, cell);
         break;
-      case "kn":
+      case "n":
         instance = new Knight(color, cell);
         break;
       case "p":

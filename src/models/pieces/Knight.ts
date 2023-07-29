@@ -4,7 +4,7 @@ import Cell from "models/Cell";
 
 class Knight extends Piece {
   constructor(color: Color, cell: Cell) {
-    super(color, cell, "kn");
+    super(color, cell, "n");
   }
 
   move(): void {
