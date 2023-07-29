@@ -29,8 +29,8 @@ export default function Board() {
   return (
     <>
       <div className="board">
-        {cells.map((row: CellModel[], index: number) => (
-          <Row key={getRowNum(index)} number={getRowNum(index)}>
+        {cells.map((_row: CellModel[], index: number) => (
+          <Row key={getRowNum(index)} number={getRowNum(index)} colorOnTop={colorOnTop}>
             {cells[index].map((cell: CellModel, idx: number) => (
               <Cell
                 key={`${getRowNum(index)}-${idx + 1}`}

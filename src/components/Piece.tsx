@@ -9,7 +9,7 @@ export default function Piece({ cell }: PieceProps) {
     console.log(data);
   }
   return (
-    <Draggable onStop={handleStop}>
+    <Draggable bounds=".board" onStop={handleStop}>
       <div className="piece">
         <img
           src={require(`images/pieces/${cell?.piece?.image}`)}
