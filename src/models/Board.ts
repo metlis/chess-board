@@ -81,10 +81,12 @@ class Board {
 
   private createCells(): void {
     let color: Color = "w";
-    for (let row: Row = 0; row < 8; row++) {
+    const rows: Row[] = [0, 1, 2, 3, 4, 5, 6, 7];
+    const columns: Column[] = [0, 1, 2, 3, 4, 5, 6, 7];
+    for (let row of rows) {
       this.cells[row] = [];
-      for (let column: Column = 0; column < 8; column++) {
-        const coordinate: Coordinate = [row, column] as Coordinate;
+      for (let column of columns) {
+        const coordinate: Coordinate = [row, column];
         const cell: Cell = new Cell(color, coordinate, this.controller);
         this.cells[row][column] = cell;
         this.controller.addCell(cell);
