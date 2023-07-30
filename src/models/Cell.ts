@@ -12,7 +12,7 @@ class Cell {
   public readonly color: Color;
   public readonly coordinate: Coordinate;
   public piece: Piece | null;
-  public draggable = true;
+  public draggable: boolean = true;
 
   constructor(
     color: Color,

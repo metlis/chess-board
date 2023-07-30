@@ -111,9 +111,9 @@ class Board {
   }
 
   public getRotatedCells(): Cell[][] {
-    const rotated: Cell[][] = [...this.cells].reverse();
+    const rotated: Cell[][] = this.cells.reverse();
     for (let i = 0; i < rotated.length; i++) {
-      rotated[i] = [...rotated[i]].reverse();
+      rotated[i] = rotated[i].reverse();
     }
     return rotated;
   }

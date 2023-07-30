@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import BoardModel from "models/Board";
 import CellModel from "models/Cell";
 import Row from "components/Row";
@@ -10,13 +10,15 @@ export default function Board() {
   const board: BoardModel = BoardModel.init();
 
   const [colorOnTop, setColorOnTop] = useState<Color>("b");
-  const cells: CellModel[][] = useMemo(() => {
-    if (colorOnTop === "b") {
-      return [...board.cells];
-    } else {
-      return [...board.getRotatedCells()];
-    }
-  }, [board, colorOnTop]);
+
+  const [cells, setCells] = useState(
+    colorOnTop === "b" ? board.cells : board.getRotatedCells()
+  );
+
+  const onRotate = () => {
+    setColorOnTop(colorOnTop === "b" ? "w" : "b");
+    setCells(board.getRotatedCells());
+  };
 
   function getRowNum(index: number): number {
     if (colorOnTop === "b") {
@@ -58,10 +60,7 @@ export default function Board() {
           </div>
         </div>
       </div>
-      <button
-        className="button button--rotate"
-        onClick={() => setColorOnTop(colorOnTop === "b" ? "w" : "b")}
-      >
+      <button className="button button--rotate" onClick={onRotate}>
         Rotate
       </button>
     </>
