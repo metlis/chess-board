@@ -30,7 +30,11 @@ export default function Board() {
     <>
       <div className="board">
         {cells.map((_row: CellModel[], index: number) => (
-          <Row key={getRowNum(index)} number={getRowNum(index)} colorOnTop={colorOnTop}>
+          <Row
+            key={getRowNum(index)}
+            number={getRowNum(index)}
+            colorOnTop={colorOnTop}
+          >
             {cells[index].map((cell: CellModel, idx: number) => (
               <Cell
                 key={`${getRowNum(index)}-${idx + 1}`}

@@ -1,6 +1,7 @@
 import Cell from "models/Cell";
 import PieceFactory from "models/PieceFactory";
-import type { Color, Coordinate, PieceName } from "types";
+import BoardController from "controllers/BoardController";
+import type { Color, Coordinate, PieceName, Row, Column } from "types";
 
 class Board {
   public readonly cells: Cell[][] = [];
@@ -63,8 +64,10 @@ class Board {
     "H",
   ];
   private static instance: Board;
+  public controller: BoardController;
 
   private constructor() {
+    this.controller = new BoardController();
     this.createCells();
     this.populateCells();
   }
@@ -78,11 +81,14 @@ class Board {
 
   private createCells(): void {
     let color: Color = "w";
-    for (let i = 0; i < 8; i++) {
-      this.cells[i] = [];
-      for (let y = 0; y < 8; y++) {
-        this.cells[i][y] = new Cell(color);
-        if (y !== 7) {
+    for (let row: Row = 0; row < 8; row++) {
+      this.cells[row] = [];
+      for (let column: Column = 0; column < 8; column++) {
+        const coordinate: Coordinate = [row, column] as Coordinate;
+        const cell: Cell = new Cell(color, coordinate, this.controller);
+        this.cells[row][column] = cell;
+        this.controller.addCell(cell);
+        if (column !== 7) {
           color = color === "w" ? "b" : "w";
         }
       }
@@ -103,7 +109,7 @@ class Board {
   }
 
   public getRotatedCells(): Cell[][] {
-    const rotated = [...this.cells].reverse();
+    const rotated: Cell[][] = [...this.cells].reverse();
     for (let i = 0; i < rotated.length; i++) {
       rotated[i] = [...rotated[i]].reverse();
     }

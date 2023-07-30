@@ -1,4 +1,5 @@
 import Cell from "models/Cell";
+import { useMemo } from "react";
 import Draggable from "react-draggable";
 import { DraggableEvent } from "react-draggable";
 
@@ -8,15 +9,32 @@ export default function Piece({ cell }: PieceProps) {
     console.log(e);
     console.log(data);
   }
-  return (
-    <Draggable bounds=".board" onStop={handleStop}>
-      <div className="piece">
-        <img
-          src={require(`images/pieces/${cell?.piece?.image}`)}
-          alt={cell?.piece?.name}
-          draggable={false}
-        />
-      </div>
-    </Draggable>
+
+  const draggable: boolean = useMemo(() => {
+    return cell.draggable;
+  }, [cell.draggable]);
+
+  const piece = (
+    <div className="piece">
+      <img
+        src={require(`images/pieces/${cell?.piece?.image}`)}
+        alt={cell?.piece?.name}
+        draggable={false}
+      />
+    </div>
   );
+
+  if (draggable) {
+    return (
+      <Draggable
+        bounds=".board"
+        onStart={cell.onDragStart.bind(cell)}
+        onStop={cell.onDragStop.bind(cell)}
+      >
+        {piece}
+      </Draggable>
+    );
+  } else {
+    return piece;
+  }
 }
