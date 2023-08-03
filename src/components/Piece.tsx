@@ -1,18 +1,14 @@
 import Cell from "models/Cell";
-import { useMemo } from "react";
 import Draggable from "react-draggable";
 import { DraggableEvent } from "react-draggable";
 
-type PieceProps = { cell: Cell };
-export default function Piece({ cell }: PieceProps) {
+type PieceProps = { cell: Cell; draggable: boolean };
+
+export default function Piece({ cell, draggable }: PieceProps) {
   function handleStop(e: DraggableEvent, data: Object) {
     console.log(e);
     console.log(data);
   }
-
-  const draggable: boolean = useMemo(() => {
-    return cell.draggable;
-  }, [cell.draggable]);
 
   const piece = (
     <div className="piece">
