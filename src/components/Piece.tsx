@@ -3,11 +3,23 @@ import Draggable from "react-draggable";
 import { DraggableEvent } from "react-draggable";
 
 type PieceProps = { cell: Cell; draggable: boolean };
-
+type Node = { node: HTMLElement; x: number; y: number };
 export default function Piece({ cell, draggable }: PieceProps) {
-  function handleStop(e: DraggableEvent, data: Object) {
-    console.log(e);
-    console.log(data);
+  function locatePiece(_: DraggableEvent, data: Node) {
+    // console.log(_);
+    // console.log(data);
+    const { x: xOffset, y: yOffset } = data;
+    const parent: HTMLElement = data.node.parentNode as HTMLElement;
+    const parentHeight = parent.getBoundingClientRect().height;
+    const parentWidth = parent.getBoundingClientRect().width;
+    const xOffsetCells = Math.round(xOffset / parentWidth);
+    const yOffsetCells = Math.round(yOffset / parentHeight);
+    console.log(xOffsetCells, yOffsetCells);
+  }
+
+  function onStop(e: DraggableEvent, data: Node) {
+    locatePiece(e, data);
+    cell.onDragStop();
   }
 
   const piece = (
@@ -25,7 +37,8 @@ export default function Piece({ cell, draggable }: PieceProps) {
       <Draggable
         bounds=".board"
         onStart={cell.onDragStart.bind(cell)}
-        onStop={cell.onDragStop.bind(cell)}
+        onStop={onStop.bind(cell)}
+        onDrag={locatePiece}
       >
         {piece}
       </Draggable>
