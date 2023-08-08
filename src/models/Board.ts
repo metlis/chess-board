@@ -4,7 +4,7 @@ import BoardController from "controllers/BoardController";
 import type { Color, Coordinate, PieceName, Row, Column } from "types";
 
 class Board {
-  public readonly cells: Cell[][] = [];
+  public readonly cellGrid: Cell[][] = [];
   private readonly piecePositionMap: {
     [key in PieceName]: Coordinate[];
   } = {
@@ -67,7 +67,7 @@ class Board {
   public controller: BoardController;
 
   private constructor() {
-    this.controller = new BoardController();
+    this.controller = new BoardController(this);
     this.createCells();
     this.populateCells();
   }
@@ -84,12 +84,14 @@ class Board {
     const rows: Row[] = [0, 1, 2, 3, 4, 5, 6, 7];
     const columns: Column[] = [0, 1, 2, 3, 4, 5, 6, 7];
     for (let row of rows) {
-      this.cells[row] = [];
+      this.cellGrid[row] = [];
       for (let column of columns) {
         const coordinate: Coordinate = [row, column];
-        const cell: Cell = new Cell(color, coordinate, this.controller);
-        this.cells[row][column] = cell;
-        this.controller.addCell(cell);
+        this.cellGrid[row][column] = new Cell(
+          color,
+          coordinate,
+          this.controller
+        );
         if (column !== 7) {
           color = color === "w" ? "b" : "w";
         }
@@ -105,13 +107,13 @@ class Board {
       // eslint-disable-next-line no-loop-func
       coordinates.forEach(([y, x]: Coordinate, index) => {
         const color: Color = index < coordinates.length / 2 ? "b" : "w";
-        factory.create(p, color, this.cells[y][x]);
+        factory.create(p, color, this.cellGrid[y][x]);
       });
     }
   }
 
   public getRotatedCells(): Cell[][] {
-    const rotated: Cell[][] = this.cells.reverse();
+    const rotated: Cell[][] = this.cellGrid.reverse();
     for (let i = 0; i < rotated.length; i++) {
       rotated[i] = rotated[i].reverse();
     }

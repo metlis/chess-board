@@ -1,11 +1,20 @@
 import Cell from "models/Cell";
+import Board from "models/Board";
 import { CellEventType, CellEventPayload } from "types";
 
 class BoardController {
-  public cells: Cell[] = [];
+  public board: Board;
 
-  public addCell(cell: Cell): void {
-    this.cells.push(cell);
+  constructor(board: Board) {
+    this.board = board;
+  }
+
+  private get cells() {
+    const cells: Cell[] = [];
+    for (let row of this.board.cellGrid) {
+      row.forEach((cell) => cells.push(cell));
+    }
+    return cells;
   }
 
   private dispatch(

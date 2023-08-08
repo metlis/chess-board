@@ -12,7 +12,7 @@ export default function Board() {
   const [colorOnTop, setColorOnTop] = useState<Color>("b");
 
   const [cells, setCells] = useState(
-    colorOnTop === "b" ? board.cells : board.getRotatedCells()
+    colorOnTop === "b" ? board.cellGrid : board.getRotatedCells()
   );
 
   const onRotate = () => {
