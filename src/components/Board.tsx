@@ -9,14 +9,15 @@ import "styles/Board.sass";
 export default function Board() {
   const board: BoardModel = BoardModel.init();
 
-  const [colorOnTop, setColorOnTop] = useState<Color>("b");
+  const [colorOnTop, setColorOnTop] = useState<Color>(board.colorOnTop);
 
   const [cells, setCells] = useState(
     colorOnTop === "b" ? board.cellGrid : board.getRotatedCells()
   );
 
   const onRotate = () => {
-    setColorOnTop(colorOnTop === "b" ? "w" : "b");
+    board.colorOnTop = board.colorOnTop === "b" ? "w" : "b";
+    setColorOnTop(board.colorOnTop);
     setCells(board.getRotatedCells());
   };
 

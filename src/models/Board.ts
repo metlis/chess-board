@@ -65,6 +65,7 @@ class Board {
   ];
   private static instance: Board;
   public controller: BoardController;
+  private _colorOnTop: Color = "b";
 
   private constructor() {
     this.controller = new BoardController(this);
@@ -77,6 +78,14 @@ class Board {
       Board.instance = new Board();
     }
     return Board.instance;
+  }
+
+  public get colorOnTop() {
+    return this._colorOnTop;
+  }
+
+  public set colorOnTop(color: Color) {
+    this._colorOnTop = color;
   }
 
   private createCells(): void {
