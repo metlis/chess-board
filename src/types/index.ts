@@ -1,3 +1,4 @@
+import React from "react";
 import Pawn from "models/pieces/Pawn";
 import Bishop from "models/pieces/Bishop";
 import Knight from "models/pieces/Knight";
@@ -17,4 +18,9 @@ export type PieceImage = `${PieceName}_${Color}.svg`;
 export type CellEventType = "setDraggable";
 export type CellEventPayload = {
   exclude?: Cell[];
+};
+
+export type ComponentRefresh = {
+  val?: boolean;
+  setVal?: React.Dispatch<React.SetStateAction<boolean>>;
 };

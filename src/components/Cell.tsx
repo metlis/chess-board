@@ -1,6 +1,7 @@
 import CellModel from "models/Cell";
 import Piece from "components/Piece";
-import { useState } from "react";
+import useComponentRefresh from "hooks/useComponentRefresh";
+import { useState, useEffect } from "react";
 
 type CellProps = {
   number: number;
@@ -9,8 +10,13 @@ type CellProps = {
 };
 
 export default function Cell({ cell }: CellProps) {
+  useComponentRefresh(cell.componentRefresh);
+
   const [draggable, setDraggable] = useState(cell.draggable);
-  cell.component.setDraggable = setDraggable;
+
+  useEffect(() => {
+    setDraggable(cell.draggable);
+  }, [cell.draggable]);
 
   return (
     <div className={`row__cell row__cell--${cell.color}`}>
