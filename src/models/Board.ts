@@ -1,68 +1,20 @@
 import Cell from "models/Cell";
 import PieceFactory from "models/PieceFactory";
 import BoardController from "controllers/BoardController";
-import type { Color, Coordinate, PieceName, Row, Column } from "types";
+import type {
+  Color,
+  Coordinate,
+  PieceName,
+  Row,
+  Column,
+  PiecesCoordinates,
+} from "types";
+import { PIECES_COORDINATES, COLUMN_LETTERS } from "../constants";
 
 class Board {
   public readonly cellGrid: Cell[][] = [];
-  private readonly piecePositionMap: {
-    [key in PieceName]: Coordinate[];
-  } = {
-    b: [
-      [0, 2],
-      [0, 5],
-      [7, 2],
-      [7, 5],
-    ],
-    k: [
-      [0, 4],
-      [7, 4],
-    ],
-    n: [
-      [0, 1],
-      [0, 6],
-      [7, 1],
-      [7, 6],
-    ],
-    p: [
-      [1, 0],
-      [1, 1],
-      [1, 2],
-      [1, 3],
-      [1, 4],
-      [1, 5],
-      [1, 6],
-      [1, 7],
-      [6, 0],
-      [6, 1],
-      [6, 2],
-      [6, 3],
-      [6, 4],
-      [6, 5],
-      [6, 6],
-      [6, 7],
-    ],
-    r: [
-      [0, 0],
-      [0, 7],
-      [7, 0],
-      [7, 7],
-    ],
-    q: [
-      [0, 3],
-      [7, 3],
-    ],
-  };
-  public readonly columnLetters: string[] = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-  ];
+  private readonly piecesCoordinates: PiecesCoordinates = PIECES_COORDINATES;
+  public readonly columnLetters: string[] = COLUMN_LETTERS;
   private static instance: Board;
   public controller: BoardController;
   private _colorOnTop: Color = "b";
@@ -88,7 +40,7 @@ class Board {
     this._colorOnTop = color;
   }
 
-  private createCells(): void {
+  private createCells(): Cell[][] {
     let color: Color = "w";
     const rows: Row[] = [0, 1, 2, 3, 4, 5, 6, 7];
     const columns: Column[] = [0, 1, 2, 3, 4, 5, 6, 7];
@@ -106,22 +58,24 @@ class Board {
         }
       }
     }
+    return this.cellGrid;
   }
 
-  private populateCells(): void {
+  private populateCells(): Cell[][] {
     const factory: PieceFactory = new PieceFactory();
     let p: PieceName;
-    for (p in this.piecePositionMap) {
-      const coordinates: Coordinate[] = this.piecePositionMap[p];
+    for (p in this.piecesCoordinates) {
+      const coordinates: Coordinate[] = this.piecesCoordinates[p];
       // eslint-disable-next-line no-loop-func
       coordinates.forEach(([y, x]: Coordinate, index) => {
         const color: Color = index < coordinates.length / 2 ? "b" : "w";
         factory.create(p, color, this.cellGrid[y][x]);
       });
     }
+    return this.cellGrid;
   }
 
-  public getRotatedCells(): Cell[][] {
+  public rotateCells(): Cell[][] {
     const rotated: Cell[][] = this.cellGrid.reverse();
     for (let i = 0; i < rotated.length; i++) {
       rotated[i] = rotated[i].reverse();

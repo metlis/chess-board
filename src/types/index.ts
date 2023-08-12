@@ -24,3 +24,7 @@ export type ComponentRefresh = {
   val?: boolean;
   setVal?: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+export type PiecesCoordinates = {
+  [key in PieceName]: Coordinate[];
+};
