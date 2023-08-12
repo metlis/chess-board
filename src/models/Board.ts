@@ -17,12 +17,16 @@ class Board {
   public readonly columnLetters: string[] = COLUMN_LETTERS;
   private static instance: Board;
   public controller: BoardController;
-  private _colorOnTop: Color = "b";
+  private _colorOnTop: Color;
 
-  private constructor() {
+  private constructor(colorOnTop: Color = "b") {
     this.controller = new BoardController(this);
     this.createCells();
     this.populateCells();
+    this._colorOnTop = colorOnTop;
+    if (this._colorOnTop === "w") {
+      this.rotateBoard();
+    }
   }
 
   static init(): Board {
@@ -75,7 +79,7 @@ class Board {
     return this.cellGrid;
   }
 
-  public rotateCells(): Cell[][] {
+  public rotateBoard(): Cell[][] {
     const rotated: Cell[][] = this.cellGrid.reverse();
     for (let i = 0; i < rotated.length; i++) {
       rotated[i] = rotated[i].reverse();

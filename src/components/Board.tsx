@@ -12,13 +12,13 @@ export default function Board() {
   const [colorOnTop, setColorOnTop] = useState<Color>(board.colorOnTop);
 
   const [cells, setCells] = useState(
-    colorOnTop === "b" ? board.cellGrid : board.rotateCells()
+    colorOnTop === "b" ? board.cellGrid : board.rotateBoard()
   );
 
   const onRotate = () => {
     board.colorOnTop = board.colorOnTop === "b" ? "w" : "b";
     setColorOnTop(board.colorOnTop);
-    setCells(board.rotateCells());
+    setCells(board.rotateBoard());
   };
 
   function getRowNum(index: number): number {
