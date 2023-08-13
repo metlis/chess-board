@@ -11,7 +11,7 @@ import BoardController from "controllers/BoardController";
 class Cell {
   private controller: BoardController;
   public readonly color: Color;
-  public readonly coordinate: Coordinate;
+  public coordinate: Coordinate;
   public piece: Piece | null;
   public draggable: boolean = true;
   public componentRefresh: ComponentRefresh = {};
@@ -45,8 +45,14 @@ class Cell {
     this.dispatch("setDraggable", { exclude: [this] });
   }
 
-  public onDragStop(): void {
+  public onDragStop(offset: { x: number; y: number }): void {
     this.dispatch("setDraggable", { exclude: [this] });
+    const stopCell = this.controller.findCell(this, offset.x, offset.y);
+    if (stopCell === this) {
+      this.recenterPiece();
+    } else if (stopCell !== null) {
+      this.dispatch("movePiece", { source: { from: this, to: stopCell } });
+    }
   }
 
   private onSetDraggable(callback: Function = () => null): void {
@@ -58,6 +64,15 @@ class Cell {
     if (this.componentRefresh.setVal) {
       this.componentRefresh.setVal(!this.componentRefresh.val);
     }
+  }
+
+  private recenterPiece() {
+    this.draggable = false;
+    this.refreshComponent();
+    setTimeout(() => {
+      this.draggable = true;
+      this.refreshComponent();
+    }, 0);
   }
 }
 

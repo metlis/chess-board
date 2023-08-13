@@ -1,4 +1,4 @@
-import { PiecesCoordinates } from "types";
+import { PiecesCoordinates, Row, Column } from "types";
 
 export const PIECES_COORDINATES: PiecesCoordinates = {
   b: [
@@ -57,3 +57,5 @@ export const COLUMN_LETTERS: string[] = [
   "G",
   "H",
 ];
+
+export const AXIS_VALUES: Row[] | Column[] = [0, 1, 2, 3, 4, 5, 6, 7];

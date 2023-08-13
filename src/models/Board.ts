@@ -9,7 +9,7 @@ import type {
   Column,
   PiecesCoordinates,
 } from "types";
-import { PIECES_COORDINATES, COLUMN_LETTERS } from "../constants";
+import { PIECES_COORDINATES, COLUMN_LETTERS, AXIS_VALUES } from "../constants";
 
 class Board {
   public readonly cellGrid: Cell[][] = [];
@@ -46,8 +46,8 @@ class Board {
 
   private createCells(): Cell[][] {
     let color: Color = "w";
-    const rows: Row[] = [0, 1, 2, 3, 4, 5, 6, 7];
-    const columns: Column[] = [0, 1, 2, 3, 4, 5, 6, 7];
+    const rows: Row[] = AXIS_VALUES;
+    const columns: Column[] = AXIS_VALUES;
     for (let row of rows) {
       this.cellGrid[row] = [];
       for (let column of columns) {
@@ -80,11 +80,16 @@ class Board {
   }
 
   public rotateBoard(): Cell[][] {
-    const rotated: Cell[][] = this.cellGrid.reverse();
-    for (let i = 0; i < rotated.length; i++) {
-      rotated[i] = rotated[i].reverse();
+    const rows: Row[] = AXIS_VALUES;
+    const columns: Column[] = AXIS_VALUES;
+    this.cellGrid.reverse();
+    for (let row of rows) {
+      this.cellGrid[row].reverse();
+      for (let column of columns) {
+        this.cellGrid[row][column].coordinate = [row, column];
+      }
     }
-    return rotated;
+    return this.cellGrid;
   }
 }
 

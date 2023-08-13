@@ -30,8 +30,21 @@ class BoardController {
       case "setDraggable":
         this.setDraggable(payload);
         break;
+      case "movePiece":
+        this.movePiece(payload);
+        break;
       default:
         throw new Error("Invalid event name");
+    }
+  }
+
+  public findCell(source: Cell, xOffset: number, yOffset: number): Cell | null {
+    try {
+      return this.board.cellGrid[source.coordinate[0] + yOffset][
+        source.coordinate[1] + xOffset
+      ];
+    } catch {
+      return null;
     }
   }
 
@@ -40,6 +53,14 @@ class BoardController {
       (cell: Cell) => !(payload.exclude || []).includes(cell)
     );
     this.dispatch("setDraggable", filtered);
+  }
+
+  private movePiece(payload: CellEventPayload = {}) {
+    if (!payload.source || !payload.source.from) return;
+    if (payload.source.from.piece && payload.source.to) {
+      payload.source.to.piece = payload.source.from.piece;
+      payload.source.from.piece = null;
+    }
   }
 }
 

@@ -15,9 +15,13 @@ export type Piece = Bishop | King | Knight | Pawn | Rook | Queen;
 export type PieceName = "b" | "k" | "n" | "p" | "r" | "q";
 export type PieceImage = `${PieceName}_${Color}.svg`;
 
-export type CellEventType = "setDraggable";
+export type CellEventType = "setDraggable" | "movePiece";
 export type CellEventPayload = {
   exclude?: Cell[];
+  source?: {
+    from: Cell;
+    to?: Cell;
+  };
 };
 
 export type ComponentRefresh = {
