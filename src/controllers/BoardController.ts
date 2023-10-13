@@ -62,6 +62,18 @@ class BoardController {
       payload.source.from.piece = null;
     }
   }
+
+  public getCell(coordinate: [number, number]): Cell | null {
+    if (
+      coordinate[0] < 0 ||
+      coordinate[0] > 7 ||
+      coordinate[1] < 0 ||
+      coordinate[1] > 7
+    ) {
+      return null;
+    }
+    return this.board.cellGrid[coordinate[0]][coordinate[1]];
+  }
 }
 
 export default BoardController;

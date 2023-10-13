@@ -14,6 +14,8 @@ abstract class Piece {
   }
 
   abstract move(): void;
+
+  abstract getMoveOptions(cell: Cell): Cell[];
 }
 
 export default Piece;

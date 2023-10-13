@@ -11,9 +11,7 @@ export default function Board() {
 
   const [colorOnTop, setColorOnTop] = useState<Color>(board.colorOnTop);
 
-  const [cells, setCells] = useState(
-    colorOnTop === "b" ? board.cellGrid : board.rotateBoard()
-  );
+  const [cells, setCells] = useState(board.cellGrid);
 
   const onRotate = () => {
     board.colorOnTop = board.colorOnTop === "b" ? "w" : "b";

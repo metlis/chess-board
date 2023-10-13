@@ -9,7 +9,7 @@ import type {
 import BoardController from "controllers/BoardController";
 
 class Cell {
-  private controller: BoardController;
+  public controller: BoardController;
   public readonly color: Color;
   public coordinate: Coordinate;
   public piece: Piece | null;
@@ -73,6 +73,11 @@ class Cell {
       this.draggable = true;
       this.refreshComponent();
     }, 0);
+  }
+
+  private getPieceNewCellOptions(): Cell[] {
+    if (!this.piece) return [];
+    return this.piece.getMoveOptions(this);
   }
 }
 

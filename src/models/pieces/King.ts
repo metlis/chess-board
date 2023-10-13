@@ -10,6 +10,11 @@ class King extends Piece {
   move(): void {
     console.log();
   }
+
+  getMoveOptions(cell: Cell): Cell[] {
+    console.log();
+    return [];
+  }
 }
 
 export default King;
