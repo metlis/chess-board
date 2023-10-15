@@ -11,10 +11,10 @@ class Queen extends DiagonallyVerticallyHorizontallyMovingPiece {
     console.log();
   }
 
-  getMoveOptions(cell: Cell): Cell[] {
+  getMoveOptions(): Cell[] {
     return [
-      ...this.getDiagonalMoveOptions(cell),
-      ...this.getVerticalHorizontalMoveOptions(cell),
+      ...this.getDiagonalMoveOptions(),
+      ...this.getVerticalHorizontalMoveOptions(),
     ];
   }
 }

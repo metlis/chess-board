@@ -17,16 +17,18 @@ class Board {
   public readonly columnLetters: string[] = COLUMN_LETTERS;
   private static instance: Board;
   public controller: BoardController;
-  private _colorOnTop: Color;
+  public colorOnTop: Color;
+  public colorMoveTurn: Color;
 
   private constructor(colorOnTop: Color = "b") {
     this.controller = new BoardController(this);
     this.createCells();
     this.populateCells();
-    this._colorOnTop = colorOnTop;
-    if (this._colorOnTop === "w") {
+    this.colorOnTop = colorOnTop;
+    if (this.colorOnTop === "w") {
       this.rotateBoard();
     }
+    this.colorMoveTurn = "w";
   }
 
   static init(): Board {
@@ -34,14 +36,6 @@ class Board {
       Board.instance = new Board();
     }
     return Board.instance;
-  }
-
-  public get colorOnTop() {
-    return this._colorOnTop;
-  }
-
-  public set colorOnTop(color: Color) {
-    this._colorOnTop = color;
   }
 
   private createCells(): Cell[][] {

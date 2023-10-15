@@ -11,33 +11,34 @@ class Knight extends Piece {
     console.log();
   }
 
-  public getMoveOptions(cell: Cell): Cell[] {
+  public getMoveOptions(): Cell[] {
     const cells: Cell[] = [];
-    if (!cell.piece) return cells;
+    if (!this.canMove) return cells;
 
     const columns: number[] = [];
-    if (cell.coordinate[1] - 1 >= 0) {
-      columns.push(cell.coordinate[1] - 1);
+    if (this.cell.coordinate[1] - 1 >= 0) {
+      columns.push(this.cell.coordinate[1] - 1);
     }
-    if (cell.coordinate[1] + 1 <= 7) {
-      columns.push(cell.coordinate[1] + 1);
+    if (this.cell.coordinate[1] + 1 <= 7) {
+      columns.push(this.cell.coordinate[1] + 1);
     }
 
     columns.forEach((column) => {
       const rows: number[] = [];
-      if (cell.coordinate[0] - 2 >= 0) {
-        rows.push(cell.coordinate[0] - 2);
+      if (this.cell.coordinate[0] - 2 >= 0) {
+        rows.push(this.cell.coordinate[0] - 2);
       }
-      if (cell.coordinate[0] + 2 <= 7) {
-        rows.push(cell.coordinate[0] + 2);
+      if (this.cell.coordinate[0] + 2 <= 7) {
+        rows.push(this.cell.coordinate[0] + 2);
       }
 
       rows.forEach((row) => {
-        const target: Cell | null = cell.controller.getCell([row, column]);
+        const target: Cell | null = this.controller.getCell([row, column]);
         if (
           target &&
-          cell.piece &&
-          (target.piece === null || target.piece.color !== cell.piece.color)
+          this.cell.piece &&
+          (target.piece === null ||
+            target.piece.color !== this.cell.piece.color)
         ) {
           cells.push(target);
         }

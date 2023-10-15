@@ -11,8 +11,8 @@ class Bishop extends DiagonallyVerticallyHorizontallyMovingPiece {
     console.log();
   }
 
-  getMoveOptions(cell: Cell): Cell[] {
-    return this.getDiagonalMoveOptions(cell);
+  getMoveOptions(): Cell[] {
+    return this.getDiagonalMoveOptions();
   }
 }
 

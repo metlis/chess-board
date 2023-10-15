@@ -77,7 +77,7 @@ class Cell {
 
   private getPieceNewCellOptions(): Cell[] {
     if (!this.piece) return [];
-    return this.piece.getMoveOptions(this);
+    return this.piece.getMoveOptions();
   }
 }
 

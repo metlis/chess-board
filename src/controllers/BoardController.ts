@@ -56,9 +56,11 @@ class BoardController {
   }
 
   private movePiece(payload: CellEventPayload = {}) {
+    this.board.colorMoveTurn = this.board.colorMoveTurn === "w" ? "b" : "w";
     if (!payload.source || !payload.source.from) return;
     if (payload.source.from.piece && payload.source.to) {
       payload.source.to.piece = payload.source.from.piece;
+      payload.source.to.piece.cell = payload.source.to;
       payload.source.from.piece = null;
     }
   }

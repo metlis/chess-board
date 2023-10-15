@@ -11,7 +11,7 @@ class King extends Piece {
     console.log();
   }
 
-  getMoveOptions(cell: Cell): Cell[] {
+  getMoveOptions(): Cell[] {
     console.log();
     return [];
   }
