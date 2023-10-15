@@ -8,6 +8,7 @@ abstract class Piece {
   public readonly image: PieceImage;
   public cell: Cell;
   public controller: BoardController;
+  public moved = false;
 
   protected constructor(color: Color, cell: Cell, name: PieceName) {
     this.color = color;
@@ -18,9 +19,11 @@ abstract class Piece {
     this.controller = this.cell.controller;
   }
 
-  abstract move(): void;
-
   abstract getMoveOptions(): Cell[];
+
+  public move() {
+    this.moved = true;
+  }
 
   public get canMove(): boolean {
     return this.color === this.controller.board.colorMoveTurn;

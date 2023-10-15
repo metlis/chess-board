@@ -7,10 +7,6 @@ class King extends Piece {
     super(color, cell, "k");
   }
 
-  move(): void {
-    console.log();
-  }
-
   getMoveOptions(): Cell[] {
     console.log();
     return [];

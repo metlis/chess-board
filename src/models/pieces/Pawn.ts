@@ -7,10 +7,6 @@ class Pawn extends Piece {
     super(color, cell, "p");
   }
 
-  move(): void {
-    console.log();
-  }
-
   getMoveOptions(): Cell[] {
     console.log();
     return [];

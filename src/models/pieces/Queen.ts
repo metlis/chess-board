@@ -7,10 +7,6 @@ class Queen extends DiagonallyVerticallyHorizontallyMovingPiece {
     super(color, cell, "q");
   }
 
-  move(): void {
-    console.log();
-  }
-
   getMoveOptions(): Cell[] {
     return [
       ...this.getDiagonalMoveOptions(),

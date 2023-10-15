@@ -7,10 +7,6 @@ class Knight extends Piece {
     super(color, cell, "n");
   }
 
-  move(): void {
-    console.log();
-  }
-
   public getMoveOptions(): Cell[] {
     const cells: Cell[] = [];
     if (!this.canMove) return cells;
