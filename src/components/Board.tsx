@@ -6,9 +6,7 @@ import Cell from "components/Cell";
 import type { Color } from "types";
 import "styles/Board.sass";
 
-export default function Board() {
-  const board: BoardModel = BoardModel.init();
-
+export default function Board({ board }: { board: BoardModel }) {
   const [colorOnTop, setColorOnTop] = useState<Color>(board.colorOnTop);
 
   const [cells, setCells] = useState(board.cellGrid);

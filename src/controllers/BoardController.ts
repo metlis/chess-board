@@ -9,7 +9,7 @@ class BoardController {
     this.board = board;
   }
 
-  private get cells() {
+  public get cells() {
     const cells: Cell[] = [];
     for (let row of this.board.cellGrid) {
       row.forEach((cell) => cells.push(cell));
@@ -49,14 +49,19 @@ class BoardController {
   }
 
   private setDraggable(payload: CellEventPayload = {}): void {
-    const filtered: Cell[] = this.cells.filter(
-      (cell: Cell) => !(payload.exclude || []).includes(cell)
-    );
-    this.dispatch("setDraggable", filtered);
+    if (payload.include) {
+      this.dispatch("setDraggable", payload.include);
+    } else {
+      const filtered: Cell[] = this.cells.filter(
+        (cell: Cell) => !(payload.exclude || []).includes(cell)
+      );
+      this.dispatch("setDraggable", filtered);
+    }
   }
 
   private movePiece(payload: CellEventPayload = {}) {
-    this.board.colorMoveTurn = this.board.colorMoveTurn === "w" ? "b" : "w";
+    this.board.game.controller.colorMoveTurn =
+      this.board.game.controller.colorMoveTurn === "w" ? "b" : "w";
     if (!payload.source || !payload.source.from) return;
     if (payload.source.from.piece && payload.source.to) {
       payload.source.to.piece = payload.source.from.piece;

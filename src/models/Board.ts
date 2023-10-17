@@ -10,17 +10,19 @@ import type {
   PiecesCoordinates,
 } from "types";
 import { PIECES_COORDINATES, COLUMN_LETTERS, AXIS_VALUES } from "../constants";
+import Game from "models/Game";
 
 class Board {
+  public game: Game;
   public readonly cellGrid: Cell[][] = [];
   private readonly piecesCoordinates: PiecesCoordinates = PIECES_COORDINATES;
   public readonly columnLetters: string[] = COLUMN_LETTERS;
   private static instance: Board;
   public controller: BoardController;
   public colorOnTop: Color;
-  public colorMoveTurn: Color;
 
-  private constructor(colorOnTop: Color = "b") {
+  private constructor(game: Game, colorOnTop: Color = "b") {
+    this.game = game;
     this.controller = new BoardController(this);
     this.createCells();
     this.populateCells();
@@ -28,12 +30,11 @@ class Board {
     if (this.colorOnTop === "w") {
       this.rotateBoard();
     }
-    this.colorMoveTurn = "w";
   }
 
-  static init(): Board {
+  static init(game: Game): Board {
     if (!Board.instance) {
-      Board.instance = new Board();
+      Board.instance = new Board(game);
     }
     return Board.instance;
   }
@@ -46,11 +47,7 @@ class Board {
       this.cellGrid[row] = [];
       for (let column of columns) {
         const coordinate: Coordinate = [row, column];
-        this.cellGrid[row][column] = new Cell(
-          color,
-          coordinate,
-          this.controller
-        );
+        this.cellGrid[row][column] = new Cell(color, coordinate, this);
         if (column !== 7) {
           color = color === "w" ? "b" : "w";
         }

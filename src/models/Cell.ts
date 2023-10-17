@@ -6,9 +6,11 @@ import type {
   CellEventType,
   ComponentRefresh,
 } from "types";
+import Board from "models/Board";
 import BoardController from "controllers/BoardController";
 
 class Cell {
+  private board: Board;
   public controller: BoardController;
   public readonly color: Color;
   public coordinate: Coordinate;
@@ -16,15 +18,12 @@ class Cell {
   public draggable: boolean = true;
   public componentRefresh: ComponentRefresh = {};
 
-  constructor(
-    color: Color,
-    coordinate: Coordinate,
-    controller: BoardController
-  ) {
+  constructor(color: Color, coordinate: Coordinate, board: Board) {
     this.color = color;
     this.coordinate = coordinate;
     this.piece = null;
-    this.controller = controller;
+    this.board = board;
+    this.controller = board.controller;
   }
 
   private dispatch(event: CellEventType, payload: CellEventPayload = {}): void {
