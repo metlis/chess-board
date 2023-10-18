@@ -13,7 +13,6 @@ class King extends Piece {
 
   getMoveOptions(): Cell[] {
     const cells: Cell[] = [];
-    if (!this.canMove) return cells;
 
     const top = this.controller.getCell([
       this.cell.coordinate[0] + 1,
@@ -64,6 +63,7 @@ class King extends Piece {
     if (rightBottom && this.targetReachable(rightBottom))
       cells.push(rightBottom);
 
+    this.moveOptions = cells;
     return cells;
   }
 }

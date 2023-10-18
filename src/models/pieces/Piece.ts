@@ -11,6 +11,7 @@ abstract class Piece {
   public moved = false;
   private board: Board;
   public controller: BoardController;
+  public moveOptions: Cell[] = [];
 
   protected constructor(color: Color, cell: Cell, name: PieceName) {
     this.color = color;
@@ -26,10 +27,6 @@ abstract class Piece {
 
   public move() {
     this.moved = true;
-  }
-
-  public get canMove(): boolean {
-    return this.color === this.board.game.controller.colorMoveTurn;
   }
 }
 

@@ -35,6 +35,9 @@ class Cell {
       case "setDraggable":
         this.onSetDraggable(this.refreshComponent.bind(this));
         break;
+      case "getPiecesMoveOptions":
+        this.getPiecesMoveOptions();
+        break;
       default:
         throw new Error("Invalid event name");
     }
@@ -74,7 +77,7 @@ class Cell {
     }, 0);
   }
 
-  private getPieceNewCellOptions(): Cell[] {
+  private getPiecesMoveOptions(): Cell[] {
     if (!this.piece) return [];
     return this.piece.getMoveOptions();
   }

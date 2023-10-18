@@ -17,8 +17,8 @@ export type PieceImage = `${PieceName}_${Color}.svg`;
 
 export type CellEventType =
   | "setDraggable"
-  | "changeColorDraggable"
-  | "movePiece";
+  | "movePiece"
+  | "getPiecesMoveOptions";
 export type CellEventPayload = {
   exclude?: Cell[];
   include?: Cell[];

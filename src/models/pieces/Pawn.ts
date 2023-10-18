@@ -13,7 +13,6 @@ class Pawn extends Piece {
 
   getMoveOptions(): Cell[] {
     const cells: Cell[] = [];
-    if (!this.canMove) return cells;
 
     const left = this.controller.getCell([
       this.cell.coordinate[0] + 1 * (this.movingUp ? -1 : 1),
@@ -47,6 +46,7 @@ class Pawn extends Piece {
       cells.push(right);
     }
 
+    this.moveOptions = cells;
     return cells;
   }
 }

@@ -9,7 +9,6 @@ class Knight extends Piece {
 
   public getMoveOptions(): Cell[] {
     const cells: Cell[] = [];
-    if (!this.canMove) return cells;
 
     const columns: number[] = [];
     if (this.cell.coordinate[1] - 1 >= 0) {
@@ -41,6 +40,7 @@ class Knight extends Piece {
       });
     });
 
+    this.moveOptions = cells;
     return cells;
   }
 }

@@ -1,6 +1,6 @@
 import Cell from "models/Cell";
 import Board from "models/Board";
-import { CellEventType, CellEventPayload } from "types";
+import { CellEventType, CellEventPayload, Color } from "types";
 
 class BoardController {
   public board: Board;
@@ -32,6 +32,9 @@ class BoardController {
         break;
       case "movePiece":
         this.movePiece(payload);
+        break;
+      case "getPiecesMoveOptions":
+        this.getPiecesMoveOptions(payload);
         break;
       default:
         throw new Error("Invalid event name");
@@ -80,6 +83,16 @@ class BoardController {
       return null;
     }
     return this.board.cellGrid[coordinate[0]][coordinate[1]];
+  }
+
+  public getCellsByPieceColor(color: Color): Cell[] {
+    return this.cells.filter((cell: Cell) => cell.piece?.color === color);
+  }
+
+  private getPiecesMoveOptions(payload: CellEventPayload = {}) {
+    if (payload.include) {
+      this.dispatch("getPiecesMoveOptions", payload.include);
+    }
   }
 }
 

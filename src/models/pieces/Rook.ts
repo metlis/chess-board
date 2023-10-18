@@ -8,7 +8,8 @@ class Rook extends DiagonallyVerticallyHorizontallyMovingPiece {
   }
 
   getMoveOptions(): Cell[] {
-    return this.getVerticalHorizontalMoveOptions();
+    this.moveOptions = this.getVerticalHorizontalMoveOptions();
+    return this.moveOptions;
   }
 }
 

@@ -1,25 +1,40 @@
 import Game from "models/Game";
 import { Color } from "types";
-import Cell from "models/Cell";
+import BoardController from "controllers/BoardController";
 
 class GameController {
   private game: Game;
+  private boardController: BoardController;
   public colorMoveTurn: Color = "w";
 
   constructor(game: Game) {
     this.game = game;
+    this.boardController = this.game.board.controller;
     this.startGame();
   }
 
-  public startGame() {
+  private startGame() {
     this.blockPlayerPieces("b");
+    this.getPlayerPossibleMoves("b");
   }
 
   private blockPlayerPieces(color: Color) {
-    const filtered: Cell[] = this.game.board.controller.cells.filter(
-      (cell: Cell) => cell.color === color
+    this.boardController.on("setDraggable", {
+      include: this.boardController.getCellsByPieceColor(color),
+    });
+  }
+
+  private getPlayerPossibleMoves(color: Color) {
+    const cells = this.boardController.getCellsByPieceColor(color);
+    this.boardController.on("getPiecesMoveOptions", {
+      include: cells,
+    });
+    cells.forEach((cell) =>
+      console.log(
+        `Options: ${cell?.piece?.color}-${cell?.piece?.name}`,
+        cell.piece?.moveOptions
+      )
     );
-    this.game.board.controller.on("setDraggable", { include: filtered });
   }
 }
 

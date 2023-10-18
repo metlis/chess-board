@@ -8,7 +8,6 @@ abstract class DiagonallyVerticallyHorizontallyMovingPiece extends Piece {
 
   protected getDiagonalMoveOptions(): Cell[] {
     const cells: Cell[] = [];
-    if (!this.canMove) return cells;
 
     const topLeft: [number, number] = [
       this.cell.coordinate[0] - 1,
@@ -63,7 +62,6 @@ abstract class DiagonallyVerticallyHorizontallyMovingPiece extends Piece {
 
   protected getVerticalHorizontalMoveOptions(): Cell[] {
     const cells: Cell[] = [];
-    if (!this.canMove) return cells;
 
     let top = this.cell.coordinate[0] - 1;
     while (top >= 0) {
