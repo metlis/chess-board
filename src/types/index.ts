@@ -16,9 +16,10 @@ export type PieceName = "b" | "k" | "n" | "p" | "r" | "q";
 export type PieceImage = `${PieceName}_${Color}.svg`;
 
 export type CellEventType =
-  | "setDraggable"
-  | "movePiece"
-  | "getPiecesMoveOptions";
+  | "changePieceDraggability"
+  | "getPieceMoveOptions"
+  | "movePiece";
+
 export type CellEventPayload = {
   exclude?: Cell[];
   include?: Cell[];

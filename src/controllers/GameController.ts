@@ -5,7 +5,6 @@ import BoardController from "controllers/BoardController";
 class GameController {
   private game: Game;
   private boardController: BoardController;
-  public colorMoveTurn: Color = "w";
 
   constructor(game: Game) {
     this.game = game;
@@ -14,19 +13,21 @@ class GameController {
   }
 
   private startGame() {
-    this.blockPlayerPieces("b");
     this.getPlayerPossibleMoves("b");
+    this.changePiecesDraggability("w");
   }
 
-  private blockPlayerPieces(color: Color) {
-    this.boardController.on("setDraggable", {
-      include: this.boardController.getCellsByPieceColor(color),
+  private changePiecesDraggability(color?: Color) {
+    this.boardController.on("changePieceDraggability", {
+      include: color
+        ? this.boardController.getCellsByPieceColor(color)
+        : this.boardController.getCellsWithPieces(),
     });
   }
 
   private getPlayerPossibleMoves(color: Color) {
     const cells = this.boardController.getCellsByPieceColor(color);
-    this.boardController.on("getPiecesMoveOptions", {
+    this.boardController.on("getPieceMoveOptions", {
       include: cells,
     });
     cells.forEach((cell) =>

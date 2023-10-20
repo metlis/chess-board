@@ -10,12 +10,11 @@ import Board from "models/Board";
 import BoardController from "controllers/BoardController";
 
 class Cell {
-  private board: Board;
+  public board: Board;
   public controller: BoardController;
   public readonly color: Color;
   public coordinate: Coordinate;
   public piece: Piece | null;
-  public draggable: boolean = true;
   public componentRefresh: ComponentRefresh = {};
 
   constructor(color: Color, coordinate: Coordinate, board: Board) {
@@ -26,60 +25,41 @@ class Cell {
     this.controller = board.controller;
   }
 
-  private dispatch(event: CellEventType, payload: CellEventPayload = {}): void {
+  public dispatch(event: CellEventType, payload: CellEventPayload = {}): void {
     this.controller.on(event, payload);
   }
 
   public on(event: CellEventType, payload: CellEventPayload = {}): void {
     switch (event) {
-      case "setDraggable":
-        this.onSetDraggable(this.refreshComponent.bind(this));
+      case "changePieceDraggability":
+        this.changePieceDraggability(
+          this.piece?.refreshComponent.bind(this.piece)
+        );
         break;
-      case "getPiecesMoveOptions":
-        this.getPiecesMoveOptions();
+      case "getPieceMoveOptions":
+        this.getPieceMoveOptions();
         break;
       default:
         throw new Error("Invalid event name");
     }
   }
 
-  public onDragStart(): void {
-    this.dispatch("setDraggable", { exclude: [this] });
-  }
-
-  public onDragStop(offset: { x: number; y: number }): void {
-    this.dispatch("setDraggable", { exclude: [this] });
-    const stopCell = this.controller.findCell(this, offset.x, offset.y);
-    if (stopCell === this) {
-      this.recenterPiece();
-    } else if (stopCell !== null) {
-      this.dispatch("movePiece", { source: { from: this, to: stopCell } });
+  private changePieceDraggability(callback: Function = () => null): void {
+    if (this.piece) {
+      this.piece.draggable = !this.piece.draggable;
     }
-  }
-
-  private onSetDraggable(callback: Function = () => null): void {
-    this.draggable = !this.draggable;
     callback();
   }
 
-  private refreshComponent() {
+  private getPieceMoveOptions(): Cell[] {
+    if (!this.piece) return [];
+    return this.piece.getMoveOptions();
+  }
+
+  public refreshComponent() {
     if (this.componentRefresh.setVal) {
       this.componentRefresh.setVal(!this.componentRefresh.val);
     }
-  }
-
-  private recenterPiece() {
-    this.draggable = false;
-    this.refreshComponent();
-    setTimeout(() => {
-      this.draggable = true;
-      this.refreshComponent();
-    }, 0);
-  }
-
-  private getPiecesMoveOptions(): Cell[] {
-    if (!this.piece) return [];
-    return this.piece.getMoveOptions();
   }
 }
 

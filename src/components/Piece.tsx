@@ -1,13 +1,21 @@
-import { useState } from "react";
-import Cell from "models/Cell";
+import { useEffect, useState } from "react";
+import PieceModel from "models/pieces/Piece";
 import Draggable from "react-draggable";
 import { DraggableEvent } from "react-draggable";
+import useComponentRefresh from "hooks/useComponentRefresh";
 
-type PieceProps = { cell: Cell; draggable: boolean };
+type PieceProps = { piece: PieceModel };
 type Node = { node: HTMLElement; x: number; y: number };
 
-export default function Piece({ cell, draggable }: PieceProps) {
+export default function Piece({ piece }: PieceProps) {
+  useComponentRefresh(piece!.componentRefresh);
+
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [draggable, setDraggable] = useState(piece.draggable);
+
+  useEffect(() => {
+    setDraggable(piece.draggable);
+  }, [piece.draggable]);
 
   function locatePiece(_: DraggableEvent, data: Node) {
     const { x: xOffset, y: yOffset } = data;
@@ -22,14 +30,14 @@ export default function Piece({ cell, draggable }: PieceProps) {
 
   function onStop(e: DraggableEvent, data: Node) {
     locatePiece(e, data);
-    cell.onDragStop(offset);
+    piece.onDragStop(offset);
   }
 
-  const piece = cell?.piece?.image ? (
+  const pieceElement = piece?.image ? (
     <div className="piece">
       <img
-        src={require(`images/pieces/${cell.piece.image}`)}
-        alt={cell.piece.name}
+        src={require(`images/pieces/${piece.image}`)}
+        alt={piece.name}
         draggable={false}
       />
     </div>
@@ -41,14 +49,14 @@ export default function Piece({ cell, draggable }: PieceProps) {
     return (
       <Draggable
         bounds=".board"
-        onStart={cell.onDragStart.bind(cell)}
-        onStop={onStop.bind(cell)}
+        onStart={piece.onDragStart.bind(piece)}
+        onStop={onStop.bind(piece)}
         onDrag={locatePiece}
       >
-        {piece}
+        {pieceElement}
       </Draggable>
     );
   } else {
-    return piece;
+    return pieceElement;
   }
 }

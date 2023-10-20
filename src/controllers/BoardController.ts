@@ -27,14 +27,14 @@ class BoardController {
 
   public on(event: CellEventType, payload: CellEventPayload = {}): void {
     switch (event) {
-      case "setDraggable":
-        this.setDraggable(payload);
+      case "changePieceDraggability":
+        this.changePieceDraggability(payload);
         break;
       case "movePiece":
         this.movePiece(payload);
         break;
-      case "getPiecesMoveOptions":
-        this.getPiecesMoveOptions(payload);
+      case "getPieceMoveOptions":
+        this.getPieceMoveOptions(payload);
         break;
       default:
         throw new Error("Invalid event name");
@@ -51,25 +51,25 @@ class BoardController {
     }
   }
 
-  private setDraggable(payload: CellEventPayload = {}): void {
+  private changePieceDraggability(payload: CellEventPayload = {}): void {
     if (payload.include) {
-      this.dispatch("setDraggable", payload.include);
+      this.dispatch("changePieceDraggability", payload.include);
     } else {
       const filtered: Cell[] = this.cells.filter(
         (cell: Cell) => !(payload.exclude || []).includes(cell)
       );
-      this.dispatch("setDraggable", filtered);
+      this.dispatch("changePieceDraggability", filtered);
     }
   }
 
   private movePiece(payload: CellEventPayload = {}) {
-    this.board.game.controller.colorMoveTurn =
-      this.board.game.controller.colorMoveTurn === "w" ? "b" : "w";
     if (!payload.source || !payload.source.from) return;
     if (payload.source.from.piece && payload.source.to) {
       payload.source.to.piece = payload.source.from.piece;
       payload.source.to.piece.cell = payload.source.to;
       payload.source.from.piece = null;
+      payload.source.to.refreshComponent();
+      payload.source.from.refreshComponent();
     }
   }
 
@@ -89,9 +89,13 @@ class BoardController {
     return this.cells.filter((cell: Cell) => cell.piece?.color === color);
   }
 
-  private getPiecesMoveOptions(payload: CellEventPayload = {}) {
+  public getCellsWithPieces(): Cell[] {
+    return this.cells.filter((cell: Cell) => !!cell.piece);
+  }
+
+  private getPieceMoveOptions(payload: CellEventPayload = {}) {
     if (payload.include) {
-      this.dispatch("getPiecesMoveOptions", payload.include);
+      this.dispatch("getPieceMoveOptions", payload.include);
     }
   }
 }
