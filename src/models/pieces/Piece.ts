@@ -2,7 +2,7 @@ import type { Color, PieceImage, PieceName } from "types";
 import Cell from "models/Cell";
 import BoardController from "controllers/BoardController";
 import Board from "models/Board";
-import { EventPayload, PieceEventType, ComponentRefresh } from "types";
+import { EventPayload, EventType, ComponentRefresh } from "types";
 
 abstract class Piece {
   public board: Board;
@@ -32,12 +32,12 @@ abstract class Piece {
     this.moved = true;
   }
 
-  public on(event: PieceEventType, payload: EventPayload<Piece> = {}): void {
+  public on(event: EventType, payload: EventPayload<Piece> = {}): void {
     switch (event) {
-      case "changeDraggability":
+      case "changePieceDraggability":
         this.changeDraggability(this.refreshComponent.bind(this));
         break;
-      case "getMoveOptions":
+      case "getPieceMoveOptions":
         this.getMoveOptions();
         break;
       default:
@@ -51,13 +51,13 @@ abstract class Piece {
   }
 
   public onDragStart(): void {
-    this.boardController.addPieceEvent("changeDraggability", {
+    this.boardController.addEvent("changePieceDraggability", {
       exclude: [this],
     });
   }
 
   public onDragStop(offset: { x: number; y: number }): void {
-    this.boardController.addPieceEvent("changeDraggability", {
+    this.boardController.addEvent("changePieceDraggability", {
       exclude: [this],
     });
     const stopCell = this.board.getCell([

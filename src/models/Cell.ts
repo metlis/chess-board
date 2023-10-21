@@ -3,7 +3,7 @@ import type {
   Piece,
   Coordinate,
   ComponentRefresh,
-  CellEventType,
+  EventType,
   EventPayload,
 } from "types";
 import Board from "models/Board";
@@ -25,7 +25,7 @@ class Cell {
     this.controller = board.controller;
   }
 
-  public on(event: CellEventType, payload: EventPayload<Cell> = {}): void {}
+  public on(event: EventType, payload: EventPayload<Cell> = {}): void {}
 
   public refreshComponent() {
     if (this.componentRefresh.setVal) {

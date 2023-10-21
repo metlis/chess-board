@@ -21,7 +21,7 @@ class GameController {
   }
 
   private changePiecesDraggability(color?: Color) {
-    this.boardController.addPieceEvent("changeDraggability", {
+    this.boardController.addEvent("changePieceDraggability", {
       include: color
         ? this.board.pieces.filter((piece) => piece.color === color)
         : this.board.pieces,
@@ -30,7 +30,7 @@ class GameController {
 
   private getPlayerPossibleMoves(color: Color) {
     const pieces = this.board.pieces.filter((piece) => piece.color === color);
-    this.boardController.addPieceEvent("getMoveOptions", {
+    this.boardController.addEvent("getPieceMoveOptions", {
       include: pieces,
     });
     pieces.forEach((piece) =>
