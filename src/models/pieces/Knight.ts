@@ -28,7 +28,7 @@ class Knight extends Piece {
       }
 
       rows.forEach((row) => {
-        const target: Cell | null = this.controller.getCell([row, column]);
+        const target: Cell | null = this.board.getCell([row, column]);
         if (
           target &&
           this.cell.piece &&

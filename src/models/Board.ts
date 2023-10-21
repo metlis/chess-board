@@ -1,4 +1,6 @@
 import Cell from "models/Cell";
+import Piece from "models/pieces/Piece";
+import Game from "models/Game";
 import PieceFactory from "models/PieceFactory";
 import BoardController from "controllers/BoardController";
 import type {
@@ -10,18 +12,16 @@ import type {
   PiecesCoordinates,
 } from "types";
 import { PIECES_COORDINATES, COLUMN_LETTERS, AXIS_VALUES } from "../constants";
-import Game from "models/Game";
 
 class Board {
   public game: Game;
   public readonly cellGrid: Cell[][] = [];
   private readonly piecesCoordinates: PiecesCoordinates = PIECES_COORDINATES;
   public readonly columnLetters: string[] = COLUMN_LETTERS;
-  private static instance: Board;
   public controller: BoardController;
   public colorOnTop: Color;
 
-  private constructor(game: Game, colorOnTop: Color = "b") {
+  public constructor(game: Game, colorOnTop: Color = "b") {
     this.game = game;
     this.controller = new BoardController(this);
     this.createCells();
@@ -32,11 +32,24 @@ class Board {
     }
   }
 
-  static init(game: Game): Board {
-    if (!Board.instance) {
-      Board.instance = new Board(game);
+  public get cells() {
+    const cells: Cell[] = [];
+    for (let row of this.cellGrid) {
+      row.forEach((cell) => cells.push(cell));
     }
-    return Board.instance;
+    return cells;
+  }
+
+  public get pieces() {
+    const pieces: Piece[] = [];
+    for (let row of this.cellGrid) {
+      row.forEach((cell) => {
+        if (cell.piece) {
+          pieces.push(cell.piece);
+        }
+      });
+    }
+    return pieces;
   }
 
   private createCells(): Cell[][] {
@@ -81,6 +94,18 @@ class Board {
       }
     }
     return this.cellGrid;
+  }
+
+  public getCell(coordinate: [number, number]): Cell | null {
+    if (
+      coordinate[0] < 0 ||
+      coordinate[0] > 7 ||
+      coordinate[1] < 0 ||
+      coordinate[1] > 7
+    ) {
+      return null;
+    }
+    return this.cellGrid[coordinate[0]][coordinate[1]];
   }
 }
 

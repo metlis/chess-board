@@ -14,49 +14,49 @@ class King extends Piece {
   getMoveOptions(): Cell[] {
     const cells: Cell[] = [];
 
-    const top = this.controller.getCell([
+    const top = this.board.getCell([
       this.cell.coordinate[0] + 1,
       this.cell.coordinate[1],
     ]);
     if (top && this.targetReachable(top)) cells.push(top);
 
-    const bottom = this.controller.getCell([
+    const bottom = this.board.getCell([
       this.cell.coordinate[0] - 1,
       this.cell.coordinate[1],
     ]);
     if (bottom && this.targetReachable(bottom)) cells.push(bottom);
 
-    const left = this.controller.getCell([
+    const left = this.board.getCell([
       this.cell.coordinate[0],
       this.cell.coordinate[1] - 1,
     ]);
     if (left && this.targetReachable(left)) cells.push(left);
 
-    const right = this.controller.getCell([
+    const right = this.board.getCell([
       this.cell.coordinate[0],
       this.cell.coordinate[1] + 1,
     ]);
     if (right && this.targetReachable(right)) cells.push(right);
 
-    const leftTop = this.controller.getCell([
+    const leftTop = this.board.getCell([
       this.cell.coordinate[0] - 1,
       this.cell.coordinate[1] - 1,
     ]);
     if (leftTop && this.targetReachable(leftTop)) cells.push(leftTop);
 
-    const rightTop = this.controller.getCell([
+    const rightTop = this.board.getCell([
       this.cell.coordinate[0] - 1,
       this.cell.coordinate[1] + 1,
     ]);
     if (rightTop && this.targetReachable(rightTop)) cells.push(rightTop);
 
-    const leftBottom = this.controller.getCell([
+    const leftBottom = this.board.getCell([
       this.cell.coordinate[0] + 1,
       this.cell.coordinate[1] - 1,
     ]);
     if (leftBottom && this.targetReachable(leftBottom)) cells.push(leftBottom);
 
-    const rightBottom = this.controller.getCell([
+    const rightBottom = this.board.getCell([
       this.cell.coordinate[0] + 1,
       this.cell.coordinate[1] + 1,
     ]);

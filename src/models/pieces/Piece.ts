@@ -2,11 +2,11 @@ import type { Color, PieceImage, PieceName } from "types";
 import Cell from "models/Cell";
 import BoardController from "controllers/BoardController";
 import Board from "models/Board";
-import { ComponentRefresh } from "types";
+import { EventPayload, PieceEventType, ComponentRefresh } from "types";
 
 abstract class Piece {
   public board: Board;
-  public controller: BoardController;
+  public boardController: BoardController;
   public cell: Cell;
   public readonly color: Color;
   public readonly name: PieceName;
@@ -17,19 +17,68 @@ abstract class Piece {
   public componentRefresh: ComponentRefresh = {};
 
   protected constructor(color: Color, cell: Cell, name: PieceName) {
+    this.board = cell.controller.board;
+    this.boardController = cell.controller;
+    this.cell = cell;
     this.color = color;
     this.name = name;
     this.image = `${name}_${color}.svg`;
     cell.piece = this;
-    this.cell = cell;
-    this.controller = this.cell.controller;
-    this.board = this.cell.controller.board;
   }
 
   abstract getMoveOptions(): Cell[];
 
   public move() {
     this.moved = true;
+  }
+
+  public on(event: PieceEventType, payload: EventPayload<Piece> = {}): void {
+    switch (event) {
+      case "changeDraggability":
+        this.changeDraggability(this.refreshComponent.bind(this));
+        break;
+      case "getMoveOptions":
+        this.getMoveOptions();
+        break;
+      default:
+        throw new Error("Invalid event name");
+    }
+  }
+
+  private changeDraggability(callback: Function = () => null): void {
+    this.draggable = !this.draggable;
+    callback();
+  }
+
+  public onDragStart(): void {
+    this.boardController.addPieceEvent("changeDraggability", {
+      exclude: [this],
+    });
+  }
+
+  public onDragStop(offset: { x: number; y: number }): void {
+    this.boardController.addPieceEvent("changeDraggability", {
+      exclude: [this],
+    });
+    const stopCell = this.board.getCell([
+      this.cell.coordinate[0] + offset.y,
+      this.cell.coordinate[1] + offset.x,
+    ]);
+    if (stopCell === this.cell) {
+      this.recenterPiece();
+    } else if (stopCell !== null) {
+      this.reattach(this.cell, stopCell);
+    }
+  }
+
+  private reattach(from: Cell, to: Cell) {
+    if (from.piece && to) {
+      to.piece = from.piece;
+      to.piece.cell = to;
+      from.piece = null;
+      to.refreshComponent();
+      from.refreshComponent();
+    }
   }
 
   public refreshComponent() {
@@ -45,22 +94,6 @@ abstract class Piece {
       this.draggable = true;
       this.refreshComponent();
     }, 0);
-  }
-
-  public onDragStart(): void {
-    this.cell.dispatch("changePieceDraggability", { exclude: [this.cell] });
-  }
-
-  public onDragStop(offset: { x: number; y: number }): void {
-    this.cell.dispatch("changePieceDraggability", { exclude: [this.cell] });
-    const stopCell = this.controller.findCell(this.cell, offset.x, offset.y);
-    if (stopCell === this.cell) {
-      this.recenterPiece();
-    } else if (stopCell !== null) {
-      this.cell.dispatch("movePiece", {
-        source: { from: this.cell, to: stopCell },
-      });
-    }
   }
 }
 

@@ -8,13 +8,13 @@ class Pawn extends Piece {
   }
 
   private get movingUp(): boolean {
-    return this.color !== this.controller.board.colorOnTop;
+    return this.color !== this.board.colorOnTop;
   }
 
   getMoveOptions(): Cell[] {
     const cells: Cell[] = [];
 
-    const left = this.controller.getCell([
+    const left = this.board.getCell([
       this.cell.coordinate[0] + 1 * (this.movingUp ? -1 : 1),
       this.cell.coordinate[1] - 1,
     ]);
@@ -22,7 +22,7 @@ class Pawn extends Piece {
       cells.push(left);
     }
 
-    const singleStraight = this.controller.getCell([
+    const singleStraight = this.board.getCell([
       this.cell.coordinate[0] + 1 * (this.movingUp ? -1 : 1),
       this.cell.coordinate[1],
     ]);
@@ -30,7 +30,7 @@ class Pawn extends Piece {
       cells.push(singleStraight);
     }
 
-    const doubleStraight = this.controller.getCell([
+    const doubleStraight = this.board.getCell([
       this.cell.coordinate[0] + 2 * (this.movingUp ? -1 : 1),
       this.cell.coordinate[1],
     ]);
@@ -38,7 +38,7 @@ class Pawn extends Piece {
       cells.push(doubleStraight);
     }
 
-    const right = this.controller.getCell([
+    const right = this.board.getCell([
       this.cell.coordinate[0] + 1 * (this.movingUp ? -1 : 1),
       this.cell.coordinate[1] + 1,
     ]);

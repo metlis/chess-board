@@ -1,13 +1,16 @@
+import Board from "models/Board";
 import Game from "models/Game";
 import { Color } from "types";
 import BoardController from "controllers/BoardController";
 
 class GameController {
   private game: Game;
+  private board: Board;
   private boardController: BoardController;
 
   constructor(game: Game) {
     this.game = game;
+    this.board = this.game.board;
     this.boardController = this.game.board.controller;
     this.startGame();
   }
@@ -18,23 +21,20 @@ class GameController {
   }
 
   private changePiecesDraggability(color?: Color) {
-    this.boardController.on("changePieceDraggability", {
+    this.boardController.addPieceEvent("changeDraggability", {
       include: color
-        ? this.boardController.getCellsByPieceColor(color)
-        : this.boardController.getCellsWithPieces(),
+        ? this.board.pieces.filter((piece) => piece.color === color)
+        : this.board.pieces,
     });
   }
 
   private getPlayerPossibleMoves(color: Color) {
-    const cells = this.boardController.getCellsByPieceColor(color);
-    this.boardController.on("getPieceMoveOptions", {
-      include: cells,
+    const pieces = this.board.pieces.filter((piece) => piece.color === color);
+    this.boardController.addPieceEvent("getMoveOptions", {
+      include: pieces,
     });
-    cells.forEach((cell) =>
-      console.log(
-        `Options: ${cell?.piece?.color}-${cell?.piece?.name}`,
-        cell.piece?.moveOptions
-      )
+    pieces.forEach((piece) =>
+      console.log(`Options: ${piece.color}-${piece.name}`, piece.moveOptions)
     );
   }
 }

@@ -7,7 +7,7 @@ class Game {
   public controller: GameController;
 
   private constructor() {
-    this.board = Board.init(this);
+    this.board = new Board(this);
     this.controller = new GameController(this);
   }
 
