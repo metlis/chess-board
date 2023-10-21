@@ -65,13 +65,13 @@ abstract class Piece {
       this.cell.coordinate[1] + offset.x,
     ]);
     if (stopCell === this.cell) {
-      this.recenterPiece();
+      this.recenter();
     } else if (stopCell !== null) {
       this.reattach(this.cell, stopCell);
     }
   }
 
-  private reattach(from: Cell, to: Cell) {
+  private reattach(from: Cell, to: Cell): void {
     if (from.piece && to) {
       to.piece = from.piece;
       to.piece.cell = to;
@@ -81,19 +81,19 @@ abstract class Piece {
     }
   }
 
-  public refreshComponent() {
-    if (this.componentRefresh.setVal) {
-      this.componentRefresh.setVal(!this.componentRefresh.val);
-    }
-  }
-
-  public recenterPiece() {
+  public recenter(): void {
     this.draggable = false;
     this.refreshComponent();
     setTimeout(() => {
       this.draggable = true;
       this.refreshComponent();
     }, 0);
+  }
+
+  public refreshComponent(): void {
+    if (this.componentRefresh.setVal) {
+      this.componentRefresh.setVal(!this.componentRefresh.val);
+    }
   }
 }
 

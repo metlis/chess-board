@@ -27,7 +27,7 @@ class Cell {
 
   public on(event: EventType, payload: EventPayload<Cell> = {}): void {}
 
-  public refreshComponent() {
+  public refreshComponent(): void {
     if (this.componentRefresh.setVal) {
       this.componentRefresh.setVal(!this.componentRefresh.val);
     }

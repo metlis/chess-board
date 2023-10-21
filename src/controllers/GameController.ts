@@ -15,12 +15,12 @@ class GameController {
     this.startGame();
   }
 
-  private startGame() {
+  private startGame(): void {
     this.getPlayerPossibleMoves("b");
     this.changePiecesDraggability("w");
   }
 
-  private changePiecesDraggability(color?: Color) {
+  private changePiecesDraggability(color?: Color): void {
     this.boardController.addEvent("changePieceDraggability", {
       include: color
         ? this.board.pieces.filter((piece) => piece.color === color)
@@ -28,7 +28,7 @@ class GameController {
     });
   }
 
-  private getPlayerPossibleMoves(color: Color) {
+  private getPlayerPossibleMoves(color: Color): void {
     const pieces = this.board.pieces.filter((piece) => piece.color === color);
     this.boardController.addEvent("getPieceMoveOptions", {
       include: pieces,

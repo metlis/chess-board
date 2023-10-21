@@ -41,7 +41,7 @@ class BoardController {
     }
   }
 
-  private getMoveOptions(payload: EventPayload<Piece> = {}) {
+  private getMoveOptions(payload: EventPayload<Piece> = {}): void {
     this.dispatchEvent<Piece>("getPieceMoveOptions", payload.include || []);
   }
 }
