@@ -20,29 +20,29 @@ class BoardController {
   public addEvent(event: EventType, payload: EventPayload<Piece> = {}): void {
     switch (event) {
       case "changePieceDraggability":
-        this.changeDraggability(payload);
+        this.dispatchEvent(
+          "changePieceDraggability",
+          this.getItems(payload, this.board.pieces)
+        );
         break;
       case "getPieceMoveOptions":
-        this.getMoveOptions(payload);
+        this.dispatchEvent(
+          "getPieceMoveOptions",
+          this.getItems(payload, this.board.pieces)
+        );
         break;
       default:
         throw new Error("Invalid event name");
     }
   }
 
-  private changeDraggability(payload: EventPayload<Piece> = {}): void {
+  private getItems<T>(payload: EventPayload<T>, items: T[] = []): T[] {
     if (payload.include) {
-      this.dispatchEvent<Piece>("changePieceDraggability", payload.include);
-    } else {
-      const filtered: Piece[] = this.board.pieces.filter(
-        (piece: Piece) => !(payload.exclude || []).includes(piece)
-      );
-      this.dispatchEvent<Piece>("changePieceDraggability", filtered);
+      return payload.include;
+    } else if (payload.exclude) {
+      return items.filter((item) => !(payload.exclude || []).includes(item));
     }
-  }
-
-  private getMoveOptions(payload: EventPayload<Piece> = {}): void {
-    this.dispatchEvent<Piece>("getPieceMoveOptions", payload.include || []);
+    return [];
   }
 }
 

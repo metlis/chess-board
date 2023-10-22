@@ -1,8 +1,14 @@
-import type { Color, PieceImage, PieceName } from "types";
 import Cell from "models/Cell";
 import BoardController from "controllers/BoardController";
 import Board from "models/Board";
-import { EventPayload, EventType, ComponentRefresh } from "types";
+import {
+  Color,
+  ComponentRefresh,
+  EventPayload,
+  EventType,
+  PieceImage,
+  PieceName,
+} from "types";
 
 abstract class Piece {
   public board: Board;
