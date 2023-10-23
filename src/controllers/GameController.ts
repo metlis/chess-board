@@ -1,13 +1,13 @@
 import Board from "models/Board";
 import Game from "models/Game";
-import { Color } from "types";
+import { Color, EventType } from "types";
 import BoardController from "controllers/BoardController";
 
 class GameController {
   private game: Game;
   private board: Board;
   private boardController: BoardController;
-  private activePlayer: Color = "w";
+  private activePlayer: Color = "b";
   public isCheck: boolean = false;
 
   constructor(game: Game) {
@@ -17,9 +17,27 @@ class GameController {
     this.switchActivePlayer();
   }
 
+  public addEvent(event: EventType): void {
+    switch (event) {
+      case "pieceMoved":
+        this.changePiecesDraggability();
+        this.switchActivePlayer();
+        break;
+      default:
+        throw new Error("Invalid event name");
+    }
+  }
+
+  private get idlePlayer(): Color {
+    return this.activePlayer === "b" ? "w" : "b";
+  }
+
   private switchActivePlayer(): void {
+    this.activePlayer = this.idlePlayer;
+    this.isCheck = false;
+    this.getPlayerPossibleMoves(this.idlePlayer);
     this.detectCheck();
-    this.getPlayerPossibleMoves();
+    this.getPlayerPossibleMoves(this.activePlayer);
     this.changePiecesDraggability();
   }
 
@@ -31,10 +49,8 @@ class GameController {
     });
   }
 
-  private getPlayerPossibleMoves(): void {
-    const pieces = this.board.pieces.filter(
-      (piece) => piece.color === this.activePlayer
-    );
+  private getPlayerPossibleMoves(color: Color): void {
+    const pieces = this.board.pieces.filter((piece) => piece.color === color);
     if (this.isCheck) {
       pieces.forEach((piece) => (piece.moveOptions = []));
     }

@@ -1,5 +1,6 @@
 import Cell from "models/Cell";
 import BoardController from "controllers/BoardController";
+import GameController from "controllers/GameController";
 import Board from "models/Board";
 import {
   Color,
@@ -13,6 +14,7 @@ import {
 abstract class Piece {
   public board: Board;
   public boardController: BoardController;
+  public gameController: GameController | undefined;
   public cell: Cell;
   public readonly color: Color;
   public readonly name: PieceName;
@@ -30,6 +32,9 @@ abstract class Piece {
     this.name = name;
     this.image = `${name}_${color}.svg`;
     cell.piece = this;
+    setTimeout(() => {
+      this.gameController = this.board.game.controller;
+    }, 0);
   }
 
   abstract getMoveOptions(): Cell[];
@@ -54,13 +59,19 @@ abstract class Piece {
 
   public onDragStart(): void {
     this.boardController.addEvent("changePieceDraggability", {
-      exclude: [this],
+      exclude: [
+        this,
+        ...this.board.pieces.filter((piece) => piece.color !== this.color),
+      ],
     });
   }
 
   public onDragStop(offset: { x: number; y: number }): void {
     this.boardController.addEvent("changePieceDraggability", {
-      exclude: [this],
+      exclude: [
+        this,
+        ...this.board.pieces.filter((piece) => piece.color !== this.color),
+      ],
     });
     const to = this.board.getCell([
       this.cell.coordinate[0] + offset.y,
@@ -73,6 +84,7 @@ abstract class Piece {
     if (to !== null && this.moveOptions.includes(to)) {
       this.moved = true;
       this.reattach(this.cell, to);
+      this.gameController!.addEvent("pieceMoved");
     } else {
       this.recenter();
     }

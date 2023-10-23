@@ -14,7 +14,10 @@ export type Piece = Bishop | King | Knight | Pawn | Rook | Queen;
 export type PieceName = "b" | "k" | "n" | "p" | "r" | "q";
 export type PieceImage = `${PieceName}_${Color}.svg`;
 
-export type EventType = "changePieceDraggability" | "getPieceMoveOptions";
+export type EventType =
+  | "changePieceDraggability"
+  | "getPieceMoveOptions"
+  | "pieceMoved";
 export type EventFn<T> = (event: EventType, payload?: EventPayload<T>) => void;
 export interface EventPayload<T> {
   exclude?: T[];
