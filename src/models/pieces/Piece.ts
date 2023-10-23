@@ -17,7 +17,7 @@ abstract class Piece {
   public readonly color: Color;
   public readonly name: PieceName;
   public readonly image: PieceImage;
-  public moved = false;
+  public moved: boolean = false;
   public moveOptions: Cell[] = [];
   public draggable: boolean = false;
   public componentRefresh: ComponentRefresh = {};
@@ -33,10 +33,6 @@ abstract class Piece {
   }
 
   abstract getMoveOptions(): Cell[];
-
-  public move() {
-    this.moved = true;
-  }
 
   public on(event: EventType, payload: EventPayload<Piece> = {}): void {
     switch (event) {
@@ -66,14 +62,19 @@ abstract class Piece {
     this.boardController.addEvent("changePieceDraggability", {
       exclude: [this],
     });
-    const stopCell = this.board.getCell([
+    const to = this.board.getCell([
       this.cell.coordinate[0] + offset.y,
       this.cell.coordinate[1] + offset.x,
     ]);
-    if (stopCell === this.cell) {
+    this.move(to);
+  }
+
+  public move(to: Cell | null): void {
+    if (to !== null && this.moveOptions.includes(to)) {
+      this.moved = true;
+      this.reattach(this.cell, to);
+    } else {
       this.recenter();
-    } else if (stopCell !== null) {
-      this.reattach(this.cell, stopCell);
     }
   }
 
