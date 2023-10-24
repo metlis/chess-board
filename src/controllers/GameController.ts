@@ -1,6 +1,7 @@
 import Board from "models/Board";
 import Game from "models/Game";
-import { Color, EventType } from "types";
+import Move from "models/Move";
+import { Color, EventPayload, EventType } from "types";
 import BoardController from "controllers/BoardController";
 
 class GameController {
@@ -9,6 +10,7 @@ class GameController {
   private boardController: BoardController;
   private activePlayer: Color = "b";
   public isCheck: boolean = false;
+  public moves: Move[] = [];
 
   constructor(game: Game) {
     this.game = game;
@@ -17,14 +19,27 @@ class GameController {
     this.switchActivePlayer();
   }
 
-  public addEvent(event: EventType): void {
+  public addEvent(event: EventType, payload: EventPayload<any>): void {
     switch (event) {
       case "pieceMoved":
-        this.changePiecesDraggability();
-        this.switchActivePlayer();
+        this.pieceMoved(payload);
         break;
       default:
         throw new Error("Invalid event name");
+    }
+  }
+
+  private pieceMoved(payload: EventPayload<any>): void {
+    if (payload.move) {
+      const [piece, to] = payload.move;
+      if (piece.moveOptions.includes(to)) {
+        const move: Move = new Move(piece, to);
+        this.moves.push(move);
+        this.changePiecesDraggability();
+        this.switchActivePlayer();
+      } else {
+        piece.recenter();
+      }
     }
   }
 

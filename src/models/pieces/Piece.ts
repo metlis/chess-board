@@ -77,26 +77,10 @@ abstract class Piece {
       this.cell.coordinate[0] + offset.y,
       this.cell.coordinate[1] + offset.x,
     ]);
-    this.move(to);
-  }
-
-  public move(to: Cell | null): void {
-    if (to !== null && this.moveOptions.includes(to)) {
-      this.moved = true;
-      this.reattach(this.cell, to);
-      this.gameController!.addEvent("pieceMoved");
+    if (to) {
+      this.gameController!.addEvent("pieceMoved", { move: [this, to] });
     } else {
       this.recenter();
-    }
-  }
-
-  private reattach(from: Cell, to: Cell): void {
-    if (from.piece && to) {
-      to.piece = from.piece;
-      to.piece.cell = to;
-      from.piece = null;
-      to.refreshComponent();
-      from.refreshComponent();
     }
   }
 
