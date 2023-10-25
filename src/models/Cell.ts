@@ -1,6 +1,7 @@
 import type {
   Color,
   Piece,
+  CellID,
   Coordinate,
   ComponentRefresh,
   EventType,
@@ -8,8 +9,10 @@ import type {
 } from "types";
 import Board from "models/Board";
 import BoardController from "controllers/BoardController";
+import { COLUMN_LETTERS, ROW_NUMBERS } from "../constants";
 
 class Cell {
+  public id: CellID;
   public board: Board;
   public controller: BoardController;
   public readonly color: Color;
@@ -18,6 +21,7 @@ class Cell {
   public componentRefresh: ComponentRefresh = {};
 
   constructor(color: Color, coordinate: Coordinate, board: Board) {
+    this.id = `${COLUMN_LETTERS[coordinate[1]]}${ROW_NUMBERS[coordinate[0]]}`;
     this.color = color;
     this.coordinate = coordinate;
     this.piece = null;

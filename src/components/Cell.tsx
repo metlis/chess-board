@@ -12,7 +12,7 @@ export default function Cell({ cell }: CellProps) {
   useComponentRefresh(cell.componentRefresh);
 
   return (
-    <div className={`row__cell row__cell--${cell.color}`}>
+    <div id={cell.id} className={`row__cell row__cell--${cell.color}`}>
       {cell.piece ? <Piece piece={cell.piece} /> : ""}
     </div>
   );

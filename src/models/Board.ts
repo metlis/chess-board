@@ -9,6 +9,7 @@ import type {
   PieceName,
   Row,
   Column,
+  ColumnLetter,
   PiecesCoordinates,
 } from "types";
 import { PIECES_COORDINATES, COLUMN_LETTERS, AXIS_VALUES } from "../constants";
@@ -17,7 +18,7 @@ class Board {
   public game: Game;
   public readonly cellGrid: Cell[][] = [];
   private readonly piecesCoordinates: PiecesCoordinates = PIECES_COORDINATES;
-  public readonly columnLetters: string[] = COLUMN_LETTERS;
+  public readonly columnLetters: ColumnLetter[] = COLUMN_LETTERS;
   public controller: BoardController;
   public colorOnTop: Color;
 

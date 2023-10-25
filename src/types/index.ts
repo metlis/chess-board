@@ -34,3 +34,7 @@ export type ComponentRefresh = {
 export type PiecesCoordinates = {
   [key in PieceName]: Coordinate[];
 };
+
+export type ColumnLetter = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H";
+export type RowNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+export type CellID = `${ColumnLetter}${RowNumber}`;

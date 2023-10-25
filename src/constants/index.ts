@@ -1,4 +1,4 @@
-import { PiecesCoordinates, Row, Column } from "types";
+import { PiecesCoordinates, Row, Column, ColumnLetter, RowNumber } from "types";
 
 export const PIECES_COORDINATES: PiecesCoordinates = {
   b: [
@@ -47,7 +47,7 @@ export const PIECES_COORDINATES: PiecesCoordinates = {
   ],
 };
 
-export const COLUMN_LETTERS: string[] = [
+export const COLUMN_LETTERS: ColumnLetter[] = [
   "A",
   "B",
   "C",
@@ -59,3 +59,5 @@ export const COLUMN_LETTERS: string[] = [
 ];
 
 export const AXIS_VALUES: Row[] | Column[] = [0, 1, 2, 3, 4, 5, 6, 7];
+
+export const ROW_NUMBERS: RowNumber[] = [8, 7, 6, 5, 4, 3, 2, 1];
