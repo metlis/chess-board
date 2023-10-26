@@ -74,9 +74,6 @@ class GameController {
         ? pieces.filter((piece) => piece.name === "k")
         : pieces,
     });
-    pieces.forEach((piece) =>
-      console.log(`Options: ${piece.color}-${piece.name}`, piece.moveOptions)
-    );
   }
 
   private detectCheck(): void {
@@ -94,6 +91,10 @@ class GameController {
         })
       );
     this.isCheck = _isCheck;
+  }
+
+  public getLastMove(): Move {
+    return this.moves[this.moves.length - 1];
   }
 }
 

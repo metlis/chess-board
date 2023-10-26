@@ -2,11 +2,12 @@ import Cell from "models/Cell";
 import Piece from "models/pieces/Piece";
 
 class Move {
-  private piece: Piece;
-  private from: Cell;
-  private to: Cell;
+  public piece: Piece;
+  public from: Cell;
+  public to: Cell;
 
   public constructor(piece: Piece, to: Cell) {
+    this.checkPawnSpecialMove(piece, to);
     this.piece = piece;
     this.from = piece.cell;
     this.to = to;
@@ -16,6 +17,23 @@ class Move {
     this.piece.moved = true;
     this.to.refreshComponent();
     this.from.refreshComponent();
+  }
+
+  private checkPawnSpecialMove(piece: Piece, to: Cell) {
+    if (
+      piece.name === "p" &&
+      to.coordinate[1] !== piece.cell.coordinate[1] &&
+      !to.piece
+    ) {
+      const cell = piece.board.getCell([
+        piece.cell.coordinate[0],
+        to.coordinate[1],
+      ]);
+      if (cell) {
+        cell.piece = null;
+        cell.refreshComponent();
+      }
+    }
   }
 }
 

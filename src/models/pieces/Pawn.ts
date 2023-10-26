@@ -46,6 +46,23 @@ class Pawn extends Piece {
       cells.push(right);
     }
 
+    const lastMove = this.gameController?.getLastMove();
+    if (
+      lastMove?.piece.name === "p" &&
+      lastMove.to.coordinate[0] === this.cell.coordinate[0] &&
+      Math.abs(lastMove.from.coordinate[0] - lastMove.to.coordinate[0]) === 2 &&
+      (lastMove.to.coordinate[1] === this.cell.coordinate[1] - 1 ||
+        lastMove.to.coordinate[1] === this.cell.coordinate[1] + 1)
+    ) {
+      const cell = this.board.getCell([
+        lastMove.to.coordinate[0] + (this.movingUp ? -1 : 1),
+        lastMove.to.coordinate[1],
+      ]);
+      if (cell) {
+        cells.push(cell);
+      }
+    }
+
     this.moveOptions = cells;
     return cells;
   }
