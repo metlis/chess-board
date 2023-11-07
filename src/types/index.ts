@@ -18,7 +18,8 @@ export type PieceImage = `${PieceName}_${Color}.svg`;
 export type EventType =
   | "changePieceDraggability"
   | "getPieceMoveOptions"
-  | "pieceMoved";
+  | "pieceMoved"
+  | "showPromotionOptions";
 export type EventFn<T> = (event: EventType, payload?: EventPayload<T>) => void;
 export interface EventPayload<T> {
   exclude?: T[];

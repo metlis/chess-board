@@ -1,5 +1,6 @@
 import Piece from "models/pieces/Piece";
 import Board from "models/Board";
+import Cell from "models/Cell";
 import { EventType, EventPayload, EventFn } from "types";
 
 class BoardController {
@@ -17,18 +18,27 @@ class BoardController {
     items.forEach((item: T) => item.on(event, payload));
   }
 
-  public addEvent(event: EventType, payload: EventPayload<Piece> = {}): void {
+  public addEvent(
+    event: EventType,
+    payload: EventPayload<Piece | Cell> = {}
+  ): void {
     switch (event) {
       case "changePieceDraggability":
         this.dispatchEvent(
           "changePieceDraggability",
-          this.getItems(payload, this.board.pieces)
+          this.getItems(payload as EventPayload<Piece>)
         );
         break;
       case "getPieceMoveOptions":
         this.dispatchEvent(
           "getPieceMoveOptions",
-          this.getItems(payload, this.board.pieces)
+          this.getItems(payload as EventPayload<Piece>)
+        );
+        break;
+      case "showPromotionOptions":
+        this.dispatchEvent(
+          "showPromotionOptions",
+          this.getItems(payload as EventPayload<Cell>)
         );
         break;
       default:
@@ -36,11 +46,13 @@ class BoardController {
     }
   }
 
-  private getItems<T>(payload: EventPayload<T>, items: T[] = []): T[] {
+  private getItems<T>(payload: EventPayload<T>): T[] {
     if (payload.include) {
       return payload.include;
     } else if (payload.exclude) {
-      return items.filter((item) => !(payload.exclude || []).includes(item));
+      return (this.board.pieces as T[]).filter(
+        (item) => !(payload.exclude || []).includes(item)
+      );
     }
     return [];
   }

@@ -29,7 +29,15 @@ class Cell {
     this.controller = board.controller;
   }
 
-  public on(event: EventType, payload: EventPayload<Cell> = {}): void {}
+  public on(event: EventType, payload: EventPayload<Cell> = {}): void {
+    switch (event) {
+      case "showPromotionOptions":
+        console.log(this);
+        break;
+      default:
+        throw new Error("Invalid event name");
+    }
+  }
 
   public refreshComponent(): void {
     if (this.componentRefresh.setVal) {

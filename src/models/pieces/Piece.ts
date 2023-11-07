@@ -57,22 +57,27 @@ abstract class Piece {
     callback();
   }
 
-  public onDragStart(): void {
-    this.boardController.addEvent("changePieceDraggability", {
+  private get draggabilityPayload(): EventPayload<Piece> {
+    return {
       exclude: [
         this,
         ...this.board.pieces.filter((piece) => piece.color !== this.color),
       ],
-    });
+    };
+  }
+
+  public onDragStart(): void {
+    this.boardController.addEvent(
+      "changePieceDraggability",
+      this.draggabilityPayload
+    );
   }
 
   public onDragStop(offset: { x: number; y: number }): void {
-    this.boardController.addEvent("changePieceDraggability", {
-      exclude: [
-        this,
-        ...this.board.pieces.filter((piece) => piece.color !== this.color),
-      ],
-    });
+    this.boardController.addEvent(
+      "changePieceDraggability",
+      this.draggabilityPayload
+    );
     const to = this.board.getCell([
       this.cell.coordinate[0] + offset.y,
       this.cell.coordinate[1] + offset.x,

@@ -1,7 +1,9 @@
 import Board from "models/Board";
 import Game from "models/Game";
 import Move from "models/Move";
-import { Color, EventPayload, EventType } from "types";
+import Piece from "models/pieces/Piece";
+import Cell from "models/Cell";
+import { Color, EventPayload, EventType, Row } from "types";
 import BoardController from "controllers/BoardController";
 
 class GameController {
@@ -19,7 +21,15 @@ class GameController {
     this.switchActivePlayer();
   }
 
-  public addEvent(event: EventType, payload: EventPayload<any>): void {
+  private get idlePlayer(): Color {
+    return this.activePlayer === "b" ? "w" : "b";
+  }
+
+  public get lastMove(): Move {
+    return this.moves[this.moves.length - 1];
+  }
+
+  public addEvent(event: EventType, payload: EventPayload<Cell | Piece>): void {
     switch (event) {
       case "pieceMoved":
         this.pieceMoved(payload);
@@ -29,10 +39,14 @@ class GameController {
     }
   }
 
-  private pieceMoved(payload: EventPayload<any>): void {
+  private pieceMoved(payload: EventPayload<Cell | Piece>): void {
     if (payload.move) {
       const [piece, to] = payload.move;
       if (piece.moveOptions.includes(to)) {
+        if (piece.name === "p" && [0, 7].includes(to.coordinate[0])) {
+          this.showPromotionOptions(to);
+          return;
+        }
         const move: Move = new Move(piece, to);
         this.moves.push(move);
         this.changePiecesDraggability();
@@ -43,8 +57,20 @@ class GameController {
     }
   }
 
-  private get idlePlayer(): Color {
-    return this.activePlayer === "b" ? "w" : "b";
+  private showPromotionOptions(to: Cell) {
+    const cells: Cell[] = [];
+    if (to.coordinate[0] === 0) {
+      for (let i: Row = 0; i <= 3; i++) {
+        const cell = this.board.getCell([i, to.coordinate[1]]);
+        if (cell) cells.push(cell);
+      }
+    } else {
+      for (let i: Row = 7; i >= 4; i--) {
+        const cell = this.board.getCell([i, to.coordinate[1]]);
+        if (cell) cells.push(cell);
+      }
+    }
+    this.boardController.addEvent("showPromotionOptions", { include: cells });
   }
 
   private switchActivePlayer(): void {
@@ -91,10 +117,6 @@ class GameController {
         })
       );
     this.isCheck = _isCheck;
-  }
-
-  public getLastMove(): Move {
-    return this.moves[this.moves.length - 1];
   }
 }
 
