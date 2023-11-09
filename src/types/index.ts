@@ -6,6 +6,7 @@ import Rook from "models/pieces/Rook";
 import Queen from "models/pieces/Queen";
 import King from "models/pieces/King";
 import Cell from "models/Cell";
+import PromotionPiece from "models/pieces/PromotionPiece";
 
 export type Color = "b" | "w";
 export type Row = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
@@ -19,12 +20,15 @@ export type EventType =
   | "changePieceDraggability"
   | "getPieceMoveOptions"
   | "pieceMoved"
-  | "showPromotionOptions";
+  | "showPromotionOptions"
+  | "hidePromotionOptions"
+  | "promotionOptionSelected";
 export type EventFn<T> = (event: EventType, payload?: EventPayload<T>) => void;
 export interface EventPayload<T> {
   exclude?: T[];
   include?: T[];
   move?: [Piece, Cell];
+  promotion?: PromotionPiece;
 }
 
 export type ComponentRefresh = {

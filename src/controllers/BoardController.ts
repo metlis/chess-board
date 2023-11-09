@@ -41,6 +41,12 @@ class BoardController {
           this.getItems(payload as EventPayload<Cell>)
         );
         break;
+      case "hidePromotionOptions":
+        this.dispatchEvent(
+          "hidePromotionOptions",
+          this.getItems(payload as EventPayload<Cell>)
+        );
+        break;
       default:
         throw new Error("Invalid event name");
     }
