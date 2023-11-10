@@ -39,10 +39,7 @@ abstract class Piece {
 
   abstract getMoveOptions(): Cell[];
 
-  public on(
-    event: BoardEventType,
-    payload: BoardEventPayload<Piece> = {}
-  ): void {
+  public on(event: BoardEventType, payload: BoardEventPayload = {}): void {
     switch (event) {
       case "changePieceDraggability":
         this.changeDraggability(this.refreshComponent.bind(this));
@@ -60,7 +57,7 @@ abstract class Piece {
     callback();
   }
 
-  private get draggabilityPayload(): BoardEventPayload<Piece> {
+  private get draggabilityPayload(): BoardEventPayload {
     return {
       exclude: [
         this,

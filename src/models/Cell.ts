@@ -32,10 +32,7 @@ class Cell {
     this.controller = board.controller;
   }
 
-  public on(
-    event: BoardEventType,
-    payload: BoardEventPayload<Cell> = {}
-  ): void {
+  public on(event: BoardEventType, payload: BoardEventPayload = {}): void {
     switch (event) {
       case "showPromotionOptions":
         this.showPromotionOptions();

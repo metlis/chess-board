@@ -23,14 +23,14 @@ export type BoardEventType =
   | "showPromotionOptions"
   | "hidePromotionOptions";
 
-export type BoardEventFn<T> = (
+export type BoardEventFn = (
   event: BoardEventType,
-  payload?: BoardEventPayload<T>
+  payload?: BoardEventPayload
 ) => void;
 
-export interface BoardEventPayload<T> {
-  exclude?: T[];
-  include?: T[];
+export interface BoardEventPayload {
+  exclude?: (Piece | Cell)[];
+  include?: (Piece | Cell)[];
 }
 
 export type GameEventType =
