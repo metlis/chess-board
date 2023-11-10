@@ -6,6 +6,7 @@ import Rook from "models/pieces/Rook";
 import Queen from "models/pieces/Queen";
 import King from "models/pieces/King";
 import Cell from "models/Cell";
+import Move from "models/Move";
 import PromotionPiece from "models/pieces/PromotionPiece";
 
 export type Color = "b" | "w";
@@ -18,16 +19,19 @@ export type PieceImage = `${PieceName}_${Color}.svg`;
 
 export type EventType =
   | "changePieceDraggability"
+  | "changePiecesDraggability"
   | "getPieceMoveOptions"
   | "pieceMoved"
   | "showPromotionOptions"
   | "hidePromotionOptions"
-  | "promotionOptionSelected";
+  | "promotionOptionSelected"
+  | "switchActivePlayer"
+  | "pushMove";
 export type EventFn<T> = (event: EventType, payload?: EventPayload<T>) => void;
 export interface EventPayload<T> {
   exclude?: T[];
   include?: T[];
-  move?: [Piece, Cell];
+  move?: [Piece, Cell] | Move;
   promotion?: PromotionPiece;
 }
 
