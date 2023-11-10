@@ -1,10 +1,8 @@
 import Board from "models/Board";
 import Game from "models/Game";
 import Move from "models/Move";
-import Piece from "models/pieces/Piece";
-import Cell from "models/Cell";
 import PendingPromotion from "models/PendingPromotion";
-import { Color, EventPayload, EventType } from "types";
+import { Color, GameEventType, GameEventPayload } from "types";
 import BoardController from "controllers/BoardController";
 
 class GameController {
@@ -31,10 +29,7 @@ class GameController {
     return this.moves[this.moves.length - 1];
   }
 
-  public addEvent(
-    event: EventType,
-    payload: EventPayload<Cell | Piece> = {}
-  ): void {
+  public addEvent(event: GameEventType, payload: GameEventPayload = {}): void {
     switch (event) {
       case "pieceMoved":
         this.pieceMoved(payload);
@@ -57,7 +52,7 @@ class GameController {
     }
   }
 
-  private pieceMoved(payload: EventPayload<Cell | Piece>): void {
+  private pieceMoved(payload: GameEventPayload): void {
     if (payload.move instanceof Array) {
       const [piece, to] = payload.move;
       if (piece.moveOptions.includes(to)) {

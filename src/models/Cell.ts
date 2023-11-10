@@ -5,8 +5,8 @@ import type {
   CellID,
   Coordinate,
   ComponentRefresh,
-  EventType,
-  EventPayload,
+  BoardEventType,
+  BoardEventPayload,
 } from "types";
 import Board from "models/Board";
 import PromotionPiece from "models/pieces/PromotionPiece";
@@ -32,7 +32,10 @@ class Cell {
     this.controller = board.controller;
   }
 
-  public on(event: EventType, payload: EventPayload<Cell> = {}): void {
+  public on(
+    event: BoardEventType,
+    payload: BoardEventPayload<Cell> = {}
+  ): void {
     switch (event) {
       case "showPromotionOptions":
         this.showPromotionOptions();

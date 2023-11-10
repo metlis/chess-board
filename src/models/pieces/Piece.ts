@@ -5,8 +5,8 @@ import Board from "models/Board";
 import {
   Color,
   ComponentRefresh,
-  EventPayload,
-  EventType,
+  BoardEventPayload,
+  BoardEventType,
   PieceImage,
   PieceName,
 } from "types";
@@ -39,7 +39,10 @@ abstract class Piece {
 
   abstract getMoveOptions(): Cell[];
 
-  public on(event: EventType, payload: EventPayload<Piece> = {}): void {
+  public on(
+    event: BoardEventType,
+    payload: BoardEventPayload<Piece> = {}
+  ): void {
     switch (event) {
       case "changePieceDraggability":
         this.changeDraggability(this.refreshComponent.bind(this));
@@ -57,7 +60,7 @@ abstract class Piece {
     callback();
   }
 
-  private get draggabilityPayload(): EventPayload<Piece> {
+  private get draggabilityPayload(): BoardEventPayload<Piece> {
     return {
       exclude: [
         this,

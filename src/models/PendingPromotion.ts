@@ -4,7 +4,7 @@ import PieceFactory from "models/PieceFactory";
 import Move from "models/Move";
 import GameController from "controllers/GameController";
 import BoardController from "controllers/BoardController";
-import { EventPayload, Row } from "types";
+import { GameEventPayload, Row } from "types";
 
 class PendingPromotion {
   private boardController: BoardController;
@@ -46,7 +46,7 @@ class PendingPromotion {
     });
   }
 
-  public optionSelected(payload: EventPayload<Cell | Piece>) {
+  public optionSelected(payload: GameEventPayload) {
     this.boardController.addEvent("hidePromotionOptions", {
       include: this.promotionCells,
     });

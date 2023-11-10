@@ -17,20 +17,30 @@ export type Piece = Bishop | King | Knight | Pawn | Rook | Queen;
 export type PieceName = "b" | "k" | "n" | "p" | "r" | "q";
 export type PieceImage = `${PieceName}_${Color}.svg`;
 
-export type EventType =
+export type BoardEventType =
   | "changePieceDraggability"
-  | "changePiecesDraggability"
   | "getPieceMoveOptions"
-  | "pieceMoved"
   | "showPromotionOptions"
-  | "hidePromotionOptions"
+  | "hidePromotionOptions";
+
+export type BoardEventFn<T> = (
+  event: BoardEventType,
+  payload?: BoardEventPayload<T>
+) => void;
+
+export interface BoardEventPayload<T> {
+  exclude?: T[];
+  include?: T[];
+}
+
+export type GameEventType =
+  | "changePiecesDraggability"
+  | "pieceMoved"
   | "promotionOptionSelected"
   | "switchActivePlayer"
   | "pushMove";
-export type EventFn<T> = (event: EventType, payload?: EventPayload<T>) => void;
-export interface EventPayload<T> {
-  exclude?: T[];
-  include?: T[];
+
+export interface GameEventPayload {
   move?: [Piece, Cell] | Move;
   promotion?: PromotionPiece;
 }

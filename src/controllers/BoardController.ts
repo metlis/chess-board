@@ -1,7 +1,7 @@
 import Piece from "models/pieces/Piece";
 import Board from "models/Board";
 import Cell from "models/Cell";
-import { EventType, EventPayload, EventFn } from "types";
+import { BoardEventType, BoardEventPayload, BoardEventFn } from "types";
 
 class BoardController {
   public board: Board;
@@ -10,41 +10,41 @@ class BoardController {
     this.board = board;
   }
 
-  private dispatchEvent<T extends { on: EventFn<T> }>(
-    event: EventType,
+  private dispatchEvent<T extends { on: BoardEventFn<T> }>(
+    event: BoardEventType,
     items: T[],
-    payload: EventPayload<T> = {}
+    payload: BoardEventPayload<T> = {}
   ): void {
     items.forEach((item: T) => item.on(event, payload));
   }
 
   public addEvent(
-    event: EventType,
-    payload: EventPayload<Piece | Cell> = {}
+    event: BoardEventType,
+    payload: BoardEventPayload<Piece | Cell> = {}
   ): void {
     switch (event) {
       case "changePieceDraggability":
         this.dispatchEvent(
           "changePieceDraggability",
-          this.getItems(payload as EventPayload<Piece>)
+          this.getItems(payload as BoardEventPayload<Piece>)
         );
         break;
       case "getPieceMoveOptions":
         this.dispatchEvent(
           "getPieceMoveOptions",
-          this.getItems(payload as EventPayload<Piece>)
+          this.getItems(payload as BoardEventPayload<Piece>)
         );
         break;
       case "showPromotionOptions":
         this.dispatchEvent(
           "showPromotionOptions",
-          this.getItems(payload as EventPayload<Cell>)
+          this.getItems(payload as BoardEventPayload<Cell>)
         );
         break;
       case "hidePromotionOptions":
         this.dispatchEvent(
           "hidePromotionOptions",
-          this.getItems(payload as EventPayload<Cell>)
+          this.getItems(payload as BoardEventPayload<Cell>)
         );
         break;
       default:
@@ -52,7 +52,7 @@ class BoardController {
     }
   }
 
-  private getItems<T>(payload: EventPayload<T>): T[] {
+  private getItems<T>(payload: BoardEventPayload<T>): T[] {
     if (payload.include) {
       return payload.include;
     } else if (payload.exclude) {
