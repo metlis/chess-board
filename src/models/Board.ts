@@ -13,6 +13,7 @@ import type {
   PiecesCoordinates,
 } from "types";
 import { PIECES_COORDINATES, COLUMN_LETTERS, AXIS_VALUES } from "../constants";
+import { ComponentRefresh } from "types";
 
 class Board {
   public game: Game;
@@ -21,6 +22,7 @@ class Board {
   public readonly columnLetters: ColumnLetter[] = COLUMN_LETTERS;
   public eventBridge: EventBridge;
   public colorOnTop: Color;
+  public componentRefresh: ComponentRefresh = {};
 
   public constructor(
     game: Game,
@@ -29,12 +31,16 @@ class Board {
   ) {
     this.game = game;
     this.eventBridge = eventBridge.init(this);
+    this.colorOnTop = colorOnTop;
+  }
+
+  public init() {
     this.createCells();
     this.populateCells();
-    this.colorOnTop = colorOnTop;
     if (this.colorOnTop === "w") {
       this.rotateBoard();
     }
+    this.refreshComponent();
   }
 
   public get cells() {
@@ -111,6 +117,12 @@ class Board {
       return null;
     }
     return this.cellGrid[coordinate[0]][coordinate[1]];
+  }
+
+  public refreshComponent(): void {
+    if (this.componentRefresh.setVal) {
+      this.componentRefresh.setVal(!this.componentRefresh.val);
+    }
   }
 }
 

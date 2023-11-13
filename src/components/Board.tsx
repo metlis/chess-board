@@ -5,8 +5,11 @@ import Row from "components/Row";
 import Cell from "components/Cell";
 import type { Color } from "types";
 import "styles/Board.sass";
+import useComponentRefresh from "hooks/useComponentRefresh";
 
 export default function Board({ board }: { board: BoardModel }) {
+  useComponentRefresh(board.componentRefresh);
+
   const [colorOnTop, setColorOnTop] = useState<Color>(board.colorOnTop);
 
   const [cells, setCells] = useState(board.cellGrid);
