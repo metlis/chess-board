@@ -2,7 +2,6 @@ import Base from "models/Base";
 import Cell from "models/Cell";
 import {
   Color,
-  ComponentRefresh,
   BoardEventPayload,
   BoardEventType,
   PieceImage,
@@ -17,7 +16,6 @@ abstract class Piece extends Base {
   public moved: boolean = false;
   public moveOptions: Cell[] = [];
   public draggable: boolean = false;
-  public componentRefresh: ComponentRefresh = {};
 
   protected constructor(color: Color, cell: Cell, name: PieceName) {
     super(cell.board);
@@ -87,12 +85,6 @@ abstract class Piece extends Base {
       this.draggable = true;
       this.refreshComponent();
     }, 0);
-  }
-
-  public refreshComponent(): void {
-    if (this.componentRefresh.setVal) {
-      this.componentRefresh.setVal(!this.componentRefresh.val);
-    }
   }
 }
 

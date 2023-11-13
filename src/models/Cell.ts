@@ -4,7 +4,6 @@ import type {
   PieceName,
   CellID,
   Coordinate,
-  ComponentRefresh,
   BoardEventType,
   BoardEventPayload,
 } from "types";
@@ -19,7 +18,6 @@ class Cell extends Base {
   public coordinate: Coordinate;
   public piece: Piece | null;
   public promotionPiece: PromotionPiece | null = null;
-  public componentRefresh: ComponentRefresh = {};
 
   constructor(color: Color, coordinate: Coordinate, board: Board) {
     super(board);
@@ -71,12 +69,6 @@ class Cell extends Base {
   private hidePromotionOptions() {
     this.promotionPiece = null;
     this.refreshComponent();
-  }
-
-  public refreshComponent(): void {
-    if (this.componentRefresh.setVal) {
-      this.componentRefresh.setVal(!this.componentRefresh.val);
-    }
   }
 }
 

@@ -2,6 +2,7 @@ import Cell from "models/Cell";
 import Piece from "models/pieces/Piece";
 import Game from "models/Game";
 import PieceFactory from "models/PieceFactory";
+import BaseComponent from "models/BaseComponent";
 import EventBridge from "controllers/EventBridge";
 import type {
   Color,
@@ -13,22 +14,21 @@ import type {
   PiecesCoordinates,
 } from "types";
 import { PIECES_COORDINATES, COLUMN_LETTERS, AXIS_VALUES } from "../constants";
-import { ComponentRefresh } from "types";
 
-class Board {
+class Board extends BaseComponent {
   public game: Game;
   public readonly cellGrid: Cell[][] = [];
   private readonly piecesCoordinates: PiecesCoordinates = PIECES_COORDINATES;
   public readonly columnLetters: ColumnLetter[] = COLUMN_LETTERS;
   public eventBridge: EventBridge;
   public colorOnTop: Color;
-  public componentRefresh: ComponentRefresh = {};
 
   public constructor(
     game: Game,
     eventBridge: EventBridge,
     colorOnTop: Color = "b"
   ) {
+    super();
     this.game = game;
     this.eventBridge = eventBridge.init(this);
     this.colorOnTop = colorOnTop;
@@ -117,12 +117,6 @@ class Board {
       return null;
     }
     return this.cellGrid[coordinate[0]][coordinate[1]];
-  }
-
-  public refreshComponent(): void {
-    if (this.componentRefresh.setVal) {
-      this.componentRefresh.setVal(!this.componentRefresh.val);
-    }
   }
 }
 
