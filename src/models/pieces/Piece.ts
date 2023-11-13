@@ -1,6 +1,5 @@
 import Cell from "models/Cell";
-import BoardController from "controllers/BoardController";
-import GameController from "controllers/GameController";
+import EventBridge from "controllers/EventBridge";
 import Board from "models/Board";
 import {
   Color,
@@ -13,8 +12,7 @@ import {
 
 abstract class Piece {
   public board: Board;
-  public boardController: BoardController;
-  public gameController: GameController | undefined;
+  public eventBridge: EventBridge;
   public cell: Cell;
   public readonly color: Color;
   public readonly name: PieceName;
@@ -25,16 +23,13 @@ abstract class Piece {
   public componentRefresh: ComponentRefresh = {};
 
   protected constructor(color: Color, cell: Cell, name: PieceName) {
-    this.board = cell.controller.board;
-    this.boardController = cell.controller;
+    this.board = cell.board;
+    this.eventBridge = cell.eventBridge;
     this.cell = cell;
     this.color = color;
     this.name = name;
     this.image = `${name}_${color}.svg`;
     cell.piece = this;
-    setTimeout(() => {
-      this.gameController = this.board.game.controller;
-    }, 0);
   }
 
   abstract getMoveOptions(): Cell[];
@@ -67,14 +62,14 @@ abstract class Piece {
   }
 
   public onDragStart(): void {
-    this.boardController.addEvent(
+    this.eventBridge.addEvent(
       "changePieceDraggability",
       this.draggabilityPayload
     );
   }
 
   public onDragStop(offset: { x: number; y: number }): void {
-    this.boardController.addEvent(
+    this.eventBridge.addEvent(
       "changePieceDraggability",
       this.draggabilityPayload
     );
@@ -83,7 +78,7 @@ abstract class Piece {
       this.cell.coordinate[1] + offset.x,
     ]);
     if (to) {
-      this.gameController!.addEvent("pieceMoved", { move: [this, to] });
+      this.eventBridge.addEvent("pieceMoved", { move: [this, to] });
     } else {
       this.recenter();
     }

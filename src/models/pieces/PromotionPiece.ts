@@ -1,25 +1,21 @@
 import type { Color, PieceImage, PieceName } from "types";
-import GameController from "controllers/GameController";
+import EventBridge from "controllers/EventBridge";
 
 class PromotionPiece {
   public color: Color;
   public name: PieceName;
   public image: PieceImage;
-  public controller: GameController;
+  public eventBridge: EventBridge;
 
-  public constructor(
-    color: Color,
-    name: PieceName,
-    controller: GameController
-  ) {
+  public constructor(color: Color, name: PieceName, eventBridge: EventBridge) {
     this.color = color;
     this.name = name;
     this.image = `${name}_${color}.svg`;
-    this.controller = controller;
+    this.eventBridge = eventBridge;
   }
 
   public onSelected() {
-    this.controller.addEvent("promotionOptionSelected", { promotion: this });
+    this.eventBridge.addEvent("promotionOptionSelected", { promotion: this });
   }
 }
 

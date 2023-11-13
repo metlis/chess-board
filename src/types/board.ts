@@ -14,11 +14,13 @@ export type Piece = Bishop | King | Knight | Pawn | Rook | Queen;
 export type PieceName = "b" | "k" | "n" | "p" | "r" | "q";
 export type PieceImage = `${PieceName}_${Color}.svg`;
 
-export type BoardEventType =
-  | "changePieceDraggability"
-  | "getPieceMoveOptions"
-  | "showPromotionOptions"
-  | "hidePromotionOptions";
+export const BoardEventTypeLiterals = [
+  "changePieceDraggability",
+  "getPieceMoveOptions",
+  "showPromotionOptions",
+  "hidePromotionOptions",
+] as const;
+export type BoardEventType = (typeof BoardEventTypeLiterals)[number];
 
 export type BoardEventFn = (
   event: BoardEventType,

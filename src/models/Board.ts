@@ -2,7 +2,7 @@ import Cell from "models/Cell";
 import Piece from "models/pieces/Piece";
 import Game from "models/Game";
 import PieceFactory from "models/PieceFactory";
-import BoardController from "controllers/BoardController";
+import EventBridge from "controllers/EventBridge";
 import type {
   Color,
   Coordinate,
@@ -19,12 +19,12 @@ class Board {
   public readonly cellGrid: Cell[][] = [];
   private readonly piecesCoordinates: PiecesCoordinates = PIECES_COORDINATES;
   public readonly columnLetters: ColumnLetter[] = COLUMN_LETTERS;
-  public controller: BoardController;
+  public eventBridge: EventBridge;
   public colorOnTop: Color;
 
   public constructor(game: Game, colorOnTop: Color = "b") {
     this.game = game;
-    this.controller = new BoardController(this);
+    this.eventBridge = new EventBridge(this);
     this.createCells();
     this.populateCells();
     this.colorOnTop = colorOnTop;

@@ -46,7 +46,7 @@ class Pawn extends Piece {
       cells.push(right);
     }
 
-    const lastMove = this.gameController?.lastMove;
+    const lastMove = this.board.game.controller?.lastMove;
     if (
       lastMove?.piece.name === "p" &&
       lastMove.to.coordinate[0] === this.cell.coordinate[0] &&

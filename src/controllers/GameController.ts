@@ -3,12 +3,12 @@ import Game from "models/Game";
 import Move from "models/Move";
 import PendingPromotion from "models/PendingPromotion";
 import { Color, GameEventType, GameEventPayload } from "types";
-import BoardController from "controllers/BoardController";
+import EventBridge from "controllers/EventBridge";
 
 class GameController {
   private game: Game;
   private board: Board;
-  private boardController: BoardController;
+  private readonly eventBridge: EventBridge;
   private activePlayer: Color = "b";
   public isCheck: boolean = false;
   public moves: Move[] = [];
@@ -17,7 +17,7 @@ class GameController {
   constructor(game: Game) {
     this.game = game;
     this.board = this.game.board;
-    this.boardController = this.game.board.controller;
+    this.eventBridge = this.game.board.eventBridge;
     this.switchActivePlayer();
   }
 
@@ -29,7 +29,7 @@ class GameController {
     return this.moves[this.moves.length - 1];
   }
 
-  public addEvent(event: GameEventType, payload: GameEventPayload = {}): void {
+  public on(event: GameEventType, payload: GameEventPayload = {}): void {
     switch (event) {
       case "pieceMoved":
         this.pieceMoved(payload);
@@ -60,8 +60,7 @@ class GameController {
           this.pendingPromotion = new PendingPromotion(
             piece,
             to,
-            this,
-            this.boardController
+            this.eventBridge
           );
           return;
         }
@@ -85,7 +84,7 @@ class GameController {
   }
 
   private changePiecesDraggability(): void {
-    this.boardController.addEvent("changePieceDraggability", {
+    this.eventBridge.addEvent("changePieceDraggability", {
       include: this.board.pieces.filter(
         (piece) => piece.color === this.activePlayer
       ),
@@ -97,7 +96,7 @@ class GameController {
     if (this.isCheck) {
       pieces.forEach((piece) => (piece.moveOptions = []));
     }
-    this.boardController.addEvent("getPieceMoveOptions", {
+    this.eventBridge.addEvent("getPieceMoveOptions", {
       include: this.isCheck
         ? pieces.filter((piece) => piece.name === "k")
         : pieces,

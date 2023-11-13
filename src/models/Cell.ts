@@ -10,13 +10,13 @@ import type {
 } from "types";
 import Board from "models/Board";
 import PromotionPiece from "models/pieces/PromotionPiece";
-import BoardController from "controllers/BoardController";
+import EventBridge from "controllers/EventBridge";
 import { COLUMN_LETTERS, ROW_NUMBERS } from "../constants";
 
 class Cell {
   public id: CellID;
   public board: Board;
-  public controller: BoardController;
+  public eventBridge: EventBridge;
   public readonly color: Color;
   public coordinate: Coordinate;
   public piece: Piece | null;
@@ -29,7 +29,7 @@ class Cell {
     this.coordinate = coordinate;
     this.piece = null;
     this.board = board;
-    this.controller = board.controller;
+    this.eventBridge = board.eventBridge;
   }
 
   public on(event: BoardEventType, payload: BoardEventPayload = {}): void {
@@ -69,7 +69,7 @@ class Cell {
       this.promotionPiece = new PromotionPiece(
         pieceColor,
         pieceName,
-        this.board.game.controller
+        this.eventBridge
       );
       this.refreshComponent();
     }
