@@ -22,9 +22,13 @@ class Board {
   public eventBridge: EventBridge;
   public colorOnTop: Color;
 
-  public constructor(game: Game, colorOnTop: Color = "b") {
+  public constructor(
+    game: Game,
+    eventBridge: EventBridge,
+    colorOnTop: Color = "b"
+  ) {
     this.game = game;
-    this.eventBridge = new EventBridge(this);
+    this.eventBridge = eventBridge.init(this);
     this.createCells();
     this.populateCells();
     this.colorOnTop = colorOnTop;

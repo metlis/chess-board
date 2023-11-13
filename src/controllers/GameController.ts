@@ -6,9 +6,9 @@ import { Color, GameEventType, GameEventPayload } from "types";
 import EventBridge from "controllers/EventBridge";
 
 class GameController {
-  private game: Game;
-  private board: Board;
-  private readonly eventBridge: EventBridge;
+  private readonly game: Game;
+  public readonly board: Board;
+  public readonly eventBridge: EventBridge;
   private activePlayer: Color = "b";
   public isCheck: boolean = false;
   public moves: Move[] = [];
@@ -16,8 +16,8 @@ class GameController {
 
   constructor(game: Game) {
     this.game = game;
-    this.board = this.game.board;
-    this.eventBridge = this.game.board.eventBridge;
+    this.eventBridge = new EventBridge();
+    this.board = new Board(this.game, this.eventBridge);
     this.switchActivePlayer();
   }
 
@@ -57,11 +57,7 @@ class GameController {
       const [piece, to] = payload.move;
       if (piece.moveOptions.includes(to)) {
         if (piece.name === "p" && [0, 7].includes(to.coordinate[0])) {
-          this.pendingPromotion = new PendingPromotion(
-            piece,
-            to,
-            this.eventBridge
-          );
+          this.pendingPromotion = new PendingPromotion(piece, to);
           return;
         }
         const move: Move = new Move(piece, to);

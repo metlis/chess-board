@@ -15,10 +15,11 @@ type eventType = BoardEventType | GameEventType;
 type eventPayload = BoardEventPayload | GameEventPayload;
 
 class EventBridge {
-  private board: Board;
+  private board: Board | undefined;
 
-  constructor(board: Board) {
+  public init(board: Board) {
     this.board = board;
+    return this;
   }
 
   private isBoardEvent(event: unknown): event is BoardEventType {
@@ -55,7 +56,7 @@ class EventBridge {
     event: GameEventType,
     payload: GameEventPayload = {}
   ) {
-    this.board.game.controller.on(event, payload);
+    this.board?.game.controller.on(event, payload);
   }
 
   public addEvent(event: eventType, payload: eventPayload = {}): void {
@@ -100,12 +101,16 @@ class EventBridge {
     if (payload.include) {
       return payload.include;
     } else if (payload.exclude?.length && payload.exclude[0] instanceof Piece) {
-      return this.board.pieces.filter(
-        (item) => !(payload.exclude || []).includes(item)
+      return (
+        this.board?.pieces.filter(
+          (item) => !(payload.exclude || []).includes(item)
+        ) || []
       );
     } else if (payload.exclude?.length && payload.exclude[0] instanceof Cell) {
-      return this.board.cells.filter(
-        (item) => !(payload.exclude || []).includes(item)
+      return (
+        this.board?.cells.filter(
+          (item) => !(payload.exclude || []).includes(item)
+        ) || []
       );
     }
     return [];

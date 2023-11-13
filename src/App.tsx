@@ -7,7 +7,7 @@ function App() {
 
   return (
     <div className="App">
-      <Board board={game.board} />
+      <Board board={game.controller.board} />
     </div>
   );
 }

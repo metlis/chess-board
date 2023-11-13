@@ -24,7 +24,7 @@ abstract class Piece {
 
   protected constructor(color: Color, cell: Cell, name: PieceName) {
     this.board = cell.board;
-    this.eventBridge = cell.eventBridge;
+    this.eventBridge = this.board.eventBridge;
     this.cell = cell;
     this.color = color;
     this.name = name;

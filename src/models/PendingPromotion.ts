@@ -12,8 +12,8 @@ class PendingPromotion {
   private readonly to: Cell;
   private readonly promotionCells: Cell[];
 
-  constructor(piece: Piece, to: Cell, eventBridge: EventBridge) {
-    this.eventBridge = eventBridge;
+  constructor(piece: Piece, to: Cell) {
+    this.eventBridge = piece.eventBridge;
     this.piece = piece;
     this.to = to;
     this.from = piece.cell;
