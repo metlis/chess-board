@@ -1,6 +1,5 @@
+import Base from "models/Base";
 import Cell from "models/Cell";
-import EventBridge from "controllers/EventBridge";
-import Board from "models/Board";
 import {
   Color,
   ComponentRefresh,
@@ -10,9 +9,7 @@ import {
   PieceName,
 } from "types";
 
-abstract class Piece {
-  public board: Board;
-  public eventBridge: EventBridge;
+abstract class Piece extends Base {
   public cell: Cell;
   public readonly color: Color;
   public readonly name: PieceName;
@@ -23,8 +20,7 @@ abstract class Piece {
   public componentRefresh: ComponentRefresh = {};
 
   protected constructor(color: Color, cell: Cell, name: PieceName) {
-    this.board = cell.board;
-    this.eventBridge = this.board.eventBridge;
+    super(cell.board);
     this.cell = cell;
     this.color = color;
     this.name = name;

@@ -1,19 +1,18 @@
+import Base from "models/Base";
 import Piece from "models/pieces/Piece";
 import Cell from "models/Cell";
 import PieceFactory from "models/PieceFactory";
 import Move from "models/Move";
-import EventBridge from "controllers/EventBridge";
 import { GameEventPayload, Row } from "types";
 
-class PendingPromotion {
-  private eventBridge: EventBridge;
+class PendingPromotion extends Base {
   private readonly piece: Piece;
   private readonly from: Cell;
   private readonly to: Cell;
   private readonly promotionCells: Cell[];
 
   constructor(piece: Piece, to: Cell) {
-    this.eventBridge = piece.eventBridge;
+    super(to.board);
     this.piece = piece;
     this.to = to;
     this.from = piece.cell;

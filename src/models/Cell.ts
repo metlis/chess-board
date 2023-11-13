@@ -8,15 +8,13 @@ import type {
   BoardEventType,
   BoardEventPayload,
 } from "types";
+import Base from "models/Base";
 import Board from "models/Board";
 import PromotionPiece from "models/pieces/PromotionPiece";
-import EventBridge from "controllers/EventBridge";
 import { COLUMN_LETTERS, ROW_NUMBERS } from "../constants";
 
-class Cell {
+class Cell extends Base {
   public id: CellID;
-  public board: Board;
-  public eventBridge: EventBridge;
   public readonly color: Color;
   public coordinate: Coordinate;
   public piece: Piece | null;
@@ -24,12 +22,11 @@ class Cell {
   public componentRefresh: ComponentRefresh = {};
 
   constructor(color: Color, coordinate: Coordinate, board: Board) {
+    super(board);
     this.id = `${COLUMN_LETTERS[coordinate[1]]}${ROW_NUMBERS[coordinate[0]]}`;
     this.color = color;
     this.coordinate = coordinate;
     this.piece = null;
-    this.board = board;
-    this.eventBridge = board.eventBridge;
   }
 
   public on(event: BoardEventType, payload: BoardEventPayload = {}): void {
@@ -66,11 +63,7 @@ class Cell {
           : this.board.colorOnTop === "b"
           ? "b"
           : "w";
-      this.promotionPiece = new PromotionPiece(
-        pieceColor,
-        pieceName,
-        this.eventBridge
-      );
+      this.promotionPiece = new PromotionPiece(pieceColor, pieceName, this);
       this.refreshComponent();
     }
   }

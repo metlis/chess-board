@@ -1,17 +1,17 @@
 import type { Color, PieceImage, PieceName } from "types";
-import EventBridge from "controllers/EventBridge";
+import Base from "models/Base";
+import Cell from "models/Cell";
 
-class PromotionPiece {
+class PromotionPiece extends Base {
   public color: Color;
   public name: PieceName;
   public image: PieceImage;
-  public eventBridge: EventBridge;
 
-  public constructor(color: Color, name: PieceName, eventBridge: EventBridge) {
+  public constructor(color: Color, name: PieceName, cell: Cell) {
+    super(cell.board);
     this.color = color;
     this.name = name;
     this.image = `${name}_${color}.svg`;
-    this.eventBridge = eventBridge;
   }
 
   public onSelected() {
