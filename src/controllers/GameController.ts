@@ -18,6 +18,9 @@ class GameController {
     this.game = game;
     this.eventBridge = new EventBridge();
     this.board = new Board(this.game, this.eventBridge);
+  }
+
+  public init() {
     this.board.init();
     this.switchActivePlayer();
   }

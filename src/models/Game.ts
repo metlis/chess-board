@@ -6,6 +6,7 @@ class Game {
 
   private constructor() {
     this.controller = new GameController(this);
+    this.controller.init();
   }
 
   static init(): Game {
