@@ -61,34 +61,7 @@ class EventBridge {
 
   public addEvent(event: eventType, payload: eventPayload = {}): void {
     if (this.isBoardEvent(event) && this.isBoardEventPayload(event, payload)) {
-      switch (event) {
-        case "changePieceDraggability":
-          this.dispatchBoardEvent(
-            "changePieceDraggability",
-            this.getItems(payload)
-          );
-          break;
-        case "getPieceMoveOptions":
-          this.dispatchBoardEvent(
-            "getPieceMoveOptions",
-            this.getItems(payload)
-          );
-          break;
-        case "showPromotionOptions":
-          this.dispatchBoardEvent(
-            "showPromotionOptions",
-            this.getItems(payload)
-          );
-          break;
-        case "hidePromotionOptions":
-          this.dispatchBoardEvent(
-            "hidePromotionOptions",
-            this.getItems(payload)
-          );
-          break;
-        default:
-          throw new Error("Invalid event name");
-      }
+      this.dispatchBoardEvent(event, this.getItems(payload));
     } else if (
       this.isGamedEvent(event) &&
       this.isGameEventPayload(event, payload)
