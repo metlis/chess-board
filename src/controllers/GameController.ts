@@ -1,6 +1,7 @@
 import Board from "models/Board";
 import Game from "models/Game";
 import Move from "models/Move";
+import MovesHistory from "models/MovesHistory";
 import PendingPromotion from "models/PendingPromotion";
 import { Color, GameEventType, GameEventPayload } from "types";
 import EventBridge from "controllers/EventBridge";
@@ -11,13 +12,14 @@ class GameController {
   public readonly eventBridge: EventBridge;
   private activePlayer: Color = "b";
   public isCheck: boolean = false;
-  public moves: Move[] = [];
+  public movesHistory: MovesHistory;
   private pendingPromotion: PendingPromotion | null = null;
 
   constructor(game: Game) {
     this.game = game;
     this.eventBridge = new EventBridge();
     this.board = new Board(this.game, this.eventBridge);
+    this.movesHistory = new MovesHistory();
   }
 
   public init() {
@@ -30,7 +32,7 @@ class GameController {
   }
 
   public get lastMove(): Move {
-    return this.moves[this.moves.length - 1];
+    return this.movesHistory.lastMove;
   }
 
   public on(event: GameEventType, payload: GameEventPayload = {}): void {
@@ -49,7 +51,9 @@ class GameController {
         this.switchActivePlayer();
         break;
       case "pushMove":
-        if (payload.move instanceof Move) this.moves.push(payload.move);
+        if (payload.move instanceof Move) {
+          this.movesHistory.addMove(payload.move);
+        }
         break;
       default:
         throw new Error("Invalid event name");
@@ -65,7 +69,7 @@ class GameController {
           return;
         }
         const move: Move = new Move(piece, to);
-        this.moves.push(move);
+        this.movesHistory.addMove(move);
         this.changePiecesDraggability();
         this.switchActivePlayer();
       } else {
