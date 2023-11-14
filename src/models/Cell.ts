@@ -10,9 +10,10 @@ import type {
 import Base from "models/Base";
 import Board from "models/Board";
 import PromotionPiece from "models/pieces/PromotionPiece";
+import Refreshable from "mixins/Refreshable";
 import { COLUMN_LETTERS, ROW_NUMBERS } from "../constants";
 
-class Cell extends Base {
+class Cell extends Refreshable(Base) {
   public id: CellID;
   public readonly color: Color;
   public coordinate: Coordinate;

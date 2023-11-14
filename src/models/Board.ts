@@ -2,8 +2,8 @@ import Cell from "models/Cell";
 import Piece from "models/pieces/Piece";
 import Game from "models/Game";
 import PieceFactory from "models/PieceFactory";
-import BaseComponent from "models/BaseComponent";
 import EventBridge from "controllers/EventBridge";
+import Refreshable from "mixins/Refreshable";
 import type {
   Color,
   Coordinate,
@@ -15,7 +15,8 @@ import type {
 } from "types";
 import { PIECES_COORDINATES, COLUMN_LETTERS, AXIS_VALUES } from "../constants";
 
-class Board extends BaseComponent {
+class _Board {}
+class Board extends Refreshable(_Board) {
   public game: Game;
   public readonly cellGrid: Cell[][] = [];
   private readonly piecesCoordinates: PiecesCoordinates = PIECES_COORDINATES;

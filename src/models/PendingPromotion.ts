@@ -2,10 +2,11 @@ import Base from "models/Base";
 import Piece from "models/pieces/Piece";
 import Cell from "models/Cell";
 import PieceFactory from "models/PieceFactory";
+import Refreshable from "mixins/Refreshable";
 import Move from "models/Move";
 import { GameEventPayload, Row } from "types";
 
-class PendingPromotion extends Base {
+class PendingPromotion extends Refreshable(Base) {
   private readonly piece: Piece;
   private readonly from: Cell;
   private readonly to: Cell;

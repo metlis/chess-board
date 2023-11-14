@@ -1,5 +1,6 @@
 import Base from "models/Base";
 import Cell from "models/Cell";
+import Refreshable from "mixins/Refreshable";
 import {
   Color,
   BoardEventPayload,
@@ -8,7 +9,7 @@ import {
   PieceName,
 } from "types";
 
-abstract class Piece extends Base {
+abstract class Piece extends Refreshable(Base) {
   public cell: Cell;
   public readonly color: Color;
   public readonly name: PieceName;
