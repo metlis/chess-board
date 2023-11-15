@@ -12,6 +12,17 @@ class MovesHistory {
     this.stack.push(move);
     this.pointer++;
   }
+
+  public removeMove() {
+    const move = this.stack.pop();
+    if (move) {
+      move.piece.cell = move.from;
+      move.from.piece = move.piece;
+      move.to.piece = move.prevToPiece;
+      move.piece.moved = move.prevMoved;
+      this.pointer--;
+    }
+  }
 }
 
 export default MovesHistory;

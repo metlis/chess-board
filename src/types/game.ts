@@ -9,6 +9,7 @@ export const GameEventTypeLiterals = [
   "promotionOptionSelected",
   "switchActivePlayer",
   "pushMove",
+  "checkMove",
 ] as const;
 export type GameEventType = (typeof GameEventTypeLiterals)[number];
 

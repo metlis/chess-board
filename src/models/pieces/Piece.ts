@@ -16,6 +16,7 @@ abstract class Piece extends Refreshable(Base) {
   public readonly image: PieceImage;
   public moved: boolean = false;
   public moveOptions: Cell[] = [];
+  public checkedMoveOptions: Cell[] = [];
   public draggable: boolean = false;
 
   protected constructor(color: Color, cell: Cell, name: PieceName) {
@@ -29,13 +30,14 @@ abstract class Piece extends Refreshable(Base) {
 
   abstract getMoveOptions(): Cell[];
 
-  public on(event: BoardEventType, payload: BoardEventPayload = {}): void {
+  public on(event: BoardEventType, _payload: BoardEventPayload = {}): void {
     switch (event) {
       case "changePieceDraggability":
         this.changeDraggability(this.refreshComponent.bind(this));
         break;
       case "getPieceMoveOptions":
         this.getMoveOptions();
+        this.checkMoveOptions();
         break;
       default:
         throw new Error("Invalid event name");
@@ -86,6 +88,18 @@ abstract class Piece extends Refreshable(Base) {
       this.draggable = true;
       this.refreshComponent();
     }, 0);
+  }
+
+  protected checkMoveOptions() {
+    if (this.color === this.gameController.idlePlayer) return;
+    this.checkedMoveOptions = [];
+    this.moveOptions.forEach((option) =>
+      this.eventBridge.addEvent("checkMove", { move: [this, option] })
+    );
+  }
+
+  public addCheckedMoveOption(option: Cell) {
+    this.checkedMoveOptions.push(option);
   }
 }
 

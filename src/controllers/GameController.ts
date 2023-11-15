@@ -12,7 +12,7 @@ class GameController {
   public readonly eventBridge: EventBridge;
   private activePlayer: Color = "b";
   public isCheck: boolean = false;
-  public movesHistory: MovesHistory;
+  private movesHistory: MovesHistory;
   private pendingPromotion: PendingPromotion | null = null;
 
   constructor(game: Game) {
@@ -27,7 +27,7 @@ class GameController {
     this.switchActivePlayer();
   }
 
-  private get idlePlayer(): Color {
+  public get idlePlayer(): Color {
     return this.activePlayer === "b" ? "w" : "b";
   }
 
@@ -55,6 +55,9 @@ class GameController {
           this.movesHistory.addMove(payload.move);
         }
         break;
+      case "checkMove":
+        this.checkMove(payload);
+        break;
       default:
         throw new Error("Invalid event name");
     }
@@ -63,7 +66,7 @@ class GameController {
   private pieceMoved(payload: GameEventPayload): void {
     if (payload.move instanceof Array) {
       const [piece, to] = payload.move;
-      if (piece.moveOptions.includes(to)) {
+      if (piece.checkedMoveOptions.includes(to)) {
         if (piece.name === "p" && [0, 7].includes(to.coordinate[0])) {
           this.pendingPromotion = new PendingPromotion(piece, to);
           return;
@@ -81,8 +84,6 @@ class GameController {
   private switchActivePlayer(): void {
     this.activePlayer = this.idlePlayer;
     this.isCheck = false;
-    this.getPlayerPossibleMoves(this.idlePlayer);
-    this.detectCheck();
     this.getPlayerPossibleMoves(this.activePlayer);
     this.changePiecesDraggability();
   }
@@ -97,13 +98,8 @@ class GameController {
 
   private getPlayerPossibleMoves(color: Color): void {
     const pieces = this.board.pieces.filter((piece) => piece.color === color);
-    if (this.isCheck) {
-      pieces.forEach((piece) => (piece.moveOptions = []));
-    }
     this.eventBridge.addEvent("getPieceMoveOptions", {
-      include: this.isCheck
-        ? pieces.filter((piece) => piece.name === "k")
-        : pieces,
+      include: pieces,
     });
   }
 
@@ -122,6 +118,22 @@ class GameController {
         })
       );
     this.isCheck = _isCheck;
+  }
+
+  private checkMove(payload: GameEventPayload) {
+    if (payload.move instanceof Array) {
+      const move: Move = new Move(...payload.move);
+      this.movesHistory.addMove(move);
+      this.getPlayerPossibleMoves(this.idlePlayer);
+      this.detectCheck();
+      if (!this.isCheck) {
+        this.movesHistory.removeMove();
+        move.piece.addCheckedMoveOption(payload.move[1]);
+      } else {
+        this.movesHistory.removeMove();
+      }
+      this.isCheck = false;
+    }
   }
 }
 

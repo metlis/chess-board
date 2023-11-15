@@ -11,15 +11,19 @@ class Move {
   public from: Cell;
   public to: Cell;
   public promotion: Promotion | null = null;
+  public prevToPiece: Piece | null;
+  public prevMoved: boolean = false;
 
   public constructor(piece: Piece, to: Cell, promotion?: Promotion) {
     this.checkEnPassant(piece, to);
     this.piece = piece;
     this.from = promotion ? promotion.from : piece.cell;
     this.to = to;
+    this.prevToPiece = to.piece;
     this.to.piece = this.piece;
     this.piece.cell = to;
     this.from.piece = null;
+    this.prevMoved = this.piece.moved;
     this.piece.moved = true;
     this.promotion = promotion || null;
     this.to.refreshComponent();
