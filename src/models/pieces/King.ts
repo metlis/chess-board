@@ -1,6 +1,6 @@
+import Cell from "models/Cell";
 import Piece from "models/pieces/Piece";
 import { Color } from "types";
-import Cell from "models/Cell";
 
 class King extends Piece {
   constructor(color: Color, cell: Cell) {
@@ -62,6 +62,45 @@ class King extends Piece {
     ]);
     if (rightBottom && this.targetReachable(rightBottom))
       cells.push(rightBottom);
+
+    const oppositePieces = this.board.pieces.filter(
+      (p) => p.color !== this.color
+    );
+    if (
+      !this.moved &&
+      !oppositePieces.some((p) => p.moveOptions.includes(this.cell))
+    ) {
+      const shortCastlingCoords: [number, number][] = [1, 2, 3].map((i) => [
+        this.cell.coordinate[0],
+        this.cell.coordinate[1] + i,
+      ]);
+      const longCastlingCoords: [number, number][] = [1, 2, 3, 4].map((i) => [
+        this.cell.coordinate[0],
+        this.cell.coordinate[1] - i,
+      ]);
+      const checkCastling = (coords: [number, number][]) => {
+        const rookCell = this.board.getCell(coords[coords.length - 1]);
+        if (rookCell?.piece && !rookCell.piece.moved) {
+          const cells: Cell[] = [];
+          for (let i = 0; i < coords.length - 1; i++) {
+            const cell = this.board.getCell(coords[i]);
+            if (cell) {
+              if (cell.piece) return false;
+              for (const p of oppositePieces) {
+                if (p.moveOptions.includes(cell)) return false;
+              }
+              cells.push(cell);
+            }
+          }
+          return cells.length === coords.length - 1;
+        }
+        return false;
+      };
+      const shortCastlingAvailable = checkCastling(shortCastlingCoords);
+      const longCastlingAvailable = checkCastling(longCastlingCoords);
+      console.log("Short available: ", shortCastlingAvailable);
+      console.log("Long available: ", longCastlingAvailable);
+    }
 
     this.moveOptions = cells;
     return cells;
