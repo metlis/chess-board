@@ -13,6 +13,8 @@ class Move {
   public promotion: Promotion | null = null;
   public prevToPiece: Piece | null;
   public prevMoved: boolean = false;
+  private enPassantCell: Cell | null = null;
+  private enPassantPiece: Piece | null = null;
 
   public constructor(piece: Piece, to: Cell, promotion?: Promotion) {
     this.checkEnPassant(piece, to);
@@ -41,9 +43,26 @@ class Move {
         to.coordinate[1],
       ]);
       if (cell) {
+        this.enPassantPiece = cell.piece;
+        this.enPassantCell = cell;
         cell.piece = null;
         cell.refreshComponent();
       }
+    }
+  }
+
+  public undoMove() {
+    if (this.promotion) {
+      this.piece.cell = this.promotion.from;
+      this.promotion.from.piece = this.piece;
+    } else {
+      this.piece.cell = this.from;
+      this.from.piece = this.piece;
+    }
+    this.to.piece = this.prevToPiece;
+    this.piece.moved = this.prevMoved;
+    if (this.enPassantCell && this.enPassantPiece) {
+      this.enPassantCell.piece = this.enPassantPiece;
     }
   }
 }
