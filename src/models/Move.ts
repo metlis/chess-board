@@ -1,12 +1,14 @@
 import Cell from "models/Cell";
 import Piece from "models/pieces/Piece";
+import Base from "models/Base";
+import King from "./pieces/King";
 
 type Promotion = {
   from: Cell;
   piece: Piece;
 };
 
-class Move {
+class Move extends Base {
   public piece: Piece;
   public from: Cell;
   public to: Cell;
@@ -15,9 +17,13 @@ class Move {
   public prevMoved: boolean = false;
   private enPassantCell: Cell | null = null;
   private enPassantPiece: Piece | null = null;
+  private castledRook: Piece | null = null;
+  private prevCastlingRookCell: Cell | null = null;
 
   public constructor(piece: Piece, to: Cell, promotion?: Promotion) {
+    super(piece.cell.board);
     this.checkEnPassant(piece, to);
+    this.checkCastling(piece, to);
     this.piece = piece;
     this.from = promotion ? promotion.from : piece.cell;
     this.to = to;
@@ -51,6 +57,37 @@ class Move {
     }
   }
 
+  private checkCastling(piece: Piece, to: Cell) {
+    if (!(piece instanceof King)) return;
+    const _ = (oldCellOffset: number, newCellOffset: number) => {
+      this.prevCastlingRookCell = this.board.getCell([
+        piece.cell.coordinate[0],
+        piece.cell.coordinate[1] + oldCellOffset,
+      ]);
+      const rook = this.prevCastlingRookCell?.piece;
+      if (rook) {
+        const newRookCell = this.board.getCell([
+          rook.cell.coordinate[0],
+          rook.cell.coordinate[1] + newCellOffset,
+        ]);
+        if (newRookCell && this.prevCastlingRookCell) {
+          this.castledRook = rook;
+          rook.cell = newRookCell;
+          newRookCell.piece = rook;
+          this.prevCastlingRookCell.piece = null;
+          rook.cell.refreshComponent();
+          this.prevCastlingRookCell.refreshComponent();
+        }
+      }
+    };
+
+    if (to.coordinate[1] - piece.cell.coordinate[1] === 2) {
+      _(3, -2);
+    } else if (to.coordinate[1] - piece.cell.coordinate[1] === -2) {
+      _(-4, 3);
+    }
+  }
+
   public undoMove() {
     if (this.promotion) {
       this.piece.cell = this.promotion.from;
@@ -63,6 +100,11 @@ class Move {
     this.piece.moved = this.prevMoved;
     if (this.enPassantCell && this.enPassantPiece) {
       this.enPassantCell.piece = this.enPassantPiece;
+    }
+    if (this.castledRook && this.prevCastlingRookCell) {
+      this.castledRook.cell.piece = null;
+      this.castledRook.cell = this.prevCastlingRookCell;
+      this.castledRook.cell.piece = this.castledRook;
     }
   }
 }

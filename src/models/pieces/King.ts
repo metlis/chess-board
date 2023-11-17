@@ -3,6 +3,9 @@ import Piece from "models/pieces/Piece";
 import { Color } from "types";
 
 class King extends Piece {
+  public shortCastlingAvailable = false;
+  public longCastlingAvailable = false;
+
   constructor(color: Color, cell: Cell) {
     super(color, cell, "k");
   }
@@ -96,10 +99,11 @@ class King extends Piece {
         }
         return false;
       };
-      const shortCastlingAvailable = checkCastling(shortCastlingCoords);
-      const longCastlingAvailable = checkCastling(longCastlingCoords);
-      console.log("Short available: ", shortCastlingAvailable);
-      console.log("Long available: ", longCastlingAvailable);
+      this.shortCastlingAvailable = checkCastling(shortCastlingCoords);
+      this.longCastlingAvailable = checkCastling(longCastlingCoords);
+    } else {
+      this.shortCastlingAvailable = false;
+      this.longCastlingAvailable = false;
     }
 
     this.moveOptions = cells;

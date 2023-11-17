@@ -1,6 +1,7 @@
 import Board from "models/Board";
 import Game from "models/Game";
 import Move from "models/Move";
+import King from "models/pieces/King";
 import MovesHistory from "models/MovesHistory";
 import PendingPromotion from "models/PendingPromotion";
 import { Color, GameEventType, GameEventPayload } from "types";
@@ -66,15 +67,26 @@ class GameController {
   private pieceMoved(payload: GameEventPayload): void {
     if (payload.move instanceof Array) {
       const [piece, to] = payload.move;
+      const addMove = () => {
+        this.movesHistory.addMove(new Move(piece, to));
+        this.changePiecesDraggability();
+        this.switchActivePlayer();
+      };
+
       if (piece.checkedMoveOptions.includes(to)) {
         if (piece.name === "p" && [0, 7].includes(to.coordinate[0])) {
           this.pendingPromotion = new PendingPromotion(piece, to);
           return;
         }
-        const move: Move = new Move(piece, to);
-        this.movesHistory.addMove(move);
-        this.changePiecesDraggability();
-        this.switchActivePlayer();
+        addMove();
+      } else if (
+        piece instanceof King &&
+        ((to.coordinate[1] - piece.cell.coordinate[1] === 2 &&
+          piece.shortCastlingAvailable) ||
+          (to.coordinate[1] - piece.cell.coordinate[1] === -2 &&
+            piece.longCastlingAvailable))
+      ) {
+        addMove();
       } else {
         piece.recenter();
       }
@@ -84,7 +96,8 @@ class GameController {
   private switchActivePlayer(): void {
     this.activePlayer = this.idlePlayer;
     this.isCheck = false;
-    this.getPlayerPossibleMoves(this.activePlayer);
+    this.getPossibleMoves(this.idlePlayer);
+    this.getPossibleMoves(this.activePlayer);
     this.changePiecesDraggability();
   }
 
@@ -96,7 +109,7 @@ class GameController {
     });
   }
 
-  private getPlayerPossibleMoves(color: Color): void {
+  private getPossibleMoves(color: Color): void {
     const pieces = this.board.pieces.filter((piece) => piece.color === color);
     this.eventBridge.addEvent("getPieceMoveOptions", {
       include: pieces,
@@ -124,7 +137,7 @@ class GameController {
     if (payload.move instanceof Array) {
       const move: Move = new Move(...payload.move);
       this.movesHistory.addMove(move);
-      this.getPlayerPossibleMoves(this.idlePlayer);
+      this.getPossibleMoves(this.idlePlayer);
       this.detectCheck();
       if (!this.isCheck) {
         this.movesHistory.removeMove();
