@@ -3,9 +3,6 @@ import Piece from "models/pieces/Piece";
 import { Color } from "types";
 
 class King extends Piece {
-  public shortCastlingAvailable = false;
-  public longCastlingAvailable = false;
-
   constructor(color: Color, cell: Cell) {
     super(color, cell, "k");
   }
@@ -99,11 +96,19 @@ class King extends Piece {
         }
         return false;
       };
-      this.shortCastlingAvailable = checkCastling(shortCastlingCoords);
-      this.longCastlingAvailable = checkCastling(longCastlingCoords);
-    } else {
-      this.shortCastlingAvailable = false;
-      this.longCastlingAvailable = false;
+      if (checkCastling(shortCastlingCoords)) {
+        const shortCastlingCell = this.board.getCell([
+          this.cell.coordinate[0],
+          this.cell.coordinate[1] + 2,
+        ]);
+        if (shortCastlingCell) cells.push(shortCastlingCell);
+      } else if (checkCastling(longCastlingCoords)) {
+        const longCastlingCell = this.board.getCell([
+          this.cell.coordinate[0],
+          this.cell.coordinate[1] - 2,
+        ]);
+        if (longCastlingCell) cells.push(longCastlingCell);
+      }
     }
 
     this.moveOptions = cells;

@@ -1,7 +1,6 @@
 import Board from "models/Board";
 import Game from "models/Game";
 import Move from "models/Move";
-import King from "models/pieces/King";
 import MovesHistory from "models/MovesHistory";
 import PendingPromotion from "models/PendingPromotion";
 import { Color, GameEventType, GameEventPayload } from "types";
@@ -67,26 +66,14 @@ class GameController {
   private pieceMoved(payload: GameEventPayload): void {
     if (payload.move instanceof Array) {
       const [piece, to] = payload.move;
-      const addMove = () => {
-        this.movesHistory.addMove(new Move(piece, to));
-        this.changePiecesDraggability();
-        this.switchActivePlayer();
-      };
-
       if (piece.checkedMoveOptions.includes(to)) {
         if (piece.name === "p" && [0, 7].includes(to.coordinate[0])) {
           this.pendingPromotion = new PendingPromotion(piece, to);
           return;
         }
-        addMove();
-      } else if (
-        piece instanceof King &&
-        ((to.coordinate[1] - piece.cell.coordinate[1] === 2 &&
-          piece.shortCastlingAvailable) ||
-          (to.coordinate[1] - piece.cell.coordinate[1] === -2 &&
-            piece.longCastlingAvailable))
-      ) {
-        addMove();
+        this.movesHistory.addMove(new Move(piece, to));
+        this.changePiecesDraggability();
+        this.switchActivePlayer();
       } else {
         piece.recenter();
       }
