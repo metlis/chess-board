@@ -11,7 +11,6 @@ class GameController {
   public readonly board: Board;
   public readonly eventBridge: EventBridge;
   private activePlayer: Color = "b";
-  public isCheck: boolean = false;
   private movesHistory: MovesHistory;
   private pendingPromotion: PendingPromotion | null = null;
 
@@ -82,7 +81,6 @@ class GameController {
 
   private switchActivePlayer(): void {
     this.activePlayer = this.idlePlayer;
-    this.isCheck = false;
     this.getPossibleMoves(this.idlePlayer);
     this.getPossibleMoves(this.activePlayer);
     this.changePiecesDraggability();
@@ -103,8 +101,7 @@ class GameController {
     });
   }
 
-  private detectCheck(): void {
-    let _isCheck = false;
+  private isCheck(): boolean {
     this.board.pieces
       .filter((piece) => piece.color !== this.activePlayer)
       .forEach((piece) =>
@@ -113,11 +110,11 @@ class GameController {
             option.piece?.name === "k" &&
             option.piece.color === this.activePlayer
           ) {
-            _isCheck = true;
+            return true;
           }
         })
       );
-    this.isCheck = _isCheck;
+    return false;
   }
 
   private checkMove(payload: GameEventPayload) {
@@ -125,14 +122,12 @@ class GameController {
       const move: Move = new Move(...payload.move);
       this.movesHistory.addMove(move);
       this.getPossibleMoves(this.idlePlayer);
-      this.detectCheck();
-      if (!this.isCheck) {
+      if (!this.isCheck()) {
         this.movesHistory.removeMove();
         move.piece.addCheckedMoveOption(payload.move[1]);
       } else {
         this.movesHistory.removeMove();
       }
-      this.isCheck = false;
     }
   }
 }
