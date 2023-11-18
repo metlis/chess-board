@@ -19,6 +19,7 @@ class Cell extends Refreshable(Base) {
   public coordinate: Coordinate;
   public piece: Piece | null;
   public promotionPiece: PromotionPiece | null = null;
+  public isMoveOption: boolean = false;
 
   constructor(color: Color, coordinate: Coordinate, board: Board) {
     super(board);
@@ -35,6 +36,9 @@ class Cell extends Refreshable(Base) {
         break;
       case "hidePromotionOptions":
         this.hidePromotionOptions();
+        break;
+      case "changeMoveOptionsVisibility":
+        this.changeMoveOptionsVisibility();
         break;
       default:
         throw new Error("Invalid event name");
@@ -69,6 +73,11 @@ class Cell extends Refreshable(Base) {
 
   private hidePromotionOptions() {
     this.promotionPiece = null;
+    this.refreshComponent();
+  }
+
+  private changeMoveOptionsVisibility() {
+    this.isMoveOption = !this.isMoveOption;
     this.refreshComponent();
   }
 }

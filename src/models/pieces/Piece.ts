@@ -63,6 +63,9 @@ abstract class Piece extends Refreshable(Base) {
       "changePieceDraggability",
       this.draggabilityPayload
     );
+    this.eventBridge.addEvent("changeMoveOptionsVisibility", {
+      include: this.checkedMoveOptions,
+    });
   }
 
   public onDragStop(offset: { x: number; y: number }): void {
@@ -70,6 +73,9 @@ abstract class Piece extends Refreshable(Base) {
       "changePieceDraggability",
       this.draggabilityPayload
     );
+    this.eventBridge.addEvent("changeMoveOptionsVisibility", {
+      include: this.checkedMoveOptions,
+    });
     const to = this.board.getCell([
       this.cell.coordinate[0] + offset.y,
       this.cell.coordinate[1] + offset.x,

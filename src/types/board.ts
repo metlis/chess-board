@@ -16,6 +16,7 @@ export type PieceImage = `${PieceName}_${Color}.svg`;
 
 export const BoardEventTypeLiterals = [
   "changePieceDraggability",
+  "changeMoveOptionsVisibility",
   "getPieceMoveOptions",
   "showPromotionOptions",
   "hidePromotionOptions",

@@ -33,7 +33,12 @@ export default function Cell({ cell }: CellProps) {
   }
 
   return (
-    <div id={cell.id} className={`row__cell row__cell--${cell.color}`}>
+    <div
+      id={cell.id}
+      className={`row__cell row__cell--${cell.color} ${
+        cell.isMoveOption ? `row__cell--move` : ""
+      }`}
+    >
       {cell.piece ? <Piece piece={cell.piece} /> : ""}
     </div>
   );
