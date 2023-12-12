@@ -83,7 +83,7 @@ class GameController {
     this.activePlayer = this.idlePlayer;
     this.getPossibleMoves(this.idlePlayer);
     this.getPossibleMoves(this.activePlayer);
-    this.changePiecesDraggability();
+    if (!this.checkGameOver()) this.changePiecesDraggability();
   }
 
   private changePiecesDraggability(): void {
@@ -101,7 +101,18 @@ class GameController {
     });
   }
 
-  private isCheck(): boolean {
+  private checkGameOver(): boolean {
+    if (!this.activePlayerHasMoveOptions) {
+      if (this.isCheck) {
+        alert(`Game won by ${this.idlePlayer}!`);
+      } else {
+        alert(`Stale mate!`);
+      }
+    }
+    return false;
+  }
+
+  private get isCheck(): boolean {
     this.board.pieces
       .filter((piece) => piece.color !== this.activePlayer)
       .forEach((piece) =>
@@ -117,12 +128,21 @@ class GameController {
     return false;
   }
 
+  private get activePlayerHasMoveOptions(): boolean {
+    this.board.pieces
+      .filter((piece) => piece.color === this.activePlayer)
+      .forEach((piece) => {
+        if (piece.checkedMoveOptions.length) return true;
+      });
+    return false;
+  }
+
   private checkMove(payload: GameEventPayload) {
     if (payload.move instanceof Array) {
       const move: Move = new Move(...payload.move);
       this.movesHistory.addMove(move);
       this.getPossibleMoves(this.idlePlayer);
-      if (!this.isCheck()) {
+      if (!this.isCheck) {
         this.movesHistory.removeMove();
         move.piece.addCheckedMoveOption(payload.move[1]);
       } else {
