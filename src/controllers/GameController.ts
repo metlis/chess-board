@@ -15,6 +15,7 @@ class GameController {
   private pendingPromotion: PendingPromotion | null = null;
   private isCheck: boolean = false;
   private activePlayerHasMoveOptions: boolean = false;
+  private winner: Color | undefined | null = undefined;
 
   constructor(game: Game) {
     this.game = game;
@@ -91,7 +92,12 @@ class GameController {
     this.activePlayer = this.idlePlayer;
     this.getPossibleMoves(this.idlePlayer);
     this.getPossibleMoves(this.activePlayer);
-    if (!this.checkGameOver()) this.changePiecesDraggability();
+    this.changePiecesDraggability();
+    this.checkGameOver();
+    if (this.winner !== undefined) {
+      console.log(this.winner);
+      this.changePiecesDraggability();
+    }
   }
 
   private changePiecesDraggability(): void {
@@ -126,20 +132,19 @@ class GameController {
     });
   }
 
-  private checkGameOver(): boolean {
+  private checkGameOver(): void {
     this.detectActivePlayerHasMoveOptions();
     if (!this.activePlayerHasMoveOptions) {
       this.detectCheck();
       if (this.isCheck) {
-        alert(`Game won by ${this.idlePlayer}!`);
+        this.winner = this.idlePlayer;
       } else {
-        alert(`Stale mate!`);
+        this.winner = null;
       }
     }
-    return false;
   }
 
-  private checkMove(payload: GameEventPayload) {
+  private checkMove(payload: GameEventPayload): void {
     if (payload.move instanceof Array) {
       const move: Move = new Move(...payload.move);
       this.movesHistory.addMove(move);
