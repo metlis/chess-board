@@ -15,9 +15,9 @@ export type PieceName = "b" | "k" | "n" | "p" | "r" | "q";
 export type PieceImage = `${PieceName}_${Color}.svg`;
 
 export const BoardEventTypeLiterals = [
-  "board:changeMoveOptionsVisibility",
-  "board:showPromotionOptions",
-  "board:hidePromotionOptions",
+  "cell:changeMoveOptionsVisibility",
+  "cell:showPromotionOptions",
+  "cell:hidePromotionOptions",
   "piece:changeDraggability",
   "piece:getMoveOptions",
   "piece:detectCheck",

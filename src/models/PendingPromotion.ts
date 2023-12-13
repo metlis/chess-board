@@ -33,13 +33,13 @@ class PendingPromotion extends Refreshable(Base) {
 
   private showOptions() {
     this.eventBridge.addEvent("game:changePiecesDraggability");
-    this.eventBridge.addEvent("board:showPromotionOptions", {
+    this.eventBridge.addEvent("cell:showPromotionOptions", {
       include: this.promotionCells,
     });
   }
 
   public optionSelected(payload: GameEventPayload) {
-    this.eventBridge.addEvent("board:hidePromotionOptions", {
+    this.eventBridge.addEvent("cell:hidePromotionOptions", {
       include: this.promotionCells,
     });
     if (payload.promotion) {

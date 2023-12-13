@@ -69,7 +69,7 @@ abstract class Piece extends Refreshable(Base) {
       "piece:changeDraggability",
       this.draggabilityPayload
     );
-    this.eventBridge.addEvent("board:changeMoveOptionsVisibility", {
+    this.eventBridge.addEvent("cell:changeMoveOptionsVisibility", {
       include: this.checkedMoveOptions,
     });
   }
@@ -79,7 +79,7 @@ abstract class Piece extends Refreshable(Base) {
       "piece:changeDraggability",
       this.draggabilityPayload
     );
-    this.eventBridge.addEvent("board:changeMoveOptionsVisibility", {
+    this.eventBridge.addEvent("cell:changeMoveOptionsVisibility", {
       include: this.checkedMoveOptions,
     });
     const to = this.board.getCell([
