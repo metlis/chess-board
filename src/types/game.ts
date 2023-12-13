@@ -10,6 +10,8 @@ export const GameEventTypeLiterals = [
   "switchActivePlayer",
   "pushMove",
   "checkMove",
+  "setCheck",
+  "setHasMoveOptions",
 ] as const;
 export type GameEventType = (typeof GameEventTypeLiterals)[number];
 

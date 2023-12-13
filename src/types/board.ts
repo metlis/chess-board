@@ -20,6 +20,8 @@ export const BoardEventTypeLiterals = [
   "getPieceMoveOptions",
   "showPromotionOptions",
   "hidePromotionOptions",
+  "detectCheck",
+  "detectHasMoveOptions",
 ] as const;
 export type BoardEventType = (typeof BoardEventTypeLiterals)[number];
 

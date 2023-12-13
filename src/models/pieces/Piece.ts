@@ -39,6 +39,12 @@ abstract class Piece extends Refreshable(Base) {
         this.getMoveOptions();
         this.checkMoveOptions();
         break;
+      case "detectCheck":
+        this.detectCheck();
+        break;
+      case "detectHasMoveOptions":
+        this.detectHasMoveOptions();
+        break;
       default:
         throw new Error("Invalid event name");
     }
@@ -106,6 +112,21 @@ abstract class Piece extends Refreshable(Base) {
 
   public addCheckedMoveOption(option: Cell) {
     this.checkedMoveOptions.push(option);
+  }
+
+  public detectCheck() {
+    this.moveOptions.forEach((option) => {
+      if (option.piece?.name === "k") {
+        this.eventBridge.addEvent("setCheck");
+        return;
+      }
+    });
+  }
+
+  public detectHasMoveOptions() {
+    if (this.checkedMoveOptions.length) {
+      this.eventBridge.addEvent("setHasMoveOptions");
+    }
   }
 }
 

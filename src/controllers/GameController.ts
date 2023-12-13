@@ -13,6 +13,8 @@ class GameController {
   private activePlayer: Color = "b";
   private movesHistory: MovesHistory;
   private pendingPromotion: PendingPromotion | null = null;
+  private isCheck: boolean = false;
+  private activePlayerHasMoveOptions: boolean = false;
 
   constructor(game: Game) {
     this.game = game;
@@ -57,6 +59,12 @@ class GameController {
       case "checkMove":
         this.checkMove(payload);
         break;
+      case "setCheck":
+        this.isCheck = true;
+        break;
+      case "setHasMoveOptions":
+        this.activePlayerHasMoveOptions = true;
+        break;
       default:
         throw new Error("Invalid event name");
     }
@@ -95,14 +103,33 @@ class GameController {
   }
 
   private getPossibleMoves(color: Color): void {
-    const pieces = this.board.pieces.filter((piece) => piece.color === color);
     this.eventBridge.addEvent("getPieceMoveOptions", {
-      include: pieces,
+      include: this.board.pieces.filter((piece) => piece.color === color),
+    });
+  }
+
+  private detectCheck(): void {
+    this.isCheck = false;
+    this.eventBridge.addEvent("detectCheck", {
+      include: this.board.pieces.filter(
+        (piece) => piece.color === this.idlePlayer
+      ),
+    });
+  }
+
+  private detectActivePlayerHasMoveOptions(): void {
+    this.activePlayerHasMoveOptions = false;
+    this.eventBridge.addEvent("detectHasMoveOptions", {
+      include: this.board.pieces.filter(
+        (piece) => piece.color === this.activePlayer
+      ),
     });
   }
 
   private checkGameOver(): boolean {
+    this.detectActivePlayerHasMoveOptions();
     if (!this.activePlayerHasMoveOptions) {
+      this.detectCheck();
       if (this.isCheck) {
         alert(`Game won by ${this.idlePlayer}!`);
       } else {
@@ -112,36 +139,12 @@ class GameController {
     return false;
   }
 
-  private get isCheck(): boolean {
-    this.board.pieces
-      .filter((piece) => piece.color !== this.activePlayer)
-      .forEach((piece) =>
-        piece.moveOptions.forEach((option) => {
-          if (
-            option.piece?.name === "k" &&
-            option.piece.color === this.activePlayer
-          ) {
-            return true;
-          }
-        })
-      );
-    return false;
-  }
-
-  private get activePlayerHasMoveOptions(): boolean {
-    this.board.pieces
-      .filter((piece) => piece.color === this.activePlayer)
-      .forEach((piece) => {
-        if (piece.checkedMoveOptions.length) return true;
-      });
-    return false;
-  }
-
   private checkMove(payload: GameEventPayload) {
     if (payload.move instanceof Array) {
       const move: Move = new Move(...payload.move);
       this.movesHistory.addMove(move);
       this.getPossibleMoves(this.idlePlayer);
+      this.detectCheck();
       if (!this.isCheck) {
         this.movesHistory.removeMove();
         move.piece.addCheckedMoveOption(payload.move[1]);
