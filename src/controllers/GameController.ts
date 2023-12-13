@@ -39,31 +39,31 @@ class GameController {
 
   public on(event: GameEventType, payload: GameEventPayload = {}): void {
     switch (event) {
-      case "pieceMoved":
+      case "game:pieceMoved":
         this.pieceMoved(payload);
         break;
-      case "promotionOptionSelected":
+      case "game:promotionOptionSelected":
         this.pendingPromotion?.optionSelected(payload);
         this.pendingPromotion = null;
         break;
-      case "changePiecesDraggability":
+      case "game:changePiecesDraggability":
         this.changePiecesDraggability();
         break;
-      case "switchActivePlayer":
+      case "game:switchActivePlayer":
         this.switchActivePlayer();
         break;
-      case "pushMove":
+      case "game:pushMove":
         if (payload.move instanceof Move) {
           this.movesHistory.addMove(payload.move);
         }
         break;
-      case "checkMove":
+      case "game:checkMove":
         this.checkMove(payload);
         break;
-      case "setCheck":
+      case "game:setCheck":
         this.isCheck = true;
         break;
-      case "setHasMoveOptions":
+      case "game:setHasMoveOptions":
         this.activePlayerHasMoveOptions = true;
         break;
       default:
@@ -101,7 +101,7 @@ class GameController {
   }
 
   private changePiecesDraggability(): void {
-    this.eventBridge.addEvent("changePieceDraggability", {
+    this.eventBridge.addEvent("piece:changeDraggability", {
       include: this.board.pieces.filter(
         (piece) => piece.color === this.activePlayer
       ),
@@ -109,14 +109,14 @@ class GameController {
   }
 
   private getPossibleMoves(color: Color): void {
-    this.eventBridge.addEvent("getPieceMoveOptions", {
+    this.eventBridge.addEvent("piece:getMoveOptions", {
       include: this.board.pieces.filter((piece) => piece.color === color),
     });
   }
 
   private detectCheck(): void {
     this.isCheck = false;
-    this.eventBridge.addEvent("detectCheck", {
+    this.eventBridge.addEvent("piece:detectCheck", {
       include: this.board.pieces.filter(
         (piece) => piece.color === this.idlePlayer
       ),
@@ -125,7 +125,7 @@ class GameController {
 
   private detectActivePlayerHasMoveOptions(): void {
     this.activePlayerHasMoveOptions = false;
-    this.eventBridge.addEvent("detectHasMoveOptions", {
+    this.eventBridge.addEvent("piece:detectHasMoveOptions", {
       include: this.board.pieces.filter(
         (piece) => piece.color === this.activePlayer
       ),

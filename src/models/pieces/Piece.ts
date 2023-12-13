@@ -32,17 +32,17 @@ abstract class Piece extends Refreshable(Base) {
 
   public on(event: BoardEventType, _payload: BoardEventPayload = {}): void {
     switch (event) {
-      case "changePieceDraggability":
+      case "piece:changeDraggability":
         this.changeDraggability(this.refreshComponent.bind(this));
         break;
-      case "getPieceMoveOptions":
+      case "piece:getMoveOptions":
         this.getMoveOptions();
         this.checkMoveOptions();
         break;
-      case "detectCheck":
+      case "piece:detectCheck":
         this.detectCheck();
         break;
-      case "detectHasMoveOptions":
+      case "piece:detectHasMoveOptions":
         this.detectHasMoveOptions();
         break;
       default:
@@ -66,20 +66,20 @@ abstract class Piece extends Refreshable(Base) {
 
   public onDragStart(): void {
     this.eventBridge.addEvent(
-      "changePieceDraggability",
+      "piece:changeDraggability",
       this.draggabilityPayload
     );
-    this.eventBridge.addEvent("changeMoveOptionsVisibility", {
+    this.eventBridge.addEvent("board:changeMoveOptionsVisibility", {
       include: this.checkedMoveOptions,
     });
   }
 
   public onDragStop(offset: { x: number; y: number }): void {
     this.eventBridge.addEvent(
-      "changePieceDraggability",
+      "piece:changeDraggability",
       this.draggabilityPayload
     );
-    this.eventBridge.addEvent("changeMoveOptionsVisibility", {
+    this.eventBridge.addEvent("board:changeMoveOptionsVisibility", {
       include: this.checkedMoveOptions,
     });
     const to = this.board.getCell([
@@ -87,7 +87,7 @@ abstract class Piece extends Refreshable(Base) {
       this.cell.coordinate[1] + offset.x,
     ]);
     if (to) {
-      this.eventBridge.addEvent("pieceMoved", { move: [this, to] });
+      this.eventBridge.addEvent("game:pieceMoved", { move: [this, to] });
     } else {
       this.recenter();
     }
@@ -106,7 +106,7 @@ abstract class Piece extends Refreshable(Base) {
     if (this.color === this.gameController.idlePlayer) return;
     this.checkedMoveOptions = [];
     this.moveOptions.forEach((option) =>
-      this.eventBridge.addEvent("checkMove", { move: [this, option] })
+      this.eventBridge.addEvent("game:checkMove", { move: [this, option] })
     );
   }
 
@@ -117,7 +117,7 @@ abstract class Piece extends Refreshable(Base) {
   public detectCheck() {
     this.moveOptions.forEach((option) => {
       if (option.piece?.name === "k") {
-        this.eventBridge.addEvent("setCheck");
+        this.eventBridge.addEvent("game:setCheck");
         return;
       }
     });
@@ -125,7 +125,7 @@ abstract class Piece extends Refreshable(Base) {
 
   public detectHasMoveOptions() {
     if (this.checkedMoveOptions.length) {
-      this.eventBridge.addEvent("setHasMoveOptions");
+      this.eventBridge.addEvent("game:setHasMoveOptions");
     }
   }
 }

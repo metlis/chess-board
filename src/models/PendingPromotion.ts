@@ -32,14 +32,14 @@ class PendingPromotion extends Refreshable(Base) {
   }
 
   private showOptions() {
-    this.eventBridge.addEvent("changePiecesDraggability");
-    this.eventBridge.addEvent("showPromotionOptions", {
+    this.eventBridge.addEvent("game:changePiecesDraggability");
+    this.eventBridge.addEvent("board:showPromotionOptions", {
       include: this.promotionCells,
     });
   }
 
   public optionSelected(payload: GameEventPayload) {
-    this.eventBridge.addEvent("hidePromotionOptions", {
+    this.eventBridge.addEvent("board:hidePromotionOptions", {
       include: this.promotionCells,
     });
     if (payload.promotion) {
@@ -52,8 +52,8 @@ class PendingPromotion extends Refreshable(Base) {
         from: this.from,
         piece: this.piece,
       });
-      this.eventBridge.addEvent("pushMove", { move });
-      this.eventBridge.addEvent("switchActivePlayer");
+      this.eventBridge.addEvent("game:pushMove", { move });
+      this.eventBridge.addEvent("game:switchActivePlayer");
     }
   }
 }

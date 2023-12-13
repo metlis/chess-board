@@ -31,13 +31,13 @@ class Cell extends Refreshable(Base) {
 
   public on(event: BoardEventType, payload: BoardEventPayload = {}): void {
     switch (event) {
-      case "showPromotionOptions":
+      case "board:showPromotionOptions":
         this.showPromotionOptions();
         break;
-      case "hidePromotionOptions":
+      case "board:hidePromotionOptions":
         this.hidePromotionOptions();
         break;
-      case "changeMoveOptionsVisibility":
+      case "board:changeMoveOptionsVisibility":
         this.changeMoveOptionsVisibility();
         break;
       default:

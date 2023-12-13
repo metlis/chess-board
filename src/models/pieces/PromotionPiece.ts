@@ -15,7 +15,9 @@ class PromotionPiece extends Base {
   }
 
   public onSelected() {
-    this.eventBridge.addEvent("promotionOptionSelected", { promotion: this });
+    this.eventBridge.addEvent("game:promotionOptionSelected", {
+      promotion: this,
+    });
   }
 }
 

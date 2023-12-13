@@ -15,13 +15,13 @@ export type PieceName = "b" | "k" | "n" | "p" | "r" | "q";
 export type PieceImage = `${PieceName}_${Color}.svg`;
 
 export const BoardEventTypeLiterals = [
-  "changePieceDraggability",
-  "changeMoveOptionsVisibility",
-  "getPieceMoveOptions",
-  "showPromotionOptions",
-  "hidePromotionOptions",
-  "detectCheck",
-  "detectHasMoveOptions",
+  "board:changeMoveOptionsVisibility",
+  "board:showPromotionOptions",
+  "board:hidePromotionOptions",
+  "piece:changeDraggability",
+  "piece:getMoveOptions",
+  "piece:detectCheck",
+  "piece:detectHasMoveOptions",
 ] as const;
 export type BoardEventType = (typeof BoardEventTypeLiterals)[number];
 
