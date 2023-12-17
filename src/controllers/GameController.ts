@@ -41,7 +41,7 @@ class GameController {
   public on(event: GameEventType, payload: GameEventPayload = {}): void {
     switch (event) {
       case "game:pieceMoved":
-        this.pieceMoved(payload);
+        this.onPieceMove(payload);
         break;
       case "game:promotionOptionSelected":
         this.pendingPromotion?.optionSelected(payload);
@@ -73,14 +73,14 @@ class GameController {
         }
         break;
       case "game:cellClicked":
-        this.cellClicked(payload);
+        this.onCellClick(payload);
         break;
       default:
         throw new Error("Invalid event name");
     }
   }
 
-  private pieceMoved(payload: GameEventPayload): void {
+  private onPieceMove(payload: GameEventPayload): void {
     if (payload.move instanceof Array) {
       const [piece, to] = payload.move;
       if (piece.checkedMoveOptions.includes(to)) {
@@ -97,7 +97,7 @@ class GameController {
     }
   }
 
-  private cellClicked(payload: GameEventPayload) {
+  private onCellClick(payload: GameEventPayload) {
     if (
       payload.cell &&
       this.pieceTouched?.checkedMoveOptions.includes(payload.cell)
@@ -110,7 +110,7 @@ class GameController {
       this.eventBridge.addEvent("cell:changeMoveOptionsVisibility", {
         include: this.pieceTouched.checkedMoveOptions,
       });
-      this.pieceMoved({ move: [this.pieceTouched, payload.cell] });
+      this.onPieceMove({ move: [this.pieceTouched, payload.cell] });
       this.pieceTouched = null;
     }
   }
