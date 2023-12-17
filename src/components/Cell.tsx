@@ -37,7 +37,11 @@ export default function Cell({ cell }: CellProps) {
       id={cell.id}
       onClick={cell.onClick.bind(cell)}
       className={`row__cell row__cell--${cell.color} ${
-        cell.isMoveOption ? `row__cell--move` : ""
+        cell.isMoveOption
+          ? cell.piece
+            ? `row__cell--move-beat`
+            : `row__cell--move`
+          : ""
       }`}
     >
       {cell.piece ? <Piece piece={cell.piece} /> : ""}
