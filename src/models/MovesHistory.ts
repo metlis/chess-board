@@ -1,5 +1,6 @@
 import Move from "models/Move";
 import Piece from "models/pieces/Piece";
+import King from "models/pieces/King";
 import { Color } from "types";
 
 type snapshots = { [color in Color]: string[] };
@@ -34,10 +35,15 @@ class MovesHistory {
       cell: piece.cell.id,
       name: piece.name,
       color: piece.color,
-      moved: piece.moved,
       moveOptions: piece.moveOptions
         .map((cell) => cell.id)
         .sort((a, b) => a.localeCompare(b)),
+      ...(piece instanceof King
+        ? {
+            longCastlingPossible: piece.longCastlingPossible,
+            shortCastlingPossible: piece.shortCastlingPossible,
+          }
+        : {}),
     }));
     const snapshot = JSON.stringify(stripped);
     this.snapshots[player].push(snapshot);

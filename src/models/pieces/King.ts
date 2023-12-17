@@ -3,6 +3,9 @@ import Piece from "models/pieces/Piece";
 import { Color } from "types";
 
 class King extends Piece {
+  public longCastlingPossible: boolean = true;
+  public shortCastlingPossible: boolean = true;
+
   constructor(color: Color, cell: Cell) {
     super(color, cell, "k");
   }
@@ -78,9 +81,14 @@ class King extends Piece {
         this.cell.coordinate[0],
         this.cell.coordinate[1] - i,
       ]);
-      const checkCastling = (coords: [number, number][]) => {
+      const checkCastlingForCurrentMove = (coords: [number, number][]) => {
         const rookCell = this.board.getCell(coords[coords.length - 1]);
         if (rookCell?.piece && !rookCell.piece.moved) {
+          if (coords.length === 3) {
+            this.shortCastlingPossible = true;
+          } else {
+            this.longCastlingPossible = true;
+          }
           const cells: Cell[] = [];
           for (let i = 0; i < coords.length - 1; i++) {
             const cell = this.board.getCell(coords[i]);
@@ -93,22 +101,34 @@ class King extends Piece {
             }
           }
           return cells.length === coords.length - 1;
+        } else {
+          if (coords.length === 3) {
+            this.shortCastlingPossible = false;
+          } else {
+            this.longCastlingPossible = false;
+          }
         }
         return false;
       };
-      if (checkCastling(shortCastlingCoords)) {
+      if (checkCastlingForCurrentMove(shortCastlingCoords)) {
         const shortCastlingCell = this.board.getCell([
           this.cell.coordinate[0],
           this.cell.coordinate[1] + 2,
         ]);
         if (shortCastlingCell) cells.push(shortCastlingCell);
-      } else if (checkCastling(longCastlingCoords)) {
+      }
+      if (checkCastlingForCurrentMove(longCastlingCoords)) {
         const longCastlingCell = this.board.getCell([
           this.cell.coordinate[0],
           this.cell.coordinate[1] - 2,
         ]);
         if (longCastlingCell) cells.push(longCastlingCell);
       }
+    }
+
+    if (this.moved) {
+      this.longCastlingPossible = false;
+      this.shortCastlingPossible = false;
     }
 
     this.moveOptions = cells;
