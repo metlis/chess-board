@@ -102,11 +102,10 @@ class GameController {
       payload.cell &&
       this.pieceTouched?.checkedMoveOptions.includes(payload.cell)
     ) {
-      this.eventBridge.addEvent("piece:changeDraggability", {
-        exclude: this.board.pieces.filter(
-          (piece) => piece.color !== this.pieceTouched?.color
-        ),
-      });
+      this.eventBridge.addEvent(
+        "piece:changeDraggability",
+        this.pieceTouched?.draggabilityPayload
+      );
       this.eventBridge.addEvent("cell:changeMoveOptionsVisibility", {
         include: this.pieceTouched.checkedMoveOptions,
       });

@@ -18,6 +18,7 @@ abstract class Piece extends Refreshable(Base) {
   public moveOptions: Cell[] = [];
   public checkedMoveOptions: Cell[] = [];
   public draggable: boolean = false;
+  private touched: boolean = false;
 
   protected constructor(color: Color, cell: Cell, name: PieceName) {
     super(cell.board);
@@ -52,10 +53,11 @@ abstract class Piece extends Refreshable(Base) {
 
   private changeDraggability(callback: Function = () => null): void {
     this.draggable = !this.draggable;
+    this.touched = false;
     callback();
   }
 
-  private get draggabilityPayload(): BoardEventPayload {
+  public get draggabilityPayload(): BoardEventPayload {
     return {
       exclude: [
         this,
@@ -65,6 +67,7 @@ abstract class Piece extends Refreshable(Base) {
   }
 
   public onDragStart(): void {
+    if (this.touched) return;
     this.eventBridge.addEvent(
       "piece:changeDraggability",
       this.draggabilityPayload
@@ -79,8 +82,13 @@ abstract class Piece extends Refreshable(Base) {
       this.cell.coordinate[0] + offset.y,
       this.cell.coordinate[1] + offset.x,
     ]);
-    if (to === this.cell && this.checkedMoveOptions.length) {
-      this.changeDraggability();
+    if (!to) {
+      this.recenter();
+      return;
+    }
+    if (this.isTouchedAndNotMovedCorrectly(to)) {
+      this.recenter();
+      this.touched = true;
       this.eventBridge.addEvent("game:pieceTouched", { piece: this });
       return;
     }
@@ -91,11 +99,19 @@ abstract class Piece extends Refreshable(Base) {
     this.eventBridge.addEvent("cell:changeMoveOptionsVisibility", {
       include: this.checkedMoveOptions,
     });
-    if (to) {
-      this.eventBridge.addEvent("game:pieceMoved", { move: [this, to] });
-    } else {
-      this.recenter();
+    this.eventBridge.addEvent("game:pieceMoved", { move: [this, to] });
+  }
+
+  private isTouchedAndNotMovedCorrectly(to: Cell): boolean {
+    if (this.checkedMoveOptions.length) {
+      if (
+        to === this.cell ||
+        (to !== this.cell && !this.checkedMoveOptions.includes(to))
+      ) {
+        return true;
+      }
     }
+    return false;
   }
 
   public recenter(): void {
