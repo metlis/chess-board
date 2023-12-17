@@ -133,6 +133,15 @@ class GameController {
   }
 
   private checkGameOver(): void {
+    if (
+      this.movesHistory.isThreefoldRepetition(
+        this.activePlayer,
+        this.board.pieces
+      )
+    ) {
+      this.winner = null;
+      return;
+    }
     this.detectActivePlayerHasMoveOptions();
     if (!this.activePlayerHasMoveOptions) {
       this.detectCheck();
