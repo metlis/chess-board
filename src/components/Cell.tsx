@@ -1,4 +1,5 @@
 import CellModel from "models/Cell";
+import King from "models/pieces/King";
 import Piece from "components/Piece";
 import useComponentRefresh from "hooks/useComponentRefresh";
 
@@ -41,6 +42,10 @@ export default function Cell({ cell }: CellProps) {
           ? cell.piece
             ? `row__cell--move-beat`
             : `row__cell--move`
+          : ""
+      } ${
+        cell.piece instanceof King && cell.piece.checked
+          ? "row__cell--checked"
           : ""
       }`}
     >

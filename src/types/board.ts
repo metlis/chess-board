@@ -22,6 +22,8 @@ export const BoardEventTypeLiterals = [
   "piece:getMoveOptions",
   "piece:detectCheck",
   "piece:detectHasMoveOptions",
+  "king:setCheck",
+  "king:removeCheck",
 ] as const;
 export type BoardEventType = (typeof BoardEventTypeLiterals)[number];
 

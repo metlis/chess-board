@@ -1,5 +1,6 @@
 import Base from "models/Base";
 import Cell from "models/Cell";
+import King from "models/pieces/King";
 import Refreshable from "mixins/Refreshable";
 import {
   Color,
@@ -45,6 +46,12 @@ abstract class Piece extends Refreshable(Base) {
         break;
       case "piece:detectHasMoveOptions":
         this.detectHasMoveOptions();
+        break;
+      case "king:setCheck":
+        if (this instanceof King) this.setCheckState();
+        break;
+      case "king:removeCheck":
+        if (this instanceof King) this.removeCheckState();
         break;
       default:
         throw new Error("Invalid event name");

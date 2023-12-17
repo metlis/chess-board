@@ -1,9 +1,10 @@
 import Board from "models/Board";
 import Game from "models/Game";
 import Move from "models/Move";
+import King from "models/pieces/King";
 import MovesHistory from "models/MovesHistory";
 import PendingPromotion from "models/PendingPromotion";
-import { Color, GameEventType, GameEventPayload, Piece } from "types";
+import { Color, GameEventPayload, GameEventType, Piece } from "types";
 import EventBridge from "controllers/EventBridge";
 
 class GameController {
@@ -36,6 +37,12 @@ class GameController {
 
   public get lastMove(): Move {
     return this.movesHistory.lastMove;
+  }
+
+  private get activePlayerKing(): Piece[] {
+    return this.board.pieces.filter(
+      (piece) => piece.color === this.activePlayer && piece instanceof King
+    );
   }
 
   public on(event: GameEventType, payload: GameEventPayload = {}): void {
@@ -89,6 +96,9 @@ class GameController {
           return;
         }
         this.movesHistory.addMove(new Move(piece, to));
+        this.eventBridge.addEvent("king:removeCheck", {
+          include: this.activePlayerKing,
+        });
         this.changePiecesDraggability();
         this.switchActivePlayer();
       } else {
@@ -119,6 +129,16 @@ class GameController {
     this.getPossibleMoves(this.idlePlayer);
     this.getPossibleMoves(this.activePlayer);
     this.changePiecesDraggability();
+    this.detectCheck();
+    if (this.isCheck) {
+      this.eventBridge.addEvent("king:setCheck", {
+        include: this.activePlayerKing,
+      });
+    } else {
+      this.eventBridge.addEvent("king:removeCheck", {
+        include: this.activePlayerKing,
+      });
+    }
     this.checkGameOver();
     if (this.winner !== undefined) {
       console.log(this.winner);
@@ -170,7 +190,6 @@ class GameController {
     }
     this.detectActivePlayerHasMoveOptions();
     if (!this.activePlayerHasMoveOptions) {
-      this.detectCheck();
       if (this.isCheck) {
         this.winner = this.idlePlayer;
       } else {
