@@ -80,6 +80,10 @@ class Cell extends Refreshable(Base) {
     this.isMoveOption = !this.isMoveOption;
     this.refreshComponent();
   }
+
+  public onClick() {
+    this.eventBridge.addEvent("game:cellClicked", { cell: this });
+  }
 }
 
 export default Cell;

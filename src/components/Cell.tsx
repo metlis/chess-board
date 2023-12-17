@@ -35,6 +35,7 @@ export default function Cell({ cell }: CellProps) {
   return (
     <div
       id={cell.id}
+      onClick={cell.onClick.bind(cell)}
       className={`row__cell row__cell--${cell.color} ${
         cell.isMoveOption ? `row__cell--move` : ""
       }`}

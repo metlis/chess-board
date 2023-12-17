@@ -3,7 +3,7 @@ import Game from "models/Game";
 import Move from "models/Move";
 import MovesHistory from "models/MovesHistory";
 import PendingPromotion from "models/PendingPromotion";
-import { Color, GameEventType, GameEventPayload } from "types";
+import { Color, GameEventType, GameEventPayload, Piece } from "types";
 import EventBridge from "controllers/EventBridge";
 
 class GameController {
@@ -16,6 +16,7 @@ class GameController {
   private isCheck: boolean = false;
   private activePlayerHasMoveOptions: boolean = false;
   private winner: Color | undefined | null = undefined;
+  private pieceTouched: Piece | null = null;
 
   constructor(game: Game) {
     this.game = game;
@@ -66,6 +67,14 @@ class GameController {
       case "game:setHasMoveOptions":
         this.activePlayerHasMoveOptions = true;
         break;
+      case "game:pieceTouched":
+        if (payload.piece) {
+          this.pieceTouched = payload.piece;
+        }
+        break;
+      case "game:cellClicked":
+        this.cellClicked(payload);
+        break;
       default:
         throw new Error("Invalid event name");
     }
@@ -85,6 +94,24 @@ class GameController {
       } else {
         piece.recenter();
       }
+    }
+  }
+
+  private cellClicked(payload: GameEventPayload) {
+    if (
+      payload.cell &&
+      this.pieceTouched?.checkedMoveOptions.includes(payload.cell)
+    ) {
+      this.eventBridge.addEvent("piece:changeDraggability", {
+        exclude: this.board.pieces.filter(
+          (piece) => piece.color !== this.pieceTouched?.color
+        ),
+      });
+      this.eventBridge.addEvent("cell:changeMoveOptionsVisibility", {
+        include: this.pieceTouched.checkedMoveOptions,
+      });
+      this.pieceMoved({ move: [this.pieceTouched, payload.cell] });
+      this.pieceTouched = null;
     }
   }
 

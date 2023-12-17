@@ -75,6 +75,15 @@ abstract class Piece extends Refreshable(Base) {
   }
 
   public onDragStop(offset: { x: number; y: number }): void {
+    const to = this.board.getCell([
+      this.cell.coordinate[0] + offset.y,
+      this.cell.coordinate[1] + offset.x,
+    ]);
+    if (to === this.cell && this.checkedMoveOptions.length) {
+      this.changeDraggability();
+      this.eventBridge.addEvent("game:pieceTouched", { piece: this });
+      return;
+    }
     this.eventBridge.addEvent(
       "piece:changeDraggability",
       this.draggabilityPayload
@@ -82,10 +91,6 @@ abstract class Piece extends Refreshable(Base) {
     this.eventBridge.addEvent("cell:changeMoveOptionsVisibility", {
       include: this.checkedMoveOptions,
     });
-    const to = this.board.getCell([
-      this.cell.coordinate[0] + offset.y,
-      this.cell.coordinate[1] + offset.x,
-    ]);
     if (to) {
       this.eventBridge.addEvent("game:pieceMoved", { move: [this, to] });
     } else {
