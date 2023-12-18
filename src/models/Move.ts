@@ -15,15 +15,21 @@ class Move extends Base {
   public promotion: Promotion | null = null;
   public prevToPiece: Piece | null;
   public prevMoved: boolean = false;
-  private enPassantCell: Cell | null = null;
+  public enPassantCell: Cell | null = null;
   private enPassantPiece: Piece | null = null;
   private castledRook: Piece | null = null;
   private prevCastlingRookCell: Cell | null = null;
+  public castling: 1 | 2 | null = null;
+  public capture: boolean = false;
+  public checking: boolean = false;
+  public longNotation: boolean = false;
 
   public constructor(piece: Piece, to: Cell, promotion?: Promotion) {
     super(piece.cell.board);
     this.checkEnPassant(piece, to);
     this.checkCastling(piece, to);
+    this.checkLongNotationRequired(piece, to);
+    this.checkCapture(to, promotion);
     this.piece = piece;
     this.from = promotion ? promotion.from : piece.cell;
     this.to = to;
@@ -83,8 +89,33 @@ class Move extends Base {
 
     if (to.coordinate[1] - piece.cell.coordinate[1] === 2) {
       _(3, -2);
+      this.castling = 1;
     } else if (to.coordinate[1] - piece.cell.coordinate[1] === -2) {
       _(-4, 3);
+      this.castling = 2;
+    }
+  }
+
+  public checkChecking() {
+    if (this.piece.moveOptions.some((op: Cell) => op.piece?.name === "k")) {
+      this.checking = true;
+    }
+  }
+
+  private checkLongNotationRequired(piece: Piece, to: Cell) {
+    this.longNotation = this.board.pieces.some(
+      (p) =>
+        p !== piece &&
+        p.color === piece.color &&
+        p.checkedMoveOptions.some((op) => op === to && p.name === piece.name)
+    );
+  }
+
+  private checkCapture(to: Cell, promotion?: Promotion) {
+    if (promotion) {
+      this.capture = promotion.from.coordinate[1] !== to.coordinate[1];
+    } else if (to.piece) {
+      this.capture = true;
     }
   }
 

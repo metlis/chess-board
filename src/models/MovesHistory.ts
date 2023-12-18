@@ -1,11 +1,13 @@
 import Move from "models/Move";
 import Piece from "models/pieces/Piece";
 import King from "models/pieces/King";
+import Refreshable from "mixins/Refreshable";
 import { Color } from "types";
 
 type snapshots = { [color in Color]: string[] };
 
-class MovesHistory {
+class _ {}
+class MovesHistory extends Refreshable(_) {
   private stack: Move[] = [];
   private snapshots: snapshots = { b: [], w: [] };
   private pointer: number = -1;
@@ -14,9 +16,10 @@ class MovesHistory {
     return this.stack[this.pointer];
   }
 
-  public addMove(move: Move) {
+  public addMove(move: Move, refreshComponent: boolean = false) {
     this.stack.push(move);
     this.pointer++;
+    if (refreshComponent) this.refreshComponent();
   }
 
   public removeMove() {
@@ -57,6 +60,52 @@ class MovesHistory {
       if (s === snapshot) count++;
     });
     return count === 3;
+  }
+
+  public get printable() {
+    const moves: [string, string?][] = [];
+    let whiteMove: string | null = null;
+    let blackMove: string | null = null;
+
+    const constructStr = (move: Move) => {
+      if (move.castling) {
+        return move.castling === 1 ? "0-0" : "0-0-0";
+      }
+      let str: string;
+      if (move.promotion) {
+        str = `${
+          move.capture ? move.from.id.replace(/[0-9]/g, "x").toLowerCase() : ""
+        }${move.to.id.toLowerCase()}=${move.piece.name.toUpperCase()}`;
+      } else if (
+        (move.capture && move.piece.name === "p") ||
+        move.enPassantCell
+      ) {
+        str = `${move.from.id
+          .replace(/[0-9]/g, "x")
+          .toLowerCase()}${move.to.id.toLowerCase()}`;
+      } else {
+        str = `${move.piece.name.toUpperCase()}${
+          move.longNotation
+            ? move.from.id.replace(/[0-9]/g, "").toLowerCase()
+            : ""
+        }${move.capture ? "x" : ""}${move.to.id.toLowerCase()}`;
+      }
+      if (move.checking) str += "+";
+      return str.replace("P", "");
+    };
+
+    for (let i = 0; i < this.stack.length; i++) {
+      if (!whiteMove) {
+        whiteMove = constructStr(this.stack[i]);
+        if (i === this.stack.length - 1) moves.push([whiteMove]);
+      } else {
+        blackMove = constructStr(this.stack[i]);
+        moves.push([whiteMove, blackMove]);
+        whiteMove = null;
+        blackMove = null;
+      }
+    }
+    return moves;
   }
 }
 

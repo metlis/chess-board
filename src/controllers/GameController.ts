@@ -12,7 +12,7 @@ class GameController {
   public readonly board: Board;
   public readonly eventBridge: EventBridge;
   private activePlayer: Color = "b";
-  private movesHistory: MovesHistory;
+  public movesHistory: MovesHistory;
   private pendingPromotion: PendingPromotion | null = null;
   private isCheck: boolean = false;
   private activePlayerHasMoveOptions: boolean = false;
@@ -62,7 +62,7 @@ class GameController {
         break;
       case "game:pushMove":
         if (payload.move instanceof Move) {
-          this.movesHistory.addMove(payload.move);
+          this.movesHistory.addMove(payload.move, true);
         }
         break;
       case "game:checkMove":
@@ -95,12 +95,13 @@ class GameController {
           this.pendingPromotion = new PendingPromotion(piece, to);
           return;
         }
-        this.movesHistory.addMove(new Move(piece, to));
+        this.movesHistory.addMove(new Move(piece, to), true);
         this.eventBridge.addEvent("king:removeCheck", {
           include: this.activePlayerKing,
         });
         this.changePiecesDraggability();
         this.switchActivePlayer();
+        this.lastMove.checkChecking();
       } else {
         piece.recenter();
       }

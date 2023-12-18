@@ -15,8 +15,8 @@ import type {
 } from "types";
 import { PIECES_COORDINATES, COLUMN_LETTERS, AXIS_VALUES } from "../constants";
 
-class _Board {}
-class Board extends Refreshable(_Board) {
+class _ {}
+class Board extends Refreshable(_) {
   public game: Game;
   public readonly cellGrid: Cell[][] = [];
   private readonly piecesCoordinates: PiecesCoordinates = PIECES_COORDINATES;
