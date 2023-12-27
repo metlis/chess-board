@@ -47,7 +47,7 @@ export default function Cell({ cell }: CellProps) {
         cell.piece instanceof King && cell.piece.checked
           ? "row__cell--checked"
           : ""
-      }`}
+      } ${cell.state === "lastMove" ? "row__cell--last-move" : ""}`}
     >
       {cell.piece ? <Piece piece={cell.piece} /> : ""}
     </div>

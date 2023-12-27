@@ -6,6 +6,7 @@ import type {
   Coordinate,
   BoardEventType,
   BoardEventPayload,
+  CellState,
 } from "types";
 import Base from "models/Base";
 import Board from "models/Board";
@@ -20,6 +21,7 @@ class Cell extends Refreshable(Base) {
   public piece: Piece | null;
   public promotionPiece: PromotionPiece | null = null;
   public isMoveOption: boolean = false;
+  public state: CellState = "default";
 
   constructor(color: Color, coordinate: Coordinate, board: Board) {
     super(board);
@@ -39,6 +41,9 @@ class Cell extends Refreshable(Base) {
         break;
       case "cell:changeMoveOptionsVisibility":
         this.changeMoveOptionsVisibility();
+        break;
+      case "cell:switchState":
+        this.switchState(payload);
         break;
       default:
         throw new Error("Invalid event name");
@@ -83,6 +88,13 @@ class Cell extends Refreshable(Base) {
 
   public onClick() {
     this.eventBridge.addEvent("game:cellClicked", { cell: this });
+  }
+
+  private switchState(payload: BoardEventPayload = {}) {
+    if (payload.cellState) {
+      this.state = payload.cellState;
+      this.refreshComponent();
+    }
   }
 }
 

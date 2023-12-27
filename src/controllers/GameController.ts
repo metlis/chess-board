@@ -23,7 +23,7 @@ class GameController {
     this.game = game;
     this.eventBridge = new EventBridge();
     this.board = new Board(this.game, this.eventBridge);
-    this.movesHistory = new MovesHistory();
+    this.movesHistory = new MovesHistory(this.board);
   }
 
   public init() {

@@ -1,13 +1,13 @@
 import Move from "models/Move";
 import Piece from "models/pieces/Piece";
 import King from "models/pieces/King";
+import Base from "models/Base";
 import Refreshable from "mixins/Refreshable";
 import { Color } from "types";
 
 type snapshots = { [color in Color]: string[] };
 
-class _ {}
-class MovesHistory extends Refreshable(_) {
+class MovesHistory extends Refreshable(Base) {
   private stack: Move[] = [];
   private snapshots: snapshots = { b: [], w: [] };
   private pointer: number = -1;
@@ -16,10 +16,23 @@ class MovesHistory extends Refreshable(_) {
     return this.stack[this.pointer];
   }
 
-  public addMove(move: Move, refreshComponent: boolean = false) {
+  public addMove(move: Move, showMove: boolean = false) {
+    if (showMove) this.switchLastMoveVisibility(true);
     this.stack.push(move);
     this.pointer++;
-    if (refreshComponent) this.refreshComponent();
+    if (showMove) {
+      this.refreshComponent();
+      this.switchLastMoveVisibility();
+    }
+  }
+
+  private switchLastMoveVisibility(hide = false) {
+    if (this.lastMove) {
+      this.eventBridge.addEvent("cell:switchState", {
+        include: [this.lastMove.from, this.lastMove.to],
+        cellState: hide ? "default" : "lastMove",
+      });
+    }
   }
 
   public removeMove() {

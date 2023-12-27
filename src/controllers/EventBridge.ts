@@ -61,7 +61,7 @@ class EventBridge {
 
   public addEvent(event: eventType, payload: eventPayload = {}): void {
     if (this.isBoardEvent(event) && this.isBoardEventPayload(event, payload)) {
-      this.dispatchBoardEvent(event, this.getItems(payload));
+      this.dispatchBoardEvent(event, this.getItems(payload), payload);
     } else if (
       this.isGamedEvent(event) &&
       this.isGameEventPayload(event, payload)

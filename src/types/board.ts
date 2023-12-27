@@ -18,6 +18,7 @@ export const BoardEventTypeLiterals = [
   "cell:changeMoveOptionsVisibility",
   "cell:showPromotionOptions",
   "cell:hidePromotionOptions",
+  "cell:switchState",
   "piece:changeDraggability",
   "piece:getMoveOptions",
   "piece:detectCheck",
@@ -35,6 +36,7 @@ export type BoardEventFn = (
 export interface BoardEventPayload {
   exclude?: (Piece | Cell)[];
   include?: (Piece | Cell)[];
+  cellState?: CellState;
 }
 
 export type PiecesCoordinates = {
@@ -44,3 +46,4 @@ export type PiecesCoordinates = {
 export type ColumnLetter = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H";
 export type RowNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 export type CellID = `${ColumnLetter}${RowNumber}`;
+export type CellState = "default" | "check" | "lastMove" | "moveOption";
