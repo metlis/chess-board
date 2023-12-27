@@ -1,5 +1,4 @@
 import CellModel from "models/Cell";
-import King from "models/pieces/King";
 import Piece from "components/Piece";
 import useComponentRefresh from "hooks/useComponentRefresh";
 
@@ -38,16 +37,14 @@ export default function Cell({ cell }: CellProps) {
       id={cell.id}
       onClick={cell.onClick.bind(cell)}
       className={`row__cell row__cell--${cell.color} ${
-        cell.isMoveOption
+        cell.state === "moveOption"
           ? cell.piece
             ? `row__cell--move-beat`
             : `row__cell--move`
           : ""
-      } ${
-        cell.piece instanceof King && cell.piece.checked
-          ? "row__cell--checked"
-          : ""
-      } ${cell.state === "lastMove" ? "row__cell--last-move" : ""}`}
+      } ${cell.state === "checked" ? "row__cell--checked" : ""} ${
+        cell.state === "lastMove" ? "row__cell--last-move" : ""
+      }`}
     >
       {cell.piece ? <Piece piece={cell.piece} /> : ""}
     </div>

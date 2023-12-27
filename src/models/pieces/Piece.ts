@@ -1,6 +1,5 @@
 import Base from "models/Base";
 import Cell from "models/Cell";
-import King from "models/pieces/King";
 import Refreshable from "mixins/Refreshable";
 import {
   Color,
@@ -47,12 +46,6 @@ abstract class Piece extends Refreshable(Base) {
       case "piece:detectHasMoveOptions":
         this.detectHasMoveOptions();
         break;
-      case "king:setCheck":
-        if (this instanceof King) this.setCheckState();
-        break;
-      case "king:removeCheck":
-        if (this instanceof King) this.removeCheckState();
-        break;
       default:
         throw new Error("Invalid event name");
     }
@@ -79,8 +72,9 @@ abstract class Piece extends Refreshable(Base) {
       "piece:changeDraggability",
       this.draggabilityPayload
     );
-    this.eventBridge.addEvent("cell:changeMoveOptionsVisibility", {
+    this.eventBridge.addEvent("cell:switchState", {
       include: this.checkedMoveOptions,
+      cellState: "moveOption",
     });
   }
 
@@ -103,8 +97,9 @@ abstract class Piece extends Refreshable(Base) {
       "piece:changeDraggability",
       this.draggabilityPayload
     );
-    this.eventBridge.addEvent("cell:changeMoveOptionsVisibility", {
+    this.eventBridge.addEvent("cell:switchState", {
       include: this.checkedMoveOptions,
+      cellState: "default",
     });
     this.eventBridge.addEvent("game:pieceMoved", { move: [this, to] });
   }

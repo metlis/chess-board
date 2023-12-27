@@ -33,14 +33,16 @@ class PendingPromotion extends Refreshable(Base) {
 
   private showOptions() {
     this.eventBridge.addEvent("game:changePiecesDraggability");
-    this.eventBridge.addEvent("cell:showPromotionOptions", {
+    this.eventBridge.addEvent("cell:switchState", {
       include: this.promotionCells,
+      cellState: "promotionOption",
     });
   }
 
   public optionSelected(payload: GameEventPayload) {
-    this.eventBridge.addEvent("cell:hidePromotionOptions", {
+    this.eventBridge.addEvent("cell:switchState", {
       include: this.promotionCells,
+      cellState: "default",
     });
     if (payload.promotion) {
       const piece: Piece = new PieceFactory().create(

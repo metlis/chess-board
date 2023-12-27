@@ -39,12 +39,6 @@ class GameController {
     return this.movesHistory.lastMove;
   }
 
-  private get activePlayerKing(): Piece[] {
-    return this.board.pieces.filter(
-      (piece) => piece.color === this.activePlayer && piece instanceof King
-    );
-  }
-
   public on(event: GameEventType, payload: GameEventPayload = {}): void {
     switch (event) {
       case "game:pieceMoved":
@@ -95,10 +89,9 @@ class GameController {
           this.pendingPromotion = new PendingPromotion(piece, to);
           return;
         }
+        this.isCheck = false;
+        this.switchCheckVisibility();
         this.movesHistory.addMove(new Move(piece, to), true);
-        this.eventBridge.addEvent("king:removeCheck", {
-          include: this.activePlayerKing,
-        });
         this.changePiecesDraggability();
         this.switchActivePlayer();
         this.lastMove.checkChecking();
@@ -117,8 +110,9 @@ class GameController {
         "piece:changeDraggability",
         this.pieceTouched?.draggabilityPayload
       );
-      this.eventBridge.addEvent("cell:changeMoveOptionsVisibility", {
+      this.eventBridge.addEvent("cell:switchState", {
         include: this.pieceTouched.checkedMoveOptions,
+        cellState: "default",
       });
       this.onPieceMove({ move: [this.pieceTouched, payload.cell] });
       this.pieceTouched = null;
@@ -131,19 +125,23 @@ class GameController {
     this.getPossibleMoves(this.activePlayer);
     this.changePiecesDraggability();
     this.detectCheck();
-    if (this.isCheck) {
-      this.eventBridge.addEvent("king:setCheck", {
-        include: this.activePlayerKing,
-      });
-    } else {
-      this.eventBridge.addEvent("king:removeCheck", {
-        include: this.activePlayerKing,
-      });
-    }
+    this.switchCheckVisibility();
     this.checkGameOver();
     if (this.winner !== undefined) {
       console.log(this.winner);
       this.changePiecesDraggability();
+    }
+  }
+
+  private switchCheckVisibility() {
+    const activePlayerKing = this.board.pieces.filter(
+      (piece) => piece.color === this.activePlayer && piece instanceof King
+    )[0];
+    if (activePlayerKing) {
+      this.eventBridge.addEvent("cell:switchState", {
+        include: [activePlayerKing.cell],
+        cellState: !this.isCheck ? "default" : "checked",
+      });
     }
   }
 

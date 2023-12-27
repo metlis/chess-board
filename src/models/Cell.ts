@@ -20,7 +20,6 @@ class Cell extends Refreshable(Base) {
   public coordinate: Coordinate;
   public piece: Piece | null;
   public promotionPiece: PromotionPiece | null = null;
-  public isMoveOption: boolean = false;
   public state: CellState = "default";
 
   constructor(color: Color, coordinate: Coordinate, board: Board) {
@@ -33,15 +32,6 @@ class Cell extends Refreshable(Base) {
 
   public on(event: BoardEventType, payload: BoardEventPayload = {}): void {
     switch (event) {
-      case "cell:showPromotionOptions":
-        this.showPromotionOptions();
-        break;
-      case "cell:hidePromotionOptions":
-        this.hidePromotionOptions();
-        break;
-      case "cell:changeMoveOptionsVisibility":
-        this.changeMoveOptionsVisibility();
-        break;
       case "cell:switchState":
         this.switchState(payload);
         break;
@@ -78,12 +68,6 @@ class Cell extends Refreshable(Base) {
 
   private hidePromotionOptions() {
     this.promotionPiece = null;
-    this.refreshComponent();
-  }
-
-  private changeMoveOptionsVisibility() {
-    this.isMoveOption = !this.isMoveOption;
-    this.refreshComponent();
   }
 
   public onClick() {
@@ -92,6 +76,14 @@ class Cell extends Refreshable(Base) {
 
   private switchState(payload: BoardEventPayload = {}) {
     if (payload.cellState) {
+      if (payload.cellState === "promotionOption") {
+        this.showPromotionOptions();
+      } else if (
+        payload.cellState === "default" &&
+        this.state === "promotionOption"
+      ) {
+        this.hidePromotionOptions();
+      }
       this.state = payload.cellState;
       this.refreshComponent();
     }

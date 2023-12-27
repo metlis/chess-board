@@ -15,16 +15,11 @@ export type PieceName = "b" | "k" | "n" | "p" | "r" | "q";
 export type PieceImage = `${PieceName}_${Color}.svg`;
 
 export const BoardEventTypeLiterals = [
-  "cell:changeMoveOptionsVisibility",
-  "cell:showPromotionOptions",
-  "cell:hidePromotionOptions",
   "cell:switchState",
   "piece:changeDraggability",
   "piece:getMoveOptions",
   "piece:detectCheck",
   "piece:detectHasMoveOptions",
-  "king:setCheck",
-  "king:removeCheck",
 ] as const;
 export type BoardEventType = (typeof BoardEventTypeLiterals)[number];
 
@@ -46,4 +41,9 @@ export type PiecesCoordinates = {
 export type ColumnLetter = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H";
 export type RowNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 export type CellID = `${ColumnLetter}${RowNumber}`;
-export type CellState = "default" | "check" | "lastMove" | "moveOption";
+export type CellState =
+  | "default"
+  | "checked"
+  | "lastMove"
+  | "moveOption"
+  | "promotionOption";

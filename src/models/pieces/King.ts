@@ -5,7 +5,6 @@ import { Color } from "types";
 class King extends Piece {
   public longCastlingPossible: boolean = true;
   public shortCastlingPossible: boolean = true;
-  public checked: boolean = false;
 
   constructor(color: Color, cell: Cell) {
     super(color, cell, "k");
@@ -134,16 +133,6 @@ class King extends Piece {
 
     this.moveOptions = cells;
     return cells;
-  }
-
-  public setCheckState() {
-    this.checked = true;
-    this.cell.refreshComponent();
-  }
-
-  public removeCheckState() {
-    this.checked = false;
-    this.cell.refreshComponent();
   }
 }
 
