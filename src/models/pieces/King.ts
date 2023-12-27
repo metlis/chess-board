@@ -75,11 +75,11 @@ class King extends Piece {
     ) {
       const shortCastlingCoords: [number, number][] = [1, 2, 3].map((i) => [
         this.cell.coordinate[0],
-        this.cell.coordinate[1] + i,
+        this.cell.coordinate[1] + i * (this.board.colorOnTop === "w" ? -1 : 1),
       ]);
       const longCastlingCoords: [number, number][] = [1, 2, 3, 4].map((i) => [
         this.cell.coordinate[0],
-        this.cell.coordinate[1] - i,
+        this.cell.coordinate[1] + i * (this.board.colorOnTop === "w" ? 1 : -1),
       ]);
       const checkCastlingForCurrentMove = (coords: [number, number][]) => {
         const rookCell = this.board.getCell(coords[coords.length - 1]);
@@ -113,14 +113,16 @@ class King extends Piece {
       if (checkCastlingForCurrentMove(shortCastlingCoords)) {
         const shortCastlingCell = this.board.getCell([
           this.cell.coordinate[0],
-          this.cell.coordinate[1] + 2,
+          this.cell.coordinate[1] +
+            2 * (this.board.colorOnTop === "w" ? -1 : 1),
         ]);
         if (shortCastlingCell) cells.push(shortCastlingCell);
       }
       if (checkCastlingForCurrentMove(longCastlingCoords)) {
         const longCastlingCell = this.board.getCell([
           this.cell.coordinate[0],
-          this.cell.coordinate[1] - 2,
+          this.cell.coordinate[1] +
+            2 * (this.board.colorOnTop === "w" ? 1 : -1),
         ]);
         if (longCastlingCell) cells.push(longCastlingCell);
       }

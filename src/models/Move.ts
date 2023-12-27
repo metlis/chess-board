@@ -87,11 +87,12 @@ class Move extends Base {
       }
     };
 
-    if (to.coordinate[1] - piece.cell.coordinate[1] === 2) {
-      _(3, -2);
+    const rotation = this.board.colorOnTop === "b" ? 1 : -1;
+    if (to.coordinate[1] - piece.cell.coordinate[1] === 2 * rotation) {
+      _(3 * rotation, -2 * rotation);
       this.castling = 1;
-    } else if (to.coordinate[1] - piece.cell.coordinate[1] === -2) {
-      _(-4, 3);
+    } else if (to.coordinate[1] - piece.cell.coordinate[1] === -2 * rotation) {
+      _(-4 * rotation, 3 * rotation);
       this.castling = 2;
     }
   }

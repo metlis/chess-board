@@ -119,6 +119,12 @@ class Board extends Refreshable(_) {
     }
     return this.cellGrid[coordinate[0]][coordinate[1]];
   }
+
+  public onRotate() {
+    this.colorOnTop = this.colorOnTop === "b" ? "w" : "b";
+    this.rotateBoard();
+    this.refreshComponent();
+  }
 }
 
 export default Board;
