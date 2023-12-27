@@ -14,7 +14,6 @@ class GameController {
   private activePlayer: Color = "b";
   public movesHistory: MovesHistory;
   private pendingPromotion: PendingPromotion | null = null;
-  private activePlayerHasMoveOptions: boolean = false;
   private winner: Color | undefined | null = undefined;
   private pieceTouched: Piece | null = null;
 
@@ -60,9 +59,6 @@ class GameController {
         break;
       case "game:checkMove":
         this.checkMove(payload);
-        break;
-      case "game:setHasMoveOptions":
-        this.activePlayerHasMoveOptions = true;
         break;
       case "game:pieceTouched":
         if (payload.piece) {
@@ -164,13 +160,15 @@ class GameController {
     return resultsContainer.length > 0;
   }
 
-  private detectActivePlayerHasMoveOptions(): void {
-    this.activePlayerHasMoveOptions = false;
+  private get activePlayerHasMoveOptions(): boolean {
+    const resultsContainer: Piece[] = [];
     this.eventBridge.addEvent("piece:detectHasMoveOptions", {
       include: this.board.pieces.filter(
         (piece) => piece.color === this.activePlayer
       ),
+      resultsContainer,
     });
+    return resultsContainer.length > 0;
   }
 
   private checkGameOver(): void {
@@ -183,7 +181,6 @@ class GameController {
       this.winner = null;
       return;
     }
-    this.detectActivePlayerHasMoveOptions();
     if (!this.activePlayerHasMoveOptions) {
       if (this.isCheck) {
         this.winner = this.idlePlayer;

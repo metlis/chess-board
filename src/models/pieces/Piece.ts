@@ -44,7 +44,7 @@ abstract class Piece extends Refreshable(Base) {
         this.detectCheck(payload);
         break;
       case "piece:detectHasMoveOptions":
-        this.detectHasMoveOptions();
+        this.detectHasMoveOptions(payload);
         break;
       default:
         throw new Error("Invalid event name");
@@ -146,9 +146,9 @@ abstract class Piece extends Refreshable(Base) {
     });
   }
 
-  public detectHasMoveOptions() {
-    if (this.checkedMoveOptions.length) {
-      this.eventBridge.addEvent("game:setHasMoveOptions");
+  public detectHasMoveOptions(payload: BoardEventPayload = {}) {
+    if (this.checkedMoveOptions.length && payload.resultsContainer) {
+      payload.resultsContainer.push(this);
     }
   }
 }

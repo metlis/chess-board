@@ -11,7 +11,6 @@ export const GameEventTypeLiterals = [
   "game:switchActivePlayer",
   "game:pushMove",
   "game:checkMove",
-  "game:setHasMoveOptions",
   "game:cellClicked",
 ] as const;
 export type GameEventType = (typeof GameEventTypeLiterals)[number];
