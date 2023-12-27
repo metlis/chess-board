@@ -11,6 +11,7 @@ class MovesHistory extends Refreshable(Base) {
   private stack: Move[] = [];
   private snapshots: snapshots = { b: [], w: [] };
   private pointer: number = -1;
+  public winner: Color | undefined | null = undefined;
 
   public get lastMove(): Move {
     return this.stack[this.pointer];
@@ -75,7 +76,7 @@ class MovesHistory extends Refreshable(Base) {
     return count === 3;
   }
 
-  public get printable() {
+  public get printableMoves() {
     const moves: [string, string?][] = [];
     let whiteMove: string | null = null;
     let blackMove: string | null = null;
@@ -103,7 +104,11 @@ class MovesHistory extends Refreshable(Base) {
             : ""
         }${move.capture ? "x" : ""}${move.to.id.toLowerCase()}`;
       }
-      if (move.checking) str += "+";
+      if (move.mate) {
+        str += "x";
+      } else if (move.check) {
+        str += "+";
+      }
       return str.replace("P", "");
     };
 
@@ -119,6 +124,10 @@ class MovesHistory extends Refreshable(Base) {
       }
     }
     return moves;
+  }
+
+  public setWinner(winner: Color | undefined | null) {
+    this.winner = winner;
   }
 }
 

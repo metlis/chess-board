@@ -21,7 +21,8 @@ class Move extends Base {
   private prevCastlingRookCell: Cell | null = null;
   public castling: 1 | 2 | null = null;
   public capture: boolean = false;
-  public checking: boolean = false;
+  public check: boolean = false;
+  public mate: boolean = false;
   public longNotation: boolean = false;
 
   public constructor(piece: Piece, to: Cell, promotion?: Promotion) {
@@ -97,9 +98,10 @@ class Move extends Base {
     }
   }
 
-  public checkChecking() {
+  public checkCheckMate(gameOver = false) {
     if (this.piece.moveOptions.some((op: Cell) => op.piece?.name === "k")) {
-      this.checking = true;
+      this.check = true;
+      if (gameOver) this.mate = true;
     }
   }
 

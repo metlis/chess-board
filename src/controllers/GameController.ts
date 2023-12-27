@@ -14,7 +14,7 @@ class GameController {
   private activePlayer: Color = "b";
   public movesHistory: MovesHistory;
   private pendingPromotion: PendingPromotion | null = null;
-  private winner: Color | undefined | null = undefined;
+  private gameOver: boolean = false;
   private pieceTouched: Piece | null = null;
 
   constructor(game: Game) {
@@ -85,7 +85,7 @@ class GameController {
         this.movesHistory.addMove(new Move(piece, to), true);
         this.changeActivePlayerPiecesDraggability();
         this.switchActivePlayer();
-        this.lastMove.checkChecking();
+        this.lastMove.checkCheckMate(this.gameOver);
       } else {
         piece.recenter();
       }
@@ -115,12 +115,7 @@ class GameController {
     this.getPossibleMoves(this.idlePlayer);
     this.switchCheckVisibility();
     this.getPossibleMoves(this.activePlayer);
-    this.changeActivePlayerPiecesDraggability();
-    this.checkGameOver();
-    if (this.winner !== undefined) {
-      console.log(this.winner);
-      this.changeActivePlayerPiecesDraggability();
-    }
+    if (!this.isGameOver) this.changeActivePlayerPiecesDraggability();
   }
 
   private switchCheckVisibility(hide = false) {
@@ -171,27 +166,30 @@ class GameController {
     return resultsContainer.length > 0;
   }
 
-  private checkGameOver(): void {
+  private get isGameOver(): boolean {
+    if (this.gameOver) return true;
     if (
       this.movesHistory.isThreefoldRepetition(
         this.activePlayer,
         this.board.pieces
       )
     ) {
-      this.winner = null;
-      return;
+      this.movesHistory.setWinner(null);
+      this.gameOver = true;
     }
     if (!this.activePlayerHasMoveOptions) {
       if (this.isCheck) {
-        this.winner = this.idlePlayer;
+        this.movesHistory.setWinner(this.idlePlayer);
       } else {
-        this.winner = null;
+        this.movesHistory.setWinner(null);
       }
+      this.gameOver = true;
     }
+    return this.gameOver;
   }
 
   private checkMove(payload: GameEventPayload): void {
-    if (payload.move instanceof Array) {
+    if (payload.move instanceof Array && !this.gameOver) {
       const move: Move = new Move(...payload.move);
       this.movesHistory.addMove(move);
       this.getPossibleMoves(this.idlePlayer);
