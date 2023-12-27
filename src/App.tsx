@@ -1,6 +1,7 @@
 import Board from "components/Board";
 import Moves from "components/Moves";
 import Game from "models/Game";
+import Controls from "components/Controls";
 import "styles/App.sass";
 
 function App() {
@@ -8,11 +9,10 @@ function App() {
 
   return (
     <div className="app">
-      <div>
-        <Board board={game.controller.board} />
-      </div>
+      <Board board={game.controller.board} />
       <div>
         <Moves history={game.controller.movesHistory} />
+        <Controls board={game.controller.board} />
       </div>
     </div>
   );

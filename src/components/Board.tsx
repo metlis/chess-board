@@ -48,12 +48,6 @@ export default function Board({ board }: { board: BoardModel }) {
           </div>
         </div>
       </div>
-      <button
-        className="button button--rotate"
-        onClick={board.onRotate.bind(board)}
-      >
-        Rotate
-      </button>
     </>
   );
 }
