@@ -46,13 +46,13 @@ class GameController {
         this.pendingPromotion?.optionSelected(payload);
         this.pendingPromotion = null;
         break;
-      case "game:changePiecesDraggability":
-        this.changePiecesDraggability();
+      case "game:changeActivePlayerPiecesDraggability":
+        this.changeActivePlayerPiecesDraggability();
         break;
       case "game:switchActivePlayer":
         this.switchActivePlayer();
         break;
-      case "game:pushMove":
+      case "game:addMove":
         if (payload.move instanceof Move) {
           this.movesHistory.addMove(payload.move, true);
         }
@@ -83,7 +83,7 @@ class GameController {
         }
         this.switchCheckVisibility(true);
         this.movesHistory.addMove(new Move(piece, to), true);
-        this.changePiecesDraggability();
+        this.changeActivePlayerPiecesDraggability();
         this.switchActivePlayer();
         this.lastMove.checkChecking();
       } else {
@@ -115,11 +115,11 @@ class GameController {
     this.getPossibleMoves(this.idlePlayer);
     this.switchCheckVisibility();
     this.getPossibleMoves(this.activePlayer);
-    this.changePiecesDraggability();
+    this.changeActivePlayerPiecesDraggability();
     this.checkGameOver();
     if (this.winner !== undefined) {
       console.log(this.winner);
-      this.changePiecesDraggability();
+      this.changeActivePlayerPiecesDraggability();
     }
   }
 
@@ -130,12 +130,12 @@ class GameController {
     if (activePlayerKing) {
       this.eventBridge.addEvent("cell:switchState", {
         include: [activePlayerKing.cell],
-        cellState: !this.isCheck || hide ? "default" : "checked",
+        cellState: hide || !this.isCheck ? "default" : "checked",
       });
     }
   }
 
-  private changePiecesDraggability(): void {
+  private changeActivePlayerPiecesDraggability(): void {
     this.eventBridge.addEvent("piece:changeDraggability", {
       include: this.board.pieces.filter(
         (piece) => piece.color === this.activePlayer

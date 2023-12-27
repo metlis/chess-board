@@ -32,7 +32,7 @@ class PendingPromotion extends Refreshable(Base) {
   }
 
   private showOptions() {
-    this.eventBridge.addEvent("game:changePiecesDraggability");
+    this.eventBridge.addEvent("game:changeActivePlayerPiecesDraggability");
     this.eventBridge.addEvent("cell:switchState", {
       include: this.promotionCells,
       cellState: "promotionOption",
@@ -54,7 +54,7 @@ class PendingPromotion extends Refreshable(Base) {
         from: this.from,
         piece: this.piece,
       });
-      this.eventBridge.addEvent("game:pushMove", { move });
+      this.eventBridge.addEvent("game:addMove", { move });
       this.eventBridge.addEvent("game:switchActivePlayer");
     }
   }
