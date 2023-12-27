@@ -1,10 +1,12 @@
-$side: 500px
+@use "styles/utilities/variables"
 
 .board
-  height: $side
-  width: $side
+  height: variables.$side
+  width: variables.$side
+  min-width: variables.$side
+  min-height: variables.$side
   border: 1px solid black
-  margin: 20px 20px 40px 40px
+  margin: variables.$margin
   user-select: none
   position: relative
 
@@ -57,7 +59,7 @@ $side: 500px
       background-color: #faf1be
 
 .button--rotate
-  margin: 50px 20px
+  margin: 0
 
 .piece
   cursor: pointer

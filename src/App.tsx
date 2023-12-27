@@ -2,7 +2,7 @@ import Board from "components/Board";
 import Moves from "components/Moves";
 import Game from "models/Game";
 import Controls from "components/Controls";
-import "styles/App.sass";
+import "styles/app.sass";
 
 function App() {
   const game: Game = Game.init();
@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="app">
       <Board board={game.controller.board} />
-      <div>
+      <div className="sidebar">
         <Moves history={game.controller.movesHistory} />
         <Controls board={game.controller.board} />
       </div>

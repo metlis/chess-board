@@ -1,0 +1,12 @@
+@use "styles/utilities/variables"
+
+$margin-right: variables.$margin-right
+
+.controls
+  height: variables.$controls-height
+  border: variables.$sidebar-border
+  border-top: none
+  border-bottom-left-radius: variables.$sidebar-border-radius
+  border-bottom-right-radius: variables.$sidebar-border-radius
+  width: calc(100% - #{$margin-right})
+  padding: variables.$sidebar-padding

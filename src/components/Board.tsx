@@ -2,7 +2,7 @@ import BoardModel from "models/Board";
 import CellModel from "models/Cell";
 import Row from "components/Row";
 import Cell from "components/Cell";
-import "styles/Board.sass";
+import "styles/board.sass";
 import useComponentRefresh from "hooks/useComponentRefresh";
 
 export default function Board({ board }: { board: BoardModel }) {

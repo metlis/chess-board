@@ -1,0 +1,36 @@
+@use "styles/utilities/variables"
+
+$margin-top: variables.$margin-top
+$controls-height: variables.$controls-height
+$margin-right: variables.$margin-right
+$sidebar-padding: variables.$sidebar-padding
+
+.moves
+  display: flex
+  flex-direction: column
+  overflow: auto
+  height: calc(100% - #{$margin-top} - #{$controls-height} - #{$sidebar-padding * 2})
+  width: calc(100% - #{$margin-right})
+  border: variables.$sidebar-border
+  border-top-left-radius: variables.$sidebar-border-radius
+  border-top-right-radius: variables.$sidebar-border-radius
+  padding: variables.$sidebar-padding
+  text-align: center
+  &__move
+    display: flex
+    flex-direction: row
+    &__number
+      min-width: 20px
+    &__half
+      width: calc(100% - 20px)
+      text-align: center
+      flex-grow: 1
+.result
+  padding-top: 20px
+  padding-left: 20px
+  display: flex
+  flex-direction: row
+  div
+    width: 50%
+    text-align: center
+    font-weight: bold
