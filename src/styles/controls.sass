@@ -10,3 +10,11 @@ $margin-right: variables.$margin-right
   border-bottom-right-radius: variables.$sidebar-border-radius
   width: calc(100% - #{$margin-right})
   padding: variables.$sidebar-padding
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  &__row
+    display: flex
+    flex-direction: row
+    button
+      flex-grow: 1
