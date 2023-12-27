@@ -31,7 +31,7 @@ abstract class Piece extends Refreshable(Base) {
 
   abstract getMoveOptions(): Cell[];
 
-  public on(event: BoardEventType, _payload: BoardEventPayload = {}): void {
+  public on(event: BoardEventType, payload: BoardEventPayload = {}): void {
     switch (event) {
       case "piece:changeDraggability":
         this.changeDraggability(this.refreshComponent.bind(this));
@@ -41,7 +41,7 @@ abstract class Piece extends Refreshable(Base) {
         this.checkMoveOptions();
         break;
       case "piece:detectCheck":
-        this.detectCheck();
+        this.detectCheck(payload);
         break;
       case "piece:detectHasMoveOptions":
         this.detectHasMoveOptions();
@@ -137,10 +137,10 @@ abstract class Piece extends Refreshable(Base) {
     this.checkedMoveOptions.push(option);
   }
 
-  public detectCheck() {
+  public detectCheck(payload: BoardEventPayload = {}) {
     this.moveOptions.forEach((option) => {
-      if (option.piece?.name === "k") {
-        this.eventBridge.addEvent("game:setCheck");
+      if (option.piece?.name === "k" && payload.resultsContainer) {
+        payload.resultsContainer.push(this);
         return;
       }
     });

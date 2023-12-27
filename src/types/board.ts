@@ -32,6 +32,7 @@ export interface BoardEventPayload {
   exclude?: (Piece | Cell)[];
   include?: (Piece | Cell)[];
   cellState?: CellState;
+  resultsContainer?: (Piece | Cell)[];
 }
 
 export type PiecesCoordinates = {

@@ -14,7 +14,6 @@ class GameController {
   private activePlayer: Color = "b";
   public movesHistory: MovesHistory;
   private pendingPromotion: PendingPromotion | null = null;
-  private isCheck: boolean = false;
   private activePlayerHasMoveOptions: boolean = false;
   private winner: Color | undefined | null = undefined;
   private pieceTouched: Piece | null = null;
@@ -62,9 +61,6 @@ class GameController {
       case "game:checkMove":
         this.checkMove(payload);
         break;
-      case "game:setCheck":
-        this.isCheck = true;
-        break;
       case "game:setHasMoveOptions":
         this.activePlayerHasMoveOptions = true;
         break;
@@ -89,8 +85,7 @@ class GameController {
           this.pendingPromotion = new PendingPromotion(piece, to);
           return;
         }
-        this.isCheck = false;
-        this.switchCheckVisibility();
+        this.switchCheckVisibility(true);
         this.movesHistory.addMove(new Move(piece, to), true);
         this.changePiecesDraggability();
         this.switchActivePlayer();
@@ -122,10 +117,9 @@ class GameController {
   private switchActivePlayer(): void {
     this.activePlayer = this.idlePlayer;
     this.getPossibleMoves(this.idlePlayer);
+    this.switchCheckVisibility();
     this.getPossibleMoves(this.activePlayer);
     this.changePiecesDraggability();
-    this.detectCheck();
-    this.switchCheckVisibility();
     this.checkGameOver();
     if (this.winner !== undefined) {
       console.log(this.winner);
@@ -133,14 +127,14 @@ class GameController {
     }
   }
 
-  private switchCheckVisibility() {
+  private switchCheckVisibility(hide = false) {
     const activePlayerKing = this.board.pieces.filter(
       (piece) => piece.color === this.activePlayer && piece instanceof King
     )[0];
     if (activePlayerKing) {
       this.eventBridge.addEvent("cell:switchState", {
         include: [activePlayerKing.cell],
-        cellState: !this.isCheck ? "default" : "checked",
+        cellState: !this.isCheck || hide ? "default" : "checked",
       });
     }
   }
@@ -159,13 +153,15 @@ class GameController {
     });
   }
 
-  private detectCheck(): void {
-    this.isCheck = false;
+  private get isCheck(): boolean {
+    const resultsContainer: Piece[] = [];
     this.eventBridge.addEvent("piece:detectCheck", {
       include: this.board.pieces.filter(
         (piece) => piece.color === this.idlePlayer
       ),
+      resultsContainer,
     });
+    return resultsContainer.length > 0;
   }
 
   private detectActivePlayerHasMoveOptions(): void {
@@ -202,7 +198,6 @@ class GameController {
       const move: Move = new Move(...payload.move);
       this.movesHistory.addMove(move);
       this.getPossibleMoves(this.idlePlayer);
-      this.detectCheck();
       if (!this.isCheck) {
         this.movesHistory.removeMove();
         move.piece.addCheckedMoveOption(payload.move[1]);
