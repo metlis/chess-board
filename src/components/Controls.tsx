@@ -13,8 +13,12 @@ export default function Controls({ board }: { board: Board }) {
         <button title="Previous" onClick={history.goBack.bind(history)}>
           &lt;
         </button>
-        <button title="Next">&gt;</button>
-        <button title="Last">&gt;&gt;</button>
+        <button title="Next" onClick={history.goForward.bind(history)}>
+          &gt;
+        </button>
+        <button title="Last" onClick={history.goToEnd.bind(history)}>
+          &gt;&gt;
+        </button>
       </div>
       <div className="controls__row controls__row--actions">
         <button

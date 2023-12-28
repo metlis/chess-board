@@ -36,10 +36,18 @@ class MovesHistory extends Refreshable(Base) {
     }
   }
 
-  public switchCheckVisibility() {
+  private switchCellsToDefault() {
+    this.eventBridge.addEvent("cell:switchState", {
+      include: this.board.cells,
+      cellState: "default",
+    });
+  }
+
+  public switchCheckVisibility(fromHistory = false) {
     if (!this.lastMove) return;
-    this.lastMove.checkCheckMate(this.winner !== undefined);
+    if (!fromHistory) this.lastMove.checkCheckMate(this.winner !== undefined);
     if (!this.lastMove.check) {
+      if (this.lastMove.piece instanceof King) return;
       const kingsCells = this.board.pieces
         .filter((piece) => piece instanceof King)
         .map((piece) => piece.cell);
@@ -160,11 +168,11 @@ class MovesHistory extends Refreshable(Base) {
   public goBack() {
     if (this.pointer === -1) return;
     this.switchLastMoveVisibility(true);
-    this.switchCheckVisibility();
+    this.switchCheckVisibility(true);
     this.lastMove.undoMove(true);
     this.pointer--;
     this.switchLastMoveVisibility();
-    this.switchCheckVisibility();
+    this.switchCheckVisibility(true);
   }
 
   public goToStart() {
@@ -173,10 +181,27 @@ class MovesHistory extends Refreshable(Base) {
       this.lastMove.undoMove();
       this.pointer--;
     }
-    this.eventBridge.addEvent("cell:switchState", {
-      include: this.board.cells,
-      cellState: "default",
-    });
+    this.switchCellsToDefault();
+  }
+
+  public goForward() {
+    if (this.pointer === this.stack.length - 1) return;
+    this.switchLastMoveVisibility(true);
+    this.pointer++;
+    this.lastMove.init();
+    this.switchLastMoveVisibility();
+    this.switchCheckVisibility(true);
+  }
+
+  public goToEnd() {
+    if (this.pointer === this.stack.length - 1) return;
+    while (this.pointer < this.stack.length - 1) {
+      this.pointer++;
+      this.lastMove.init();
+    }
+    this.switchCellsToDefault();
+    this.switchLastMoveVisibility();
+    this.switchCheckVisibility(true);
   }
 }
 
