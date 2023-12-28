@@ -46,8 +46,8 @@ class GameController {
         this.pendingPromotion?.optionSelected(payload);
         this.pendingPromotion = null;
         break;
-      case "game:changeActivePlayerPiecesDraggability":
-        this.changeActivePlayerPiecesDraggability();
+      case "game:switchActivePlayerPiecesDraggability":
+        this.switchActivePlayerPiecesDraggability();
         break;
       case "game:switchActivePlayer":
         this.switchActivePlayer();
@@ -81,11 +81,9 @@ class GameController {
           this.pendingPromotion = new PendingPromotion(piece, to);
           return;
         }
-        this.switchCheckVisibility(true);
         this.movesHistory.addMove(new Move(piece, to), true);
-        this.changeActivePlayerPiecesDraggability();
+        this.switchActivePlayerPiecesDraggability();
         this.switchActivePlayer();
-        this.lastMove.checkCheckMate(this.gameOver);
       } else {
         piece.recenter();
       }
@@ -113,24 +111,14 @@ class GameController {
   private switchActivePlayer(): void {
     this.activePlayer = this.idlePlayer;
     this.getPossibleMoves(this.idlePlayer);
-    this.switchCheckVisibility();
+    this.lastMove?.checkCheckMate(this.gameOver);
+    this.movesHistory.switchCheckVisibility();
     this.getPossibleMoves(this.activePlayer);
-    if (!this.isGameOver) this.changeActivePlayerPiecesDraggability();
+    this.lastMove?.checkCheckMate(this.gameOver);
+    if (!this.isGameOver) this.switchActivePlayerPiecesDraggability();
   }
 
-  private switchCheckVisibility(hide = false) {
-    const activePlayerKing = this.board.pieces.filter(
-      (piece) => piece.color === this.activePlayer && piece instanceof King
-    )[0];
-    if (activePlayerKing) {
-      this.eventBridge.addEvent("cell:switchState", {
-        include: [activePlayerKing.cell],
-        cellState: hide || !this.isCheck ? "default" : "checked",
-      });
-    }
-  }
-
-  private changeActivePlayerPiecesDraggability(): void {
+  private switchActivePlayerPiecesDraggability(): void {
     this.eventBridge.addEvent("piece:changeDraggability", {
       include: this.board.pieces.filter(
         (piece) => piece.color === this.activePlayer

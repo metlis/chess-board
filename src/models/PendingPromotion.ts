@@ -34,7 +34,7 @@ class PendingPromotion extends Refreshable(Base) {
   }
 
   private showOptions() {
-    this.eventBridge.addEvent("game:changeActivePlayerPiecesDraggability");
+    this.eventBridge.addEvent("game:switchActivePlayerPiecesDraggability");
     this.eventBridge.addEvent("cell:switchState", {
       include: this.promotionCells,
       cellState: "promotionOption",

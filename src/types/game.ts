@@ -4,7 +4,7 @@ import Move from "models/Move";
 import PromotionPiece from "models/pieces/PromotionPiece";
 
 export const GameEventTypeLiterals = [
-  "game:changeActivePlayerPiecesDraggability",
+  "game:switchActivePlayerPiecesDraggability",
   "game:pieceMoved",
   "game:pieceTouched",
   "game:promotionOptionSelected",

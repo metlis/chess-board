@@ -36,6 +36,23 @@ class MovesHistory extends Refreshable(Base) {
     }
   }
 
+  public switchCheckVisibility(hide = false) {
+    if (!this.lastMove) return;
+    const king = this.board.pieces.filter(
+      (piece) =>
+        piece.color !== this.lastMove.piece.color && piece instanceof King
+    )[0];
+    if (king) {
+      this.eventBridge.addEvent("cell:switchState", {
+        include: [king.cell],
+        cellState:
+          (hide && this.lastMove.check) || !this.lastMove.check
+            ? "default"
+            : "checked",
+      });
+    }
+  }
+
   public removeMove() {
     const move = this.stack.pop();
     if (move) {
@@ -133,9 +150,11 @@ class MovesHistory extends Refreshable(Base) {
   public goBack() {
     if (this.pointer === -1) return;
     this.switchLastMoveVisibility(true);
+    this.switchCheckVisibility(true);
     this.lastMove.undoMove(true);
     this.pointer--;
     this.switchLastMoveVisibility();
+    this.switchCheckVisibility();
   }
 
   public goToStart() {
