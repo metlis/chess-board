@@ -1,7 +1,6 @@
 import Board from "models/Board";
 import Game from "models/Game";
 import Move from "models/Move";
-import King from "models/pieces/King";
 import MovesHistory from "models/MovesHistory";
 import PendingPromotion from "models/PendingPromotion";
 import { Color, GameEventPayload, GameEventType, Piece } from "types";
@@ -111,10 +110,9 @@ class GameController {
   private switchActivePlayer(): void {
     this.activePlayer = this.idlePlayer;
     this.getPossibleMoves(this.idlePlayer);
-    this.lastMove?.checkCheckMate(this.gameOver);
     this.movesHistory.switchCheckVisibility();
     this.getPossibleMoves(this.activePlayer);
-    this.lastMove?.checkCheckMate(this.gameOver);
+    this.movesHistory.switchCheckVisibility();
     if (!this.isGameOver) this.switchActivePlayerPiecesDraggability();
   }
 

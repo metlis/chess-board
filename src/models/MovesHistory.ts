@@ -36,20 +36,30 @@ class MovesHistory extends Refreshable(Base) {
     }
   }
 
-  public switchCheckVisibility(hide = false) {
+  public switchCheckVisibility() {
     if (!this.lastMove) return;
-    const king = this.board.pieces.filter(
-      (piece) =>
-        piece.color !== this.lastMove.piece.color && piece instanceof King
-    )[0];
-    if (king) {
-      this.eventBridge.addEvent("cell:switchState", {
-        include: [king.cell],
-        cellState:
-          (hide && this.lastMove.check) || !this.lastMove.check
-            ? "default"
-            : "checked",
-      });
+    this.lastMove.checkCheckMate(this.winner !== undefined);
+    if (!this.lastMove.check) {
+      const kingsCells = this.board.pieces
+        .filter((piece) => piece instanceof King)
+        .map((piece) => piece.cell);
+      if (kingsCells.length) {
+        this.eventBridge.addEvent("cell:switchState", {
+          include: kingsCells,
+          cellState: "default",
+        });
+      }
+    } else {
+      const king = this.board.pieces.filter(
+        (piece) =>
+          piece.color !== this.lastMove.piece.color && piece instanceof King
+      )[0];
+      if (king) {
+        this.eventBridge.addEvent("cell:switchState", {
+          include: [king.cell],
+          cellState: "checked",
+        });
+      }
     }
   }
 
@@ -150,7 +160,7 @@ class MovesHistory extends Refreshable(Base) {
   public goBack() {
     if (this.pointer === -1) return;
     this.switchLastMoveVisibility(true);
-    this.switchCheckVisibility(true);
+    this.switchCheckVisibility();
     this.lastMove.undoMove(true);
     this.pointer--;
     this.switchLastMoveVisibility();
