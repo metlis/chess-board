@@ -3,11 +3,14 @@ import "styles/controls.sass";
 import { FaRotate, FaCopy } from "react-icons/fa6";
 
 export default function Controls({ board }: { board: Board }) {
+  const history = board.game.controller.movesHistory;
   return (
     <div className="controls">
       <div className="controls__row controls__row--rewind">
         <button title="First">&lt;&lt;</button>
-        <button title="Previous">&lt;</button>
+        <button title="Previous" onClick={history.goBack.bind(history)}>
+          &lt;
+        </button>
         <button title="Next">&gt;</button>
         <button title="Last">&gt;&gt;</button>
       </div>

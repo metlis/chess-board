@@ -129,6 +129,14 @@ class MovesHistory extends Refreshable(Base) {
   public setWinner(winner: Color | undefined | null) {
     this.winner = winner;
   }
+
+  public goBack() {
+    if (this.pointer === -1) return;
+    this.switchLastMoveVisibility(true);
+    this.lastMove.undoMove(true);
+    this.pointer--;
+    this.switchLastMoveVisibility();
+  }
 }
 
 export default MovesHistory;

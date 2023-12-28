@@ -8,6 +8,7 @@ import { GameEventPayload, Row } from "types";
 
 class PendingPromotion extends Refreshable(Base) {
   private readonly piece: Piece;
+  private readonly prevToPiece: Piece | null;
   private readonly from: Cell;
   private readonly to: Cell;
   private readonly promotionCells: Cell[];
@@ -17,6 +18,7 @@ class PendingPromotion extends Refreshable(Base) {
     this.piece = piece;
     this.to = to;
     this.from = piece.cell;
+    this.prevToPiece = to.piece;
     const promotionCells: Cell[] = [];
     let rows: Row[] = to.coordinate[0] === 0 ? [0, 1, 2, 3] : [4, 5, 6, 7];
     rows.forEach((i) => {
@@ -53,6 +55,7 @@ class PendingPromotion extends Refreshable(Base) {
       const move: Move = new Move(piece, this.to, {
         from: this.from,
         piece: this.piece,
+        prevToPiece: this.prevToPiece,
       });
       this.eventBridge.addEvent("game:addMove", { move });
       this.eventBridge.addEvent("game:switchActivePlayer");

@@ -6,6 +6,7 @@ import King from "./pieces/King";
 type Promotion = {
   from: Cell;
   piece: Piece;
+  prevToPiece: Piece | null;
 };
 
 class Move extends Base {
@@ -34,7 +35,7 @@ class Move extends Base {
     this.piece = piece;
     this.from = promotion ? promotion.from : piece.cell;
     this.to = to;
-    this.prevToPiece = to.piece;
+    this.prevToPiece = promotion ? promotion.prevToPiece : to.piece;
     this.to.piece = this.piece;
     this.piece.cell = to;
     this.from.piece = null;
@@ -122,22 +123,32 @@ class Move extends Base {
     }
   }
 
-  public undoMove() {
+  public undoMove(refreshComponents = false) {
     if (this.promotion) {
-      this.piece.cell = this.promotion.from;
-      this.promotion.from.piece = this.piece;
+      this.promotion.from.piece = this.promotion.piece;
+      if (refreshComponents) this.promotion.from.refreshComponent();
     } else {
       this.piece.cell = this.from;
       this.from.piece = this.piece;
     }
     this.to.piece = this.prevToPiece;
     this.piece.moved = this.prevMoved;
+
+    if (refreshComponents) {
+      this.from.refreshComponent();
+      this.to.refreshComponent();
+    }
+
     if (this.enPassantCell && this.enPassantPiece) {
       this.enPassantCell.piece = this.enPassantPiece;
+      if (refreshComponents) this.enPassantCell.refreshComponent();
     }
+
     if (this.castledRook && this.prevCastlingRookCell) {
       this.castledRook.cell.piece = null;
+      if (refreshComponents) this.castledRook.cell.refreshComponent();
       this.castledRook.cell = this.prevCastlingRookCell;
+      if (refreshComponents) this.castledRook.cell.refreshComponent();
       this.castledRook.cell.piece = this.castledRook;
     }
   }
