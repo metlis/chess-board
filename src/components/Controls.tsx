@@ -7,7 +7,9 @@ export default function Controls({ board }: { board: Board }) {
   return (
     <div className="controls">
       <div className="controls__row controls__row--rewind">
-        <button title="First">&lt;&lt;</button>
+        <button title="First" onClick={history.goToStart.bind(history)}>
+          &lt;&lt;
+        </button>
         <button title="Previous" onClick={history.goBack.bind(history)}>
           &lt;
         </button>

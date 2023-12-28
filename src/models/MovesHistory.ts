@@ -137,6 +137,18 @@ class MovesHistory extends Refreshable(Base) {
     this.pointer--;
     this.switchLastMoveVisibility();
   }
+
+  public goToStart() {
+    if (this.pointer === -1) return;
+    while (this.pointer > -1) {
+      this.lastMove.undoMove();
+      this.pointer--;
+    }
+    this.eventBridge.addEvent("cell:switchState", {
+      include: this.board.cells,
+      cellState: "default",
+    });
+  }
 }
 
 export default MovesHistory;
