@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import PieceModel from "models/pieces/Piece";
 import Draggable from "react-draggable";
 import { DraggableEvent } from "react-draggable";
@@ -12,6 +12,8 @@ export default function Piece({ piece }: PieceProps) {
 
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [draggable, setDraggable] = useState(piece.draggable);
+
+  const nodeRef = useRef(null);
 
   useEffect(() => {
     setDraggable(piece.draggable);
@@ -34,7 +36,7 @@ export default function Piece({ piece }: PieceProps) {
   }
 
   const pieceElement = piece?.image ? (
-    <div className="piece">
+    <div className="piece" ref={nodeRef}>
       <img
         src={require(`images/pieces/${piece.image}`)}
         alt={piece.name}
@@ -48,6 +50,7 @@ export default function Piece({ piece }: PieceProps) {
   if (draggable) {
     return (
       <Draggable
+        nodeRef={nodeRef}
         bounds=".board"
         onStart={piece.onDragStart.bind(piece)}
         onStop={onStop.bind(piece)}
