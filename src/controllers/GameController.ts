@@ -12,7 +12,7 @@ class GameController {
   public readonly eventBridge: EventBridge;
   private activePlayer: Color = "b";
   public movesHistory: MovesHistory;
-  private pendingPromotion: PendingPromotion | null = null;
+  public pendingPromotion: PendingPromotion | null = null;
   private gameOver: boolean = false;
   private pieceTouched: Piece | null = null;
 

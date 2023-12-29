@@ -43,6 +43,19 @@ class MovesHistory extends Refreshable(Base) {
     });
   }
 
+  private switchPendingPromotion() {
+    if (this.gameController.pendingPromotion) {
+      if (!this.gameController.pendingPromotion.undone) {
+        this.gameController.pendingPromotion.undo();
+      } else if (
+        this.gameController.pendingPromotion.undone &&
+        this.pointer === this.stack.length - 1
+      ) {
+        this.gameController.pendingPromotion.redo();
+      }
+    }
+  }
+
   public switchCheckVisibility(fromHistory = false) {
     if (!this.lastMove) return;
     if (!fromHistory) this.lastMove.checkCheckMate(this.winner !== undefined);
@@ -167,6 +180,7 @@ class MovesHistory extends Refreshable(Base) {
 
   public goBack() {
     if (this.pointer === -1) return;
+    this.switchPendingPromotion();
     this.switchLastMoveVisibility(true);
     this.switchCheckVisibility(true);
     this.lastMove.undoMove(true);
@@ -177,6 +191,7 @@ class MovesHistory extends Refreshable(Base) {
 
   public goToStart() {
     if (this.pointer === -1) return;
+    this.switchPendingPromotion();
     while (this.pointer > -1) {
       this.lastMove.undoMove();
       this.pointer--;
@@ -191,6 +206,7 @@ class MovesHistory extends Refreshable(Base) {
     this.lastMove.init();
     this.switchLastMoveVisibility();
     this.switchCheckVisibility(true);
+    this.switchPendingPromotion();
   }
 
   public goToEnd() {
@@ -202,6 +218,7 @@ class MovesHistory extends Refreshable(Base) {
     this.switchCellsToDefault();
     this.switchLastMoveVisibility();
     this.switchCheckVisibility(true);
+    this.switchPendingPromotion();
   }
 }
 
