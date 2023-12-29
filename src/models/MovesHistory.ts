@@ -180,6 +180,9 @@ class MovesHistory extends Refreshable(Base) {
 
   public goBack() {
     if (this.pointer === -1) return;
+    if (this.pointer === this.stack.length - 1) {
+      this.eventBridge.addEvent("game:switchActivePlayerPiecesDraggability");
+    }
     this.switchPendingPromotion();
     this.switchLastMoveVisibility(true);
     this.switchCheckVisibility(true);
@@ -191,6 +194,9 @@ class MovesHistory extends Refreshable(Base) {
 
   public goToStart() {
     if (this.pointer === -1) return;
+    if (this.pointer === this.stack.length - 1) {
+      this.eventBridge.addEvent("game:switchActivePlayerPiecesDraggability");
+    }
     this.switchPendingPromotion();
     while (this.pointer > -1) {
       this.lastMove.undoMove();
@@ -206,6 +212,9 @@ class MovesHistory extends Refreshable(Base) {
     this.lastMove.init();
     this.switchLastMoveVisibility();
     this.switchCheckVisibility(true);
+    if (this.pointer === this.stack.length - 1) {
+      this.eventBridge.addEvent("game:switchActivePlayerPiecesDraggability");
+    }
     this.switchPendingPromotion();
   }
 
@@ -218,6 +227,7 @@ class MovesHistory extends Refreshable(Base) {
     this.switchCellsToDefault();
     this.switchLastMoveVisibility();
     this.switchCheckVisibility(true);
+    this.eventBridge.addEvent("game:switchActivePlayerPiecesDraggability");
     this.switchPendingPromotion();
   }
 }
