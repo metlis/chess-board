@@ -39,11 +39,23 @@ export default function Cell({ cell }: CellProps) {
       className={`row__cell row__cell--${cell.color} ${
         cell.state === "moveOption"
           ? cell.piece
-            ? `row__cell--move-beat`
+            ? `row__cell--move--beat ${
+                cell.color === "b" ? "row__cell--move--beat--dark" : ""
+              }`
             : `row__cell--move`
           : ""
-      } ${cell.state === "checked" ? "row__cell--checked" : ""} ${
-        cell.state === "lastMove" ? "row__cell--last-move" : ""
+      } ${
+        cell.state === "checked"
+          ? `row__cell--checked ${
+              cell.color === "b" ? "row__cell--checked--dark" : ""
+            }`
+          : ""
+      } ${
+        cell.state === "lastMove"
+          ? `row__cell--last-move ${
+              cell.color === "b" ? "row__cell--last-move--dark" : ""
+            }`
+          : ""
       }`}
     >
       {cell.piece ? <Piece piece={cell.piece} /> : ""}
