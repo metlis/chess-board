@@ -1,8 +1,10 @@
 import Board from "models/Board";
 import "styles/controls.sass";
-import { FaRotate, FaCopy } from "react-icons/fa6";
+import { FaRotate, FaCopy, FaStop } from "react-icons/fa6";
 
-export default function Controls({ board }: { board: Board }) {
+type ControlsProps = { board: Board; startNewGame: Function };
+
+export default function Controls({ board, startNewGame }: ControlsProps) {
   const history = board.game.controller.movesHistory;
   return (
     <div className="controls">
@@ -30,6 +32,9 @@ export default function Controls({ board }: { board: Board }) {
         </button>
         <button title="Copy moves" onClick={history.copyMoves.bind(history)}>
           <FaCopy />
+        </button>
+        <button title="Stop game" onClick={() => startNewGame()}>
+          <FaStop />
         </button>
       </div>
     </div>
