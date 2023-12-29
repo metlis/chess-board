@@ -112,8 +112,8 @@ class GameController {
     this.getPossibleMoves(this.idlePlayer);
     this.movesHistory.switchCheckVisibility();
     this.getPossibleMoves(this.activePlayer);
-    this.movesHistory.switchCheckVisibility();
     if (!this.isGameOver) this.switchActivePlayerPiecesDraggability();
+    this.movesHistory.switchCheckVisibility();
   }
 
   private switchActivePlayerPiecesDraggability(): void {

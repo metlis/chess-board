@@ -182,6 +182,29 @@ class MovesHistory extends Refreshable(Base) {
     return moves;
   }
 
+  public async copyMoves() {
+    let str = "";
+    const moves = this.printableMoves;
+    moves.forEach((move, index) => {
+      str += `${index + 1}. `;
+      str += `${move[0]}`;
+      if (move[1]) {
+        str += ` ${move[1]}${index !== moves.length - 1 ? " " : ""}`;
+      }
+    });
+    if (this.winner !== undefined) {
+      str += "\n";
+      if (this.winner === "w") {
+        str += "1 - 0";
+      } else if (this.winner === "b") {
+        str += "0 - 1";
+      } else {
+        str += "1/2 - 1/2";
+      }
+    }
+    await navigator.clipboard.writeText(str);
+  }
+
   public setWinner(winner: Color | undefined | null) {
     this.winner = winner;
   }

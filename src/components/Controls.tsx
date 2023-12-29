@@ -28,7 +28,7 @@ export default function Controls({ board }: { board: Board }) {
         >
           <FaRotate />
         </button>
-        <button title="Copy moves">
+        <button title="Copy moves" onClick={history.copyMoves.bind(history)}>
           <FaCopy />
         </button>
       </div>
