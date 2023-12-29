@@ -77,6 +77,9 @@ class PendingPromotion extends Refreshable(Base) {
       include: this.promotionCells,
       cellState: "default",
     });
+    this.eventBridge.addEvent("piece:changeDraggability", {
+      include: [this.piece],
+    });
   }
 
   public redo() {

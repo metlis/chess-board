@@ -178,12 +178,19 @@ class MovesHistory extends Refreshable(Base) {
     this.winner = winner;
   }
 
-  public goBack() {
-    if (this.pointer === -1) return;
-    if (this.pointer === this.stack.length - 1) {
+  private switchDraggabilityOnBackwardsRewind() {
+    if (
+      this.pointer === this.stack.length - 1 &&
+      !this.gameController.pendingPromotion?.undone
+    ) {
       this.eventBridge.addEvent("game:switchActivePlayerPiecesDraggability");
     }
+  }
+
+  public goBack() {
+    if (this.pointer === -1) return;
     this.switchPendingPromotion();
+    this.switchDraggabilityOnBackwardsRewind();
     this.switchLastMoveVisibility(true);
     this.switchCheckVisibility(true);
     this.lastMove.undoMove(true);
@@ -194,10 +201,8 @@ class MovesHistory extends Refreshable(Base) {
 
   public goToStart() {
     if (this.pointer === -1) return;
-    if (this.pointer === this.stack.length - 1) {
-      this.eventBridge.addEvent("game:switchActivePlayerPiecesDraggability");
-    }
     this.switchPendingPromotion();
+    this.switchDraggabilityOnBackwardsRewind();
     while (this.pointer > -1) {
       this.lastMove.undoMove();
       this.pointer--;
