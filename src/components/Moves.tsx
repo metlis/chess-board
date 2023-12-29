@@ -1,9 +1,18 @@
 import MovesHistory from "models/MovesHistory";
 import useComponentRefresh from "hooks/useComponentRefresh";
+import { useRef, useEffect } from "react";
 import "styles/moves.sass";
 
 function Moves({ history }: { history: MovesHistory }) {
   useComponentRefresh(history.componentRefresh);
+
+  const movesRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (movesRef.current) {
+      movesRef.current.scrollTop = movesRef.current.scrollHeight;
+    }
+  });
 
   const result =
     history.winner !== undefined ? (
@@ -23,7 +32,7 @@ function Moves({ history }: { history: MovesHistory }) {
     );
 
   return (
-    <div className="moves">
+    <div className="moves" ref={movesRef}>
       {history.printableMoves.map((move, index) => (
         <div key={index} className="moves__move">
           <div
