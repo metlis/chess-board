@@ -17,6 +17,14 @@ class MovesHistory extends Refreshable(Base) {
     return this.stack[this.pointer];
   }
 
+  public get visibleMoveNo(): number {
+    return Math.floor(this.pointer / 2);
+  }
+
+  public get lastMoveIsWhite(): boolean {
+    return this.pointer % 2 === 0;
+  }
+
   public addMove(move: Move, showMove: boolean = false) {
     if (showMove) this.switchLastMoveVisibility(true);
     this.stack.push(move);
@@ -197,6 +205,7 @@ class MovesHistory extends Refreshable(Base) {
     this.pointer--;
     this.switchLastMoveVisibility();
     this.switchCheckVisibility(true);
+    this.refreshComponent();
   }
 
   public goToStart() {
@@ -208,6 +217,7 @@ class MovesHistory extends Refreshable(Base) {
       this.pointer--;
     }
     this.switchCellsToDefault();
+    this.refreshComponent();
   }
 
   public goForward() {
@@ -221,6 +231,7 @@ class MovesHistory extends Refreshable(Base) {
       this.eventBridge.addEvent("game:switchActivePlayerPiecesDraggability");
     }
     this.switchPendingPromotion();
+    this.refreshComponent();
   }
 
   public goToEnd() {
@@ -234,6 +245,7 @@ class MovesHistory extends Refreshable(Base) {
     this.switchCheckVisibility(true);
     this.eventBridge.addEvent("game:switchActivePlayerPiecesDraggability");
     this.switchPendingPromotion();
+    this.refreshComponent();
   }
 }
 

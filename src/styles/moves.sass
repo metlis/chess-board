@@ -21,10 +21,14 @@ $sidebar-padding: variables.$sidebar-padding
     flex-direction: row
     &__number
       min-width: 20px
+      &--active
+        background-color: lightgray
     &__half
       width: calc(100% - 20px)
       text-align: center
       flex-grow: 1
+      &--active
+        font-weight: bold
 .result
   padding-top: 20px
   padding-left: 20px

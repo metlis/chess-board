@@ -26,9 +26,33 @@ function Moves({ history }: { history: MovesHistory }) {
     <div className="moves">
       {history.printableMoves.map((move, index) => (
         <div key={index} className="moves__move">
-          <div className="moves__move__number">{index + 1}.</div>
-          <div className="moves__move__half">{move[0]}</div>
-          <div className="moves__move__half">{move[1] ? move[1] : " "}</div>
+          <div
+            className={`moves__move__number ${
+              history.visibleMoveNo === index
+                ? "moves__move__number--active"
+                : ""
+            }`}
+          >
+            {index + 1}.
+          </div>
+          <div
+            className={`moves__move__half ${
+              history.visibleMoveNo === index && history.lastMoveIsWhite
+                ? "moves__move__half--active"
+                : ""
+            }`}
+          >
+            {move[0]}
+          </div>
+          <div
+            className={`moves__move__half ${
+              history.visibleMoveNo === index && !history.lastMoveIsWhite
+                ? "moves__move__half--active"
+                : ""
+            }`}
+          >
+            {move[1] ? move[1] : ""}
+          </div>
         </div>
       ))}
       {result}
