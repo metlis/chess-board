@@ -1,4 +1,4 @@
-import CellModel from "models/Cell";
+import CellModel from "chess_controller/src/models/Cell";
 import Piece from "components/Piece";
 import useComponentRefresh from "hooks/useComponentRefresh";
 

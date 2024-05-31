@@ -1,4 +1,4 @@
-import MovesHistory from "models/MovesHistory";
+import MovesHistory from "chess_controller/src/models/MovesHistory";
 import useComponentRefresh from "hooks/useComponentRefresh";
 import { useRef, useEffect } from "react";
 import "styles/moves.sass";

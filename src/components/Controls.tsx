@@ -1,4 +1,4 @@
-import Board from "models/Board";
+import Board from "chess_controller/src/models/Board";
 import "styles/controls.sass";
 import { FaRotate, FaCopy, FaStop } from "react-icons/fa6";
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { ComponentRefresh } from "types";
+import type { ComponentRefresh } from "chess_controller/src/types";
 
 /*
   Used to trigger component update from object instance

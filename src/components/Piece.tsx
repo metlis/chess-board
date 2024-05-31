@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import PieceModel from "models/pieces/Piece";
+import PieceModel from "chess_controller/src/models/pieces/Piece";
 import Draggable from "react-draggable";
 import { DraggableEvent } from "react-draggable";
 import useComponentRefresh from "hooks/useComponentRefresh";

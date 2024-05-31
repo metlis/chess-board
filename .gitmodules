@@ -1,0 +1,3 @@
+[submodule "src/chess_controller"]
+	path = src/chess_controller
+	url = https://github.com/metlis/chess_controller.git

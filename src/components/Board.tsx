@@ -1,5 +1,5 @@
-import BoardModel from "models/Board";
-import CellModel from "models/Cell";
+import BoardModel from "chess_controller/src/models/Board";
+import CellModel from "chess_controller/src/models/Cell";
 import Row from "components/Row";
 import Cell from "components/Cell";
 import "styles/board.sass";

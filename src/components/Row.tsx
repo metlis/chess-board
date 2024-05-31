@@ -1,16 +1,17 @@
 import React from "react";
-import type { Color } from "types";
+import type { Color } from "chess_controller/src/types";
 
 type RowProps = {
   number: number;
   children: React.ReactNode;
-  colorOnTop: Color,
+  colorOnTop: Color;
 };
 
 export default function Row({ number, children, colorOnTop }: RowProps) {
   const cellHeightPercent = 12.5;
   const rowAdjustment = `${
-    (colorOnTop === "b" ? 9 - number : number) * cellHeightPercent - cellHeightPercent / 2
+    (colorOnTop === "b" ? 9 - number : number) * cellHeightPercent -
+    cellHeightPercent / 2
   }%`;
   return (
     <div className="row">

@@ -1,6 +1,6 @@
 import Board from "components/Board";
 import Moves from "components/Moves";
-import Game from "models/Game";
+import Game from "chess_controller/src/models/Game";
 import Controls from "components/Controls";
 import { useState } from "react";
 import "styles/app.sass";
