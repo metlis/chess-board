@@ -6,6 +6,9 @@ type ControlsProps = { board: Board; startNewGame: Function };
 
 export default function Controls({ board, startNewGame }: ControlsProps) {
   const history = board.game.controller.movesHistory;
+  const copyMoves = async (): Promise<void> => {
+    await navigator.clipboard.writeText(history.copyMoves());
+  };
   return (
     <div className="controls">
       <div className="controls__row controls__row--rewind">
@@ -30,7 +33,7 @@ export default function Controls({ board, startNewGame }: ControlsProps) {
         >
           <FaRotate />
         </button>
-        <button title="Copy moves" onClick={history.copyMoves.bind(history)}>
+        <button title="Copy moves" onClick={copyMoves}>
           <FaCopy />
         </button>
         <button title="Stop game" onClick={() => startNewGame()}>
