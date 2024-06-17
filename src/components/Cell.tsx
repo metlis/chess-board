@@ -23,7 +23,7 @@ export default function Cell({ cell }: CellProps) {
       >
         <div className="piece">
           <img
-            src={require(`images/pieces/${cell.promotionPiece.image}`)}
+            src={require(`images/pieces/${cell.promotionPiece.code}.svg`)}
             alt={cell.promotionPiece.name}
             draggable={false}
           />

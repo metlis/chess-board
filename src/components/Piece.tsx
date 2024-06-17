@@ -35,10 +35,10 @@ export default function Piece({ piece }: PieceProps) {
     piece.onDragStop(offset);
   }
 
-  const pieceElement = piece?.image ? (
+  const pieceElement = piece?.code ? (
     <div className="piece" ref={nodeRef}>
       <img
-        src={require(`images/pieces/${piece.image}`)}
+        src={require(`images/pieces/${piece.code}.svg`)}
         alt={piece.name}
         draggable={false}
       />
