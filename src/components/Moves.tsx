@@ -4,7 +4,7 @@ import { useRef, useEffect } from "react";
 import "styles/moves.sass";
 
 function Moves({ history }: { history: MovesHistory }) {
-  useComponentRefresh(history.componentRefresh);
+  useComponentRefresh(history);
 
   const movesRef = useRef<HTMLDivElement>(null);
 

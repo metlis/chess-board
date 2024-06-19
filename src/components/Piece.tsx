@@ -8,7 +8,7 @@ type PieceProps = { piece: PieceModel };
 type Node = { node: HTMLElement; x: number; y: number };
 
 export default function Piece({ piece }: PieceProps) {
-  useComponentRefresh(piece!.componentRefresh);
+  useComponentRefresh(piece);
 
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [draggable, setDraggable] = useState(piece.draggable);

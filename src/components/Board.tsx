@@ -6,7 +6,7 @@ import "styles/board.sass";
 import useComponentRefresh from "hooks/useComponentRefresh";
 
 export default function Board({ board }: { board: BoardModel }) {
-  useComponentRefresh(board.componentRefresh);
+  useComponentRefresh(board);
 
   function getRowNum(index: number): number {
     if (board.colorOnTop === "b") {

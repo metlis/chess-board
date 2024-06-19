@@ -9,7 +9,7 @@ type CellProps = {
 };
 
 export default function Cell({ cell }: CellProps) {
-  useComponentRefresh(cell.componentRefresh);
+  useComponentRefresh(cell);
 
   if (cell.promotionPiece) {
     return (
