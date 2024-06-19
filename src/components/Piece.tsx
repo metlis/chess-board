@@ -32,7 +32,7 @@ export default function Piece({ piece }: PieceProps) {
 
   function onStop(e: DraggableEvent, data: Node) {
     locatePiece(e, data);
-    piece.onDragStop(offset);
+    piece.onMoveStop(offset);
   }
 
   const pieceElement = piece?.code ? (
@@ -52,7 +52,7 @@ export default function Piece({ piece }: PieceProps) {
       <Draggable
         nodeRef={nodeRef}
         bounds=".board"
-        onStart={piece.onDragStart.bind(piece)}
+        onStart={piece.onMoveStart.bind(piece)}
         onStop={onStop.bind(piece)}
         onDrag={locatePiece}
       >
