@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/chess-board/static/css/main.44e20962.css",
+    "main.js": "/chess-board/static/js/main.11257f29.js",
+    "static/js/787.0cb79fac.chunk.js": "/chess-board/static/js/787.0cb79fac.chunk.js",
+    "static/media/r_b.svg": "/chess-board/static/media/r_b.11b82bbd54650e60c086.svg",
+    "static/media/n_b.svg": "/chess-board/static/media/n_b.7930be9e07b51bc0e069.svg",
+    "static/media/k_b.svg": "/chess-board/static/media/k_b.5b14c13b083205b43351.svg",
+    "static/media/q_b.svg": "/chess-board/static/media/q_b.310fe3e250ab4485dee4.svg",
+    "static/media/n_w.svg": "/chess-board/static/media/n_w.d47944d2cee4f8c707d1.svg",
+    "static/media/b_b.svg": "/chess-board/static/media/b_b.04932f63ef10dcdee115.svg",
+    "static/media/b_w.svg": "/chess-board/static/media/b_w.aa411d5809c6380713b4.svg",
+    "static/media/r_w.svg": "/chess-board/static/media/r_w.9e48b84f189eea24339f.svg",
+    "static/media/q_w.svg": "/chess-board/static/media/q_w.e195644e78392b8215dd.svg",
+    "static/media/p_b.svg": "/chess-board/static/media/p_b.65485e342f98c53d4789.svg",
+    "static/media/p_w.svg": "/chess-board/static/media/p_w.7fbab4ab8e18494ec243.svg",
+    "static/media/circle.svg": "/chess-board/static/media/circle.3e8ccbb6ecf9d498fab1.svg",
+    "static/media/k_w.svg": "/chess-board/static/media/k_w.087bee858f22f327e142.svg",
+    "index.html": "/chess-board/index.html",
+    "main.44e20962.css.map": "/chess-board/static/css/main.44e20962.css.map",
+    "main.11257f29.js.map": "/chess-board/static/js/main.11257f29.js.map",
+    "787.0cb79fac.chunk.js.map": "/chess-board/static/js/787.0cb79fac.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.44e20962.css",
+    "static/js/main.11257f29.js"
+  ]
+}
